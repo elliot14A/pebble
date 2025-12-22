@@ -24,6 +24,7 @@ vite.config.ts.timestamp-*
 
 # Cloudflare Types
 worker-configuration.d.ts
+.dev.vars
 
 # SQLite
 *.db

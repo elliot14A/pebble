@@ -16,7 +16,11 @@
 		{
 			"binding": "pebble",
 			"database_name": "pebble",
-			"database_id": "c4377ec2-9eaa-45f2-bbb4-4b96001d0020"
+			"database_id": "c4377ec2-9eaa-45f2-bbb4-4b96001d0020",
+			"migrations_dir": "drizzle/migrations"
 		}
-	]
+	],
+	"vars": {
+		"BASE_URL": "http://localhost:5173"
+	}
 }

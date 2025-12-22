@@ -47,6 +47,7 @@
 		"wrangler": "^4.56.0"
 	},
 	"dependencies": {
+		"better-auth": "^1.4.7",
 		"better-sqlite3": "^12.5.0"
 	}
 }
