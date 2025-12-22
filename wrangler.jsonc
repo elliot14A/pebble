@@ -2,12 +2,21 @@
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "pebble",
 	"compatibility_date": "2025-12-22",
-	"compatibility_flags": ["nodejs_als"],
+	"compatibility_flags": [
+		"nodejs_als"
+	],
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"assets": {
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
 	},
 	"workers_dev": true,
-	"preview_urls": true
+	"preview_urls": true,
+	"d1_databases": [
+		{
+			"binding": "pebble",
+			"database_name": "pebble",
+			"database_id": "c4377ec2-9eaa-45f2-bbb4-4b96001d0020"
+		}
+	]
 }

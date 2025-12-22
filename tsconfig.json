@@ -11,6 +11,8 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler",
-		"types": ["worker-configuration.d.ts"]
+		"types": [
+			"worker-configuration.d.ts"
+		]
 	}
 }

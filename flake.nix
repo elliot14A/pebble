@@ -16,7 +16,6 @@
           buildInputs = with pkgs; [
             bun
             nodejs_22
-            nodePackages.wrangler
             git
             nodePackages.typescript
             nodePackages.typescript-language-server
@@ -27,7 +26,17 @@
             echo "🚀 SvelteKit + Cloudflare Workers + D1 development environment"
             echo "📦 Bun version: $(bun --version)"
             echo "📦 Node version: $(node --version)"
-            echo "📦 Wrangler version: $(wrangler --version)"
+
+            # Add node_modules/.bin to PATH for local wrangler
+            export PATH="$PWD/node_modules/.bin:$PATH"
+
+            # Check if wrangler is installed locally
+            if [ -f "$PWD/node_modules/.bin/wrangler" ]; then
+              echo "📦 Wrangler version: $(wrangler --version)"
+            else
+              echo "⚠️  Wrangler not found. Run 'bun install' to install dependencies."
+            fi
+
             echo ""
             echo "Available commands:"
             echo "  bun install          - Install dependencies"
