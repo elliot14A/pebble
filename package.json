@@ -29,6 +29,7 @@
 		"@tailwindcss/vite": "^4.1.17",
 		"@types/better-sqlite3": "^7.6.13",
 		"@types/node": "^24",
+		"daisyui": "^5.5.14",
 		"drizzle-kit": "^0.31.8",
 		"drizzle-orm": "^0.45.0",
 		"eslint": "^9.39.1",
