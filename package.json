@@ -1,0 +1,39 @@
+{
+  "name": "pebble",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "bun scripts/buildIcons.ts && bun scripts/buildClient.ts",
+    "dev": "bun run build && wrangler dev --port 3000",
+    "deploy": "bun run build && wrangler deploy",
+    "check": "biome check && tsc --noEmit",
+    "check:fix": "biome check --write",
+    "test": "bun test",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply pebble --local",
+    "db:migrate": "wrangler d1 migrations apply pebble --remote",
+    "seed": "bun scripts/seed.ts",
+    "seed:remote": "bun scripts/seed.ts --remote"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.5",
+    "@cloudflare/workers-types": "^5.20260722.1",
+    "@tailwindcss/cli": "^4.3.3",
+    "@types/alpinejs": "^3.13.11",
+    "@types/bun": "latest",
+    "drizzle-kit": "^0.31.10",
+    "htmx.org": "^2.0.10",
+    "lucide-static": "^1.30.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.113.0"
+  },
+  "dependencies": {
+    "alpinejs": "^3.15.12",
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.31",
+    "neverthrow": "^8.2.0",
+    "openai": "^7.4.0",
+    "zod": "^4.4.3"
+  }
+}
