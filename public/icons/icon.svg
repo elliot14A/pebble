@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="pebble">
+  <title>pebble</title>
+  <rect width="512" height="512" rx="112" fill="#0a5c3e"/>
+  <path d="M188 372V152h84c44 0 72 26 72 66s-28 68-72 68h-40v86z" fill="none" stroke="#eefaf4" stroke-width="34" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

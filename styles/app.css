@@ -1,0 +1,515 @@
+@import "tailwindcss";
+@source "../src";
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --pb-ground: #f2f0ea;
+  --pb-paper: #faf9f5;
+  --pb-surface: #ffffff;
+  --pb-sunk: #f4f2ec;
+  --pb-line: #e3e0d6;
+  --pb-line-soft: #ece9e1;
+
+  --pb-ink: #16201b;
+  --pb-ink-2: #4a5952;
+  --pb-ink-3: #7d8b83;
+  --pb-ink-4: #a6b1aa;
+
+  --pb-money: #0e7a52;
+  --pb-money-deep: #0a5c3e;
+  --pb-money-lift: #14966a;
+  --pb-money-wash: #e6f1ea;
+  --pb-money-edge: #c3ded0;
+  --pb-on-money: #eefaf4;
+
+  --pb-over: #b4462f;
+  --pb-over-wash: #f7e9e5;
+  --pb-warn: #b27a12;
+  --pb-warn-wash: #f8f0dd;
+  --pb-move: #4a5b8c;
+  --pb-move-wash: #e9ecf5;
+
+  --pb-shadow-card:
+    0 1px 2px rgb(22 32 27 / 0.04), 0 8px 24px -12px rgb(22 32 27 / 0.1);
+  --pb-shadow-sheet:
+    0 -2px 8px rgb(22 32 27 / 0.05), 0 -24px 60px -20px rgb(22 32 27 / 0.22);
+  --pb-shadow-lift:
+    0 2px 6px rgb(10 92 62 / 0.18), 0 12px 28px -10px rgb(10 92 62 / 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --pb-ground: #080c0a;
+    --pb-paper: #0d1311;
+    --pb-surface: #141c19;
+    --pb-sunk: #101815;
+    --pb-line: #22302b;
+    --pb-line-soft: #1a2521;
+
+    --pb-ink: #e6efea;
+    --pb-ink-2: #a8b8b0;
+    --pb-ink-3: #75857d;
+    --pb-ink-4: #4e5c55;
+
+    --pb-money: #3fb98a;
+    --pb-money-deep: #2c9c72;
+    --pb-money-lift: #55d0a0;
+    --pb-money-wash: #12271f;
+    --pb-money-edge: #1e4436;
+    --pb-on-money: #f2fffa;
+
+    --pb-over: #e0765c;
+    --pb-over-wash: #2a1713;
+    --pb-warn: #d9a441;
+    --pb-warn-wash: #2a2113;
+    --pb-move: #8a9bd0;
+    --pb-move-wash: #171d2c;
+
+    --pb-shadow-card:
+      0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+    --pb-shadow-sheet:
+      0 -2px 10px rgb(0 0 0 / 0.4), 0 -28px 70px -20px rgb(0 0 0 / 0.8);
+    --pb-shadow-lift:
+      0 2px 8px rgb(0 0 0 / 0.5), 0 14px 32px -12px rgb(20 150 106 / 0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  --pb-ground: #080c0a;
+  --pb-paper: #0d1311;
+  --pb-surface: #141c19;
+  --pb-sunk: #101815;
+  --pb-line: #22302b;
+  --pb-line-soft: #1a2521;
+
+  --pb-ink: #e6efea;
+  --pb-ink-2: #a8b8b0;
+  --pb-ink-3: #75857d;
+  --pb-ink-4: #4e5c55;
+
+  --pb-money: #3fb98a;
+  --pb-money-deep: #2c9c72;
+  --pb-money-lift: #55d0a0;
+  --pb-money-wash: #12271f;
+  --pb-money-edge: #1e4436;
+  --pb-on-money: #f2fffa;
+
+  --pb-over: #e0765c;
+  --pb-over-wash: #2a1713;
+  --pb-warn: #d9a441;
+  --pb-warn-wash: #2a2113;
+  --pb-move: #8a9bd0;
+  --pb-move-wash: #171d2c;
+
+  --pb-shadow-card:
+    0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+  --pb-shadow-sheet:
+    0 -2px 10px rgb(0 0 0 / 0.4), 0 -28px 70px -20px rgb(0 0 0 / 0.8);
+  --pb-shadow-lift:
+    0 2px 8px rgb(0 0 0 / 0.5), 0 14px 32px -12px rgb(20 150 106 / 0.35);
+}
+
+@theme inline {
+  --font-sans: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: var(--font-sans);
+
+  --color-ground: var(--pb-ground);
+  --color-paper: var(--pb-paper);
+  --color-surface: var(--pb-surface);
+  --color-sunk: var(--pb-sunk);
+  --color-line: var(--pb-line);
+  --color-line-soft: var(--pb-line-soft);
+
+  --color-ink: var(--pb-ink);
+  --color-ink-2: var(--pb-ink-2);
+  --color-ink-3: var(--pb-ink-3);
+  --color-ink-4: var(--pb-ink-4);
+
+  --color-money: var(--pb-money);
+  --color-money-deep: var(--pb-money-deep);
+  --color-money-lift: var(--pb-money-lift);
+  --color-money-wash: var(--pb-money-wash);
+  --color-money-edge: var(--pb-money-edge);
+  --color-on-money: var(--pb-on-money);
+
+  --color-over: var(--pb-over);
+  --color-over-wash: var(--pb-over-wash);
+  --color-warn: var(--pb-warn);
+  --color-warn-wash: var(--pb-warn-wash);
+  --color-move: var(--pb-move);
+  --color-move-wash: var(--pb-move-wash);
+
+  --radius-tile: 0.875rem;
+  --radius-card: 1.25rem;
+
+  --shadow-card: var(--pb-shadow-card);
+  --shadow-sheet: var(--pb-shadow-sheet);
+  --shadow-lift: var(--pb-shadow-lift);
+
+  --ease-pebble: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-variant-ligatures: none;
+    font-feature-settings:
+      "liga" 0,
+      "calt" 0;
+    overscroll-behavior-y: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-money);
+    outline-offset: 2px;
+  }
+
+  [x-cloak] {
+    /* biome-ignore lint/complexity/noImportantStyles: outranks the element's own display */
+    display: none !important;
+  }
+}
+
+@layer components {
+  .card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .amt {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+
+  .amt-sub {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    font-size: 10.5px;
+    color: var(--color-ink-3);
+  }
+
+  .label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-ink-3);
+  }
+
+  .ledger-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0.875rem;
+  }
+  .ledger-row + .ledger-row {
+    border-top: 1px solid var(--color-line-soft);
+  }
+
+  .glyph {
+    flex: 0 0 34px;
+    height: 34px;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    background-color: var(--color-money-wash);
+    color: var(--color-money-deep);
+  }
+  .glyph-warn {
+    background-color: var(--color-warn-wash);
+    color: var(--color-warn);
+  }
+  .glyph-move {
+    background-color: var(--color-move-wash);
+    color: var(--color-move);
+  }
+  .glyph-over {
+    background-color: var(--color-over-wash);
+    color: var(--color-over);
+  }
+  .glyph-flat {
+    background-color: var(--color-sunk);
+    color: var(--color-ink-3);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+    padding: 0.4375rem 0.8125rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background-color: var(--color-surface);
+    color: var(--color-ink-2);
+    font-size: 11.5px;
+    transition: all 0.12s var(--ease-pebble);
+  }
+  .chip-on {
+    background-color: var(--color-ink);
+    border-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .chip-money {
+    background-color: var(--color-money-wash);
+    border-color: var(--color-money-edge);
+    color: var(--color-money-deep);
+  }
+
+  .sheet {
+    background-color: var(--color-paper);
+    border-radius: 30px 30px 0 0;
+    box-shadow: var(--shadow-sheet);
+    padding: 0.625rem 1.25rem calc(1.875rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .key {
+    height: 54px;
+    border-radius: 16px;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-card);
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    user-select: none;
+    transition: transform 0.09s var(--ease-pebble);
+  }
+  .key:active {
+    transform: scale(0.94);
+  }
+  .key-ghost {
+    background-color: transparent;
+    box-shadow: none;
+    color: var(--color-ink-3);
+    font-size: 17px;
+  }
+
+  .bar {
+    height: 7px;
+    border-radius: 999px;
+    background-color: var(--color-sunk);
+    overflow: hidden;
+  }
+  .bar > i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background-color: var(--color-money);
+  }
+}
+
+@layer components {
+  .rise {
+    animation: rise 0.34s var(--ease-pebble) both;
+    animation-delay: calc(var(--i, 0) * 45ms);
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .pop {
+    animation: pop 0.28s var(--ease-spring) both;
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .fresh {
+    animation: fresh 2s var(--ease-pebble) both;
+  }
+  @keyframes fresh {
+    0%,
+    45% {
+      background-color: var(--color-money-wash);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+
+  .press {
+    transition: transform 0.1s var(--ease-pebble);
+  }
+  .press:active {
+    transform: scale(0.975);
+  }
+
+  .toast-undo {
+    animation:
+      toast-in 0.26s var(--ease-spring) both,
+      toast-out 0.4s var(--ease-pebble) 8s forwards;
+  }
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes toast-out {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .spinner {
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .progress {
+    position: fixed;
+    inset: 0 auto auto 0;
+    z-index: 60;
+    height: 2px;
+    width: 0;
+    opacity: 0;
+    background: var(--color-money);
+    box-shadow: 0 0 8px var(--color-money);
+  }
+  .progress.on {
+    opacity: 1;
+    animation: progress 2.2s var(--ease-pebble) forwards;
+  }
+  .progress.done {
+    width: 100%;
+    opacity: 0;
+    transition:
+      width 0.16s var(--ease-pebble),
+      opacity 0.3s 0.14s linear;
+    animation: none;
+  }
+  @keyframes progress {
+    0% {
+      width: 0;
+    }
+    45% {
+      width: 62%;
+    }
+    100% {
+      width: 90%;
+    }
+  }
+
+  .skeleton {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-sunk) 25%,
+      var(--color-line-soft) 37%,
+      var(--color-sunk) 63%
+    );
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+    border-radius: 8px;
+  }
+  @keyframes shimmer {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: -100% 0;
+    }
+  }
+
+  .busy {
+    display: none;
+  }
+  .htmx-request .busy {
+    display: inline-flex;
+  }
+  .htmx-request .idle {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+  .scroll-y {
+    overflow-y: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scroll-y::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: a user preference must win */
+    animation-duration: 0.001ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: a user preference must win */
+    transition-duration: 0.001ms !important;
+  }
+}
