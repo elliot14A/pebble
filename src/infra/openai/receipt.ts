@@ -1,12 +1,12 @@
 import { ResultAsync } from "neverthrow";
-import OpenAI from "openai";
+import type OpenAI from "openai";
 import { type AppResultAsync, appError, SystemErrorCode } from "@/core/error";
 import type { Reading } from "@/core/receipts/reading";
 import { readReceipt as parseReply } from "@/core/receipts/reading";
 
-export const DEFAULT_MODEL = "google/gemini-2.5-flash";
+export type ExtraBody = Readonly<Record<string, unknown>>;
 
-const BASE_URL = "https://openrouter.ai/api/v1";
+export type Reader = Pick<OpenAI, "chat">;
 
 const PROMPT = [
   "Read this shop receipt or bill.",
@@ -19,14 +19,8 @@ const PROMPT = [
   "Use an empty string for anything you cannot read. Never guess and never invent a value.",
 ].join(" ");
 
-export type Reader = Pick<OpenAI, "chat">;
-
-export const reader = (apiKey: string, referer: string): Reader =>
-  new OpenAI({
-    apiKey,
-    baseURL: BASE_URL,
-    defaultHeaders: { "HTTP-Referer": referer, "X-Title": "pebble" },
-  });
+const unreadable = (cause: unknown) =>
+  appError(SystemErrorCode.INTERNAL, "Could not read that receipt.", { cause });
 
 const toDataUrl = (image: ArrayBuffer, contentType: string): string => {
   const bytes = new Uint8Array(image);
@@ -37,36 +31,36 @@ const toDataUrl = (image: ArrayBuffer, contentType: string): string => {
   return `data:${contentType};base64,${btoa(binary)}`;
 };
 
-export const read = (
-  client: Reader,
-  image: ArrayBuffer,
-  contentType: string,
-  today: string,
-  model: string = DEFAULT_MODEL,
-): AppResultAsync<Reading> =>
-  ResultAsync.fromPromise(
-    client.chat.completions.create({
-      model,
-      temperature: 0,
-      max_tokens: 300,
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "user",
-          content: [
-            { type: "text", text: PROMPT },
-            {
-              type: "image_url",
-              image_url: { url: toDataUrl(image, contentType) },
-            },
-          ],
-        },
-      ],
-    }),
-    (cause) =>
-      appError(SystemErrorCode.INTERNAL, "Could not read that receipt.", {
-        cause,
-      }),
-  ).map((reply) =>
-    parseReply(reply.choices?.[0]?.message?.content ?? "", today),
-  );
+export const makeRead =
+  (client: Reader, model: string, extraBody: ExtraBody) =>
+  (
+    image: ArrayBuffer,
+    contentType: string,
+    today: string,
+  ): AppResultAsync<Reading> =>
+    ResultAsync.fromPromise(
+      client.chat.completions.create({
+        model,
+        temperature: 0,
+        max_tokens: 300,
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "text", text: PROMPT },
+              {
+                type: "image_url",
+                image_url: { url: toDataUrl(image, contentType) },
+              },
+            ],
+          },
+        ],
+        ...extraBody,
+      } as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming),
+      unreadable,
+    ).map((reply) =>
+      parseReply(reply.choices?.[0]?.message?.content ?? "", today),
+    );
+
+export type ReadReceipt = ReturnType<typeof makeRead>;

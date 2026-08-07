@@ -11,7 +11,11 @@ import { detach } from "@/app/receipts/detach";
 import { scan } from "@/app/receipts/scan";
 import { MAX_BYTES } from "@/core/receipts/receipt";
 import { fetch as fetchReceipt } from "@/infra/d1/actions/receipts";
-import type { Reader } from "@/infra/openrouter/receipt";
+import {
+  makeRead,
+  type Reader,
+  type ReadReceipt,
+} from "@/infra/openai/receipt";
 
 let d1: TestDatabase;
 
@@ -21,25 +25,33 @@ const USER = "u-1";
 
 const photo = (bytes = 32): ArrayBuffer => new Uint8Array(bytes).buffer;
 
-const replying = (content: string): Reader =>
-  ({
-    chat: {
-      completions: {
-        create: async () => ({ choices: [{ message: { content } }] }),
-      },
-    },
-  }) as unknown as Reader;
-
-const failing = (): Reader =>
-  ({
-    chat: {
-      completions: {
-        create: async () => {
-          throw new Error("the model is having a day");
+const replying = (content: string): ReadReceipt =>
+  makeRead(
+    {
+      chat: {
+        completions: {
+          create: async () => ({ choices: [{ message: { content } }] }),
         },
       },
-    },
-  }) as unknown as Reader;
+    } as unknown as Reader,
+    "a-model",
+    {},
+  );
+
+const failing = (): ReadReceipt =>
+  makeRead(
+    {
+      chat: {
+        completions: {
+          create: async () => {
+            throw new Error("the model is having a day");
+          },
+        },
+      },
+    } as unknown as Reader,
+    "a-model",
+    {},
+  );
 
 beforeAll(async () => {
   d1 = await openTestDatabase();

@@ -16,7 +16,9 @@
   ],
   "workers_dev": false,
   "vars": {
-    "PEBBLE_BASE_CURRENCY": "INR"
+    "PEBBLE_BASE_CURRENCY": "INR",
+    "PEBBLE_OPENAI_BASE_URL": "https://openrouter.ai/api/v1",
+    "PEBBLE_OPENAI_MODEL": "qwen/qwen3.7-flash"
   },
   "d1_databases": [
     {

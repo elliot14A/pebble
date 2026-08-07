@@ -1,2 +1,14 @@
-OPENROUTER_API_KEY=sk-or-v1-...
-PEBBLE_RECEIPT_MODEL=google/gemini-2.5-flash
+# Copy to `.dev.vars` (gitignored) for local `wrangler dev`, or set these as
+# Worker secrets/vars for production. Reading a receipt speaks the OpenAI
+# chat-completions API, so any compatible provider works: OpenRouter, OpenAI,
+# Groq, Together, a local server, etc. Just point the base URL at it. The model
+# has to accept images.
+
+PEBBLE_OPENAI_BASE_URL=https://openrouter.ai/api/v1
+PEBBLE_OPENAI_API_KEY=sk-your-key-here
+PEBBLE_OPENAI_MODEL=qwen/qwen3.7-flash
+
+# Optional: extra JSON merged into every chat-completions request body. Use it
+# for provider specifics, such as pinning one OpenRouter provider so prompt
+# caching actually hits. Leave empty for a plain OpenAI-compatible API.
+PEBBLE_OPENAI_EXTRA_BODY=

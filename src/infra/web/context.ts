@@ -24,9 +24,11 @@ export type Env = {
   Bindings: {
     DB: D1Database;
     RECEIPTS: R2Bucket;
-    OPENROUTER_API_KEY?: string;
     PEBBLE_BASE_CURRENCY?: string;
-    PEBBLE_RECEIPT_MODEL?: string;
+    PEBBLE_OPENAI_BASE_URL?: string;
+    PEBBLE_OPENAI_API_KEY?: string;
+    PEBBLE_OPENAI_MODEL?: string;
+    PEBBLE_OPENAI_EXTRA_BODY?: string;
   };
   Variables: {
     ctx: Context;

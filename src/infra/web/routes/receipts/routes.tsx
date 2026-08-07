@@ -2,8 +2,10 @@ import { Hono } from "hono";
 import { detach } from "@/app/receipts/detach";
 import { scan } from "@/app/receipts/scan";
 import { attach, fetch as fetchReceipt } from "@/infra/d1/actions/receipts";
-import { reader } from "@/infra/openrouter/receipt";
+import { makeClient } from "@/infra/openai/client";
+import { makeRead } from "@/infra/openai/receipt";
 import { getReceipt } from "@/infra/r2/receipts";
+import { readLlmConfig } from "@/infra/web/config";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
 
@@ -23,8 +25,8 @@ export const routes = (): Hono<Env> =>
         return c.json({ error: "Pick a photo of the receipt." }, 400);
       }
 
-      const key = c.env.OPENROUTER_API_KEY;
-      if (key === undefined || key === "") {
+      const llm = readLlmConfig(c.env);
+      if (llm.apiKey === "") {
         return c.json(
           { error: "Receipt reading is not switched on yet." },
           503,
@@ -34,14 +36,13 @@ export const routes = (): Hono<Env> =>
       const scanned = await scan(
         ctx.db,
         c.env.RECEIPTS,
-        reader(key, new URL(c.req.url).origin),
+        makeRead(makeClient(llm), llm.model, llm.extraBody),
         {
           userId: ctx.user.id,
           bytes: await file.arrayBuffer(),
           contentType: file.type,
           today: ctx.today,
           now: ctx.now,
-          model: c.env.PEBBLE_RECEIPT_MODEL,
         },
       );
 

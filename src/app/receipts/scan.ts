@@ -15,7 +15,7 @@ import {
 } from "@/core/receipts/receipt";
 import { create } from "@/infra/d1/actions/receipts";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
-import { type Reader, read } from "@/infra/openrouter/receipt";
+import type { ReadReceipt } from "@/infra/openai/receipt";
 import { putReceipt } from "@/infra/r2/receipts";
 
 export type ScanInput = Readonly<{
@@ -24,7 +24,6 @@ export type ScanInput = Readonly<{
   contentType: string;
   today: string;
   now: number;
-  model?: string;
 }>;
 
 export type Scanned = Readonly<{ receipt: Receipt; reading: Reading }>;
@@ -32,7 +31,7 @@ export type Scanned = Readonly<{ receipt: Receipt; reading: Reading }>;
 export const scan = (
   db: DrizzleD1Database,
   bucket: R2Bucket,
-  reader: Reader,
+  read: ReadReceipt,
   input: ScanInput,
 ): AppResultAsync<Scanned> => {
   const run = async (): Promise<AppResult<Scanned>> => {
@@ -65,13 +64,7 @@ export const scan = (
     const stored = await putReceipt(bucket, objectKey, input.bytes, type);
     if (stored.isErr()) return err(stored.error);
 
-    const seen = await read(
-      reader,
-      input.bytes,
-      type,
-      input.today,
-      input.model,
-    );
+    const seen = await read(input.bytes, type, input.today);
     const reading = seen.isOk() ? seen.value : NOTHING;
 
     const saved = await create(db, {

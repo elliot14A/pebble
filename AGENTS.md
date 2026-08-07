@@ -237,10 +237,11 @@ a receipt deletes the object **and** the row - a bucket full of orphans is a lea
 cache. `/receipts/:id` reads the row scoped by `userId` before it touches the bucket, so the
 key alone is not enough to fetch someone else's photo.
 
-Reading a receipt is the only place a model runs. It goes out through OpenRouter with the
-OpenAI SDK - `infra/openrouter/receipt.ts` - so the model is a string in
-`PEBBLE_RECEIPT_MODEL` and swapping it needs no code change. Without `OPENROUTER_API_KEY`
-the scan endpoint answers 503 and says so; everything else keeps working. It is best-effort by construction: if the
+Reading a receipt is the only place a model runs, and it speaks plain OpenAI
+chat-completions through the SDK, so any compatible provider works. Nothing about the
+provider is hard-coded: `readLlmConfig` takes the base URL, key, model and an optional
+`EXTRA_BODY` of provider specifics out of the env, exactly as the portfolio does. Without
+a key the scan endpoint answers 503 and says so; everything else keeps working. It is best-effort by construction: if the
 model errors or returns rubbish, the photo is still stored and the fields are simply left for
 the person to type. Never let a failed reading fail the upload.
 
