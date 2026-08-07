@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pebble-test",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-08-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "PEBBLE_BASE_CURRENCY": "INR"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pebble",
+      "database_id": "954d9917-fe64-4aa7-a7dc-040e1d4f690c",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "RECEIPTS",
+      "bucket_name": "pebble-receipts"
+    }
+  ]
+}
