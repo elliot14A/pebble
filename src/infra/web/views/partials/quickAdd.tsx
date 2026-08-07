@@ -113,16 +113,19 @@ export function QuickAdd(props: QuickAddProps) {
           </div>
 
           <div class="flex-none pt-5 pb-4 text-center">
-            <div class="amt flex items-baseline justify-center gap-1 text-[46px] leading-none tracking-[-0.06em]">
+            <div
+              class="amt flex items-baseline justify-center gap-1 text-[46px] leading-none tracking-[-0.06em]"
+              x-bind:class="flash.amount ? 'lit' : ''"
+            >
               <span class="text-[26px] text-ink-3" x-text="symbol()" />
               <span x-text="display()" />
               <span class="ml-1 h-10 w-0.5 animate-pulse rounded-sm bg-money" />
             </div>
 
-            <div class="mt-3 flex justify-center" x-show="type !== 'transfer'">
+            <div class="mt-4 px-1" x-show="type !== 'transfer'">
               <label
-                class="press inline-flex cursor-pointer items-center gap-2 rounded-[12px] bg-sunk px-3 py-1.5 text-[11.5px] font-semibold text-ink-2"
-                x-bind:class="scanning ? 'opacity-60' : ''"
+                class="press scan-tile relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-[16px] border border-money-edge bg-money-wash px-4 py-3 text-left"
+                x-bind:class="scanning ? 'reading pointer-events-none' : ''"
               >
                 <input
                   type="file"
@@ -132,21 +135,55 @@ export function QuickAdd(props: QuickAddProps) {
                   x-on:change="scan($event)"
                   x-bind:disabled="scanning"
                 />
-                <Icon name="camera" size={14} />
-                <span x-text="scanning ? 'Reading the receipt…' : 'Scan a receipt'" />
+
+                <span class="relative grid h-11 w-11 flex-none place-items-center overflow-hidden rounded-[13px] bg-money-deep text-on-money">
+                  <template x-if="preview === ''">
+                    <span class="grid place-items-center">
+                      <Icon name="camera" size={19} />
+                    </span>
+                  </template>
+                  <template x-if="preview !== ''">
+                    <img
+                      x-bind:src="preview"
+                      alt=""
+                      class="h-full w-full object-cover"
+                    />
+                  </template>
+                  <span class="scan-beam" x-show="scanning" x-cloak />
+                </span>
+
+                <span class="min-w-0 flex-1">
+                  <b
+                    class="block text-[13px] font-bold tracking-[-0.015em] text-money-deep"
+                    x-text="scanning ? 'Reading the receipt' : 'Scan a receipt'"
+                  />
+                  <span class="block text-[10.5px] text-money-deep/70">
+                    <span x-show="!scanning" x-cloak>
+                      Snap the bill and we fill it in
+                    </span>
+                    <span class="dots" x-show="scanning" x-cloak>
+                      Finding the amount, shop and date
+                    </span>
+                  </span>
+                </span>
+
+                <span class="flex-none text-money-deep" x-show="!scanning">
+                  <Icon name="arrow" size={16} />
+                </span>
               </label>
             </div>
 
             <p
-              class="mx-auto mt-2 max-w-[17rem] text-center text-[11px] text-ink-3"
-              x-show="scanNote !== ''"
+              class="mx-auto mt-2 max-w-[17rem] text-center text-[11px]"
+              x-bind:class="scanFailed ? 'text-over' : 'text-ink-3'"
+              x-show="scanNote !== '' && !scanning"
               x-cloak
               x-text="scanNote"
             />
 
             <label
               class="mx-auto mt-3.5 flex w-full max-w-[15rem] items-center gap-1.5 border-b pb-1.5 transition-colors duration-150"
-              x-bind:class="note.trim() === '' ? 'border-line' : 'border-money'"
+              x-bind:class="`${note.trim() === '' ? 'border-line' : 'border-money'} ${flash.name ? 'lit' : ''}`"
             >
               <input
                 type="text"
@@ -266,7 +303,10 @@ export function QuickAdd(props: QuickAddProps) {
               <header class="mb-2">
                 <span class="label">When</span>
               </header>
-              <div class="flex flex-wrap items-center gap-2">
+              <div
+                class="flex flex-wrap items-center gap-2"
+                x-bind:class="flash.date ? 'lit' : ''"
+              >
                 <button
                   type="button"
                   class="chip press"

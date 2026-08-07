@@ -1,4 +1,4 @@
-import { ResultAsync } from "neverthrow";
+import { errAsync, ResultAsync } from "neverthrow";
 import type OpenAI from "openai";
 import { type AppResultAsync, appError, SystemErrorCode } from "@/core/error";
 import type { Reading } from "@/core/receipts/reading";
@@ -64,3 +64,8 @@ export const makeRead =
     );
 
 export type ReadReceipt = ReturnType<typeof makeRead>;
+
+export const keepUnread: ReadReceipt = () =>
+  errAsync(
+    appError(SystemErrorCode.INTERNAL, "Nothing was asked of the model."),
+  );

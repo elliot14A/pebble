@@ -478,6 +478,92 @@
     }
   }
 
+  .scan-tile {
+    transition: border-color 0.2s var(--ease-pebble);
+  }
+  .scan-tile.reading {
+    border-color: var(--color-money);
+  }
+  .scan-tile.reading::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-money-deep),
+      transparent
+    );
+    animation: sweep 1.15s var(--ease-pebble) infinite;
+  }
+  @keyframes sweep {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  .scan-beam {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 40%;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgb(255 255 255 / 0.55),
+      transparent
+    );
+    animation: beam 1.15s ease-in-out infinite alternate;
+  }
+  @keyframes beam {
+    from {
+      transform: translateY(-40%);
+    }
+    to {
+      transform: translateY(190%);
+    }
+  }
+
+  .dots::after {
+    content: "";
+    animation: dots 1.2s steps(1, end) infinite;
+  }
+  @keyframes dots {
+    0% {
+      content: "";
+    }
+    25% {
+      content: ".";
+    }
+    50% {
+      content: "..";
+    }
+    75% {
+      content: "...";
+    }
+  }
+
+  .lit {
+    animation: lit 0.42s var(--ease-spring) both;
+  }
+  @keyframes lit {
+    0% {
+      transform: scale(1);
+    }
+    35% {
+      transform: scale(1.06);
+      filter: brightness(1.12);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
   .busy {
     display: none;
   }

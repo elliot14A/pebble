@@ -39,7 +39,10 @@ export const quickAdd = (config: QuickAddConfig) => ({
   clientId: "",
   receiptId: "",
   scanning: false,
+  scanFailed: false,
   scanNote: "",
+  preview: "",
+  flash: { amount: false, name: false, date: false },
   pad: empty(2) as Keypad,
 
   openSheet(): void {
@@ -47,6 +50,9 @@ export const quickAdd = (config: QuickAddConfig) => ({
     this.receiptId = "";
     this.scanNote = "";
     this.scanning = false;
+    this.scanFailed = false;
+    this.forgetPreview();
+    this.flash = { amount: false, name: false, date: false };
     this.categoryId = "";
     this.type = "expense";
     this.accountId = config.defaultAccountId ?? "";
@@ -61,6 +67,7 @@ export const quickAdd = (config: QuickAddConfig) => ({
 
   close(): void {
     this.open = false;
+    this.forgetPreview();
   },
 
   today(): string {
@@ -123,10 +130,13 @@ export const quickAdd = (config: QuickAddConfig) => ({
     input.value = "";
     if (file === undefined) return;
 
+    this.forgetPreview();
+    this.preview = URL.createObjectURL(file);
     this.scanning = true;
+    this.scanFailed = false;
     this.scanNote = "";
 
-    try {
+    const settle = async (): Promise<void> => {
       const body = new FormData();
       body.append("photo", file);
       const reply = await window.fetch("/receipts/scan", {
@@ -142,6 +152,7 @@ export const quickAdd = (config: QuickAddConfig) => ({
       };
 
       if (!reply.ok) {
+        this.scanFailed = true;
         this.scanNote = data.error ?? "Could not read that receipt.";
         return;
       }
@@ -151,26 +162,55 @@ export const quickAdd = (config: QuickAddConfig) => ({
 
       if (data.amountText) {
         this.pad = fromText(data.amountText, this.decimals());
+        await this.lit("amount");
         found.push("amount");
       }
       if (data.name) {
         this.note = data.name;
+        await this.lit("name");
         found.push("shop");
       }
       if (data.occurredOn) {
         this.occurredOn = data.occurredOn;
+        await this.lit("date");
         found.push("date");
       }
 
+      this.scanFailed = found.length === 0;
       this.scanNote =
         found.length === 0
           ? "Receipt saved, but nothing could be read. Type it in."
           : `Read the ${found.join(", ")}. Check it.`;
+    };
+
+    try {
+      await settle();
     } catch {
+      this.scanFailed = true;
       this.scanNote = "Could not reach the scanner.";
     } finally {
       this.scanning = false;
     }
+  },
+
+  forgetPreview(): void {
+    if (this.preview !== "") URL.revokeObjectURL(this.preview);
+    this.preview = "";
+  },
+
+  lit(field: "amount" | "name" | "date"): Promise<void> {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    this.flash = { ...this.flash, [field]: true };
+
+    return new Promise((done) => {
+      window.setTimeout(
+        () => {
+          this.flash = { ...this.flash, [field]: false };
+          done();
+        },
+        still ? 0 : 260,
+      );
+    });
   },
 
   press(key: string): void {

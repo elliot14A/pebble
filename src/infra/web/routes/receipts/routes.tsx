@@ -3,7 +3,7 @@ import { detach } from "@/app/receipts/detach";
 import { scan } from "@/app/receipts/scan";
 import { attach, fetch as fetchReceipt } from "@/infra/d1/actions/receipts";
 import { makeClient } from "@/infra/openai/client";
-import { makeRead } from "@/infra/openai/receipt";
+import { keepUnread, makeRead } from "@/infra/openai/receipt";
 import { getReceipt } from "@/infra/r2/receipts";
 import { readLlmConfig } from "@/infra/web/config";
 import type { Env } from "@/infra/web/context";
@@ -25,28 +25,28 @@ export const routes = (): Hono<Env> =>
         return c.json({ error: "Pick a photo of the receipt." }, 400);
       }
 
+      const transactionId = field(form, "transactionId");
       const llm = readLlmConfig(c.env);
-      if (llm.apiKey === "") {
+
+      if (transactionId === "" && llm.apiKey === "") {
         return c.json(
           { error: "Receipt reading is not switched on yet." },
           503,
         );
       }
 
-      const scanned = await scan(
-        ctx.db,
-        c.env.RECEIPTS,
-        makeRead(makeClient(llm), llm.model, llm.extraBody),
-        {
-          userId: ctx.user.id,
-          bytes: await file.arrayBuffer(),
-          contentType: file.type,
-          today: ctx.today,
-          now: ctx.now,
-        },
-      );
+      const read =
+        transactionId === ""
+          ? makeRead(makeClient(llm), llm.model, llm.extraBody)
+          : keepUnread;
 
-      const transactionId = field(form, "transactionId");
+      const scanned = await scan(ctx.db, c.env.RECEIPTS, read, {
+        userId: ctx.user.id,
+        bytes: await file.arrayBuffer(),
+        contentType: file.type,
+        today: ctx.today,
+        now: ctx.now,
+      });
 
       if (scanned.isErr()) {
         const { status, message } = errorToHttp(scanned.error);
