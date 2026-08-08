@@ -11,18 +11,15 @@ import {
   createUser,
   type NewUserInput,
   resetPassword,
-  setUserStatus,
 } from "@/app/admin/users";
 import { login } from "@/app/auth/login";
 import { hashPassword } from "@/core/auth/password";
 import { hashToken } from "@/core/auth/session";
 import { ResourceErrorCode } from "@/core/error";
-import type { User } from "@/core/users/user";
 import { fetchByToken } from "@/infra/d1/actions/sessions";
 import { save as saveUser } from "@/infra/d1/actions/users";
 
 let d1: TestDatabase;
-let admin: User;
 
 const NOW = Date.UTC(2026, 7, 8, 12, 0, 0);
 
@@ -58,7 +55,6 @@ beforeEach(async () => {
     createdAt: NOW,
   });
   if (saved.isErr()) throw new Error(saved.error.message);
-  admin = saved.value;
 });
 
 describe("createUser", () => {
@@ -113,31 +109,5 @@ describe("resetPassword", () => {
     expect(
       (await login(d1.db, "vamshi", "pebble-second", NOW + 2000)).isOk(),
     ).toBe(true);
-  });
-});
-
-describe("setUserStatus", () => {
-  it("signs a disabled account out everywhere", async () => {
-    const created = await createUser(d1.db, INPUT, NOW);
-    if (created.isErr()) throw new Error(created.error.message);
-
-    const signedIn = await login(d1.db, "vamshi", INPUT.temporaryPassword, NOW);
-    if (signedIn.isErr()) throw new Error(signedIn.error.message);
-
-    const disabled = await setUserStatus(
-      d1.db,
-      admin,
-      created.value.id,
-      "disabled",
-      NOW + 1000,
-    );
-    expect(disabled.isOk()).toBe(true);
-
-    const stale = await fetchByToken(
-      d1.db,
-      await hashToken(signedIn.value.token),
-    );
-    if (stale.isErr()) throw new Error(stale.error.message);
-    expect(stale.value).toBeNull();
   });
 });

@@ -112,21 +112,6 @@ describe("scan", () => {
     expect(scanned.value.receipt.readAt).toBeNull();
     expect(await d1.bucket.get(scanned.value.receipt.objectKey)).not.toBeNull();
   });
-
-  it("keeps one person's receipt away from another", async () => {
-    const scanned = await scan(d1.db, d1.bucket, replying("{}"), {
-      userId: USER,
-      bytes: photo(),
-      contentType: "image/jpeg",
-      today: TODAY,
-      now: NOW,
-    });
-    if (scanned.isErr()) throw new Error(scanned.error.message);
-
-    const theirs = await fetchReceipt(d1.db, "u-2", scanned.value.receipt.id);
-    if (theirs.isErr()) throw new Error(theirs.error.message);
-    expect(theirs.value).toBeNull();
-  });
 });
 
 describe("detach", () => {

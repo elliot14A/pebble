@@ -43,6 +43,13 @@
       "when": 1786259665180,
       "tag": "0005_category_prefs",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1786260404304,
+      "tag": "0006_recurring",
+      "breakpoints": true
     }
   ]
 }

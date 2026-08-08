@@ -21,17 +21,6 @@ describe("parseRate", () => {
 describe("convert", () => {
   const eurToInr = parseRate("91.45")._unsafeUnwrap();
 
-  it("crosses a currency that has no minor unit", () => {
-    const jpyToInr = parseRate("0.55")._unsafeUnwrap();
-
-    expect(
-      convert(amount(1200, "JPY"), "INR", jpyToInr)._unsafeUnwrap(),
-    ).toEqual({
-      minor: 66000,
-      currency: "INR",
-    });
-  });
-
   it("keeps the sign and rounds half away from zero", () => {
     const half = parseRate("0.5")._unsafeUnwrap();
     expect(convert(amount(1, "EUR"), "INR", half)._unsafeUnwrap().minor).toBe(

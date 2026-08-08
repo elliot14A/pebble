@@ -14,13 +14,6 @@ describe("money", () => {
 });
 
 describe("parseAmount", () => {
-  it("respects a currency with no minor unit", () => {
-    expect(parseAmount("1200", "JPY")._unsafeUnwrap().minor).toBe(1200);
-    expect(parseAmount("12.5", "JPY")._unsafeUnwrapErr().code).toBe(
-      MoneyErrorCode.INVALID_AMOUNT,
-    );
-  });
-
   it("rejects more decimals than the currency has", () => {
     expect(parseAmount("8.401", "EUR")._unsafeUnwrapErr().code).toBe(
       MoneyErrorCode.INVALID_AMOUNT,

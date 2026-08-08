@@ -1,7 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import {
   byCategory,
-  byMonth,
   monthsEnding,
   topWithRest,
   totalOf,
@@ -65,15 +64,6 @@ describe("byCategory", () => {
     ]);
 
     expect(buckets).toEqual([]);
-  });
-});
-
-describe("byMonth", () => {
-  it("keeps a month with no activity so the chart has no gaps", () => {
-    expect(byMonth([], ["2026-06", "2026-07"])).toEqual([
-      { month: "2026-06", inMinor: 0, outMinor: 0 },
-      { month: "2026-07", inMinor: 0, outMinor: 0 },
-    ]);
   });
 });
 

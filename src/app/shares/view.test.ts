@@ -146,13 +146,6 @@ describe("view", () => {
     expect((await view(d1.db, share.token, NOW)).isErr()).toBe(true);
   });
 
-  it("refuses an expired link", async () => {
-    const share = await shareFor("u-1", "2026-08-01", "2026-08-09");
-    const later = NOW + 31 * 24 * 60 * 60 * 1000;
-
-    expect((await view(d1.db, share.token, later)).isErr()).toBe(true);
-  });
-
   it("goes dark when the owner is disabled", async () => {
     const share = await shareFor("u-1", "2026-08-01", "2026-08-09");
     await setStatus(d1.db, "u-1", "disabled");

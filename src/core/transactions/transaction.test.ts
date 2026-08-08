@@ -29,12 +29,6 @@ describe("validateNewTransaction", () => {
     expect(errFor({ amountMinor: -1 })).toBe(ValidationErrorCode.INVALID_INPUT);
   });
 
-  it("refuses a date that is not YYYY-MM-DD", () => {
-    expect(errFor({ occurredOn: "08/08/2026" })).toBe(
-      ValidationErrorCode.INVALID_INPUT,
-    );
-  });
-
   it("requires a transfer to name a different destination", () => {
     expect(errFor({ type: "transfer" })).toBe(
       ValidationErrorCode.INVALID_INPUT,

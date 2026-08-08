@@ -239,3 +239,31 @@ export const categoryPrefs = sqliteTable(
     uniqueIndex("category_prefs_unique_idx").on(table.userId, table.categoryId),
   ],
 );
+
+export const recurring = sqliteTable(
+  "recurring",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+
+    kind: text("kind").notNull().$type<"transaction" | "bill">(),
+    type: text("type").notNull().$type<"expense" | "income">(),
+    name: text("name").notNull(),
+    amountMinor: integer("amount_minor").notNull(),
+    currency: text("currency").notNull(),
+    accountId: text("account_id").notNull(),
+    categoryId: text("category_id"),
+
+    every: text("every").notNull().$type<"week" | "month" | "year">(),
+    dayOfMonth: integer("day_of_month").notNull(),
+    nextOn: text("next_on").notNull(),
+    lastRunOn: text("last_run_on"),
+
+    createdAt: integer("created_at").notNull(),
+    archivedAt: integer("archived_at"),
+  },
+  (table) => [
+    index("recurring_due_idx").on(table.nextOn, table.archivedAt),
+    index("recurring_owner_idx").on(table.userId, table.archivedAt),
+  ],
+);

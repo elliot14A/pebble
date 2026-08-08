@@ -28,6 +28,9 @@
       "migrations_dir": "migrations"
     }
   ],
+  "triggers": {
+    "crons": ["30 18 * * *"]
+  },
   "r2_buckets": [
     {
       "binding": "RECEIPTS",

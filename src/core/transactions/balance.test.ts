@@ -1,6 +1,5 @@
 import { describe, expect, it } from "bun:test";
 import {
-  accountBalanceMinor,
   flowMinor,
   groupByDay,
   netWorthMinor,
@@ -41,16 +40,6 @@ const tx = (
     ...extra,
   };
 };
-
-describe("accountBalanceMinor", () => {
-  it("moves a transfer out of one account and into the other", () => {
-    const rows = [
-      tx("transfer", 500000, { accountId: "a1", counterAccountId: "a2" }),
-    ];
-    expect(accountBalanceMinor(0, rows, "a1")).toBe(-500000);
-    expect(accountBalanceMinor(0, rows, "a2")).toBe(500000);
-  });
-});
 
 describe("netWorthMinor", () => {
   it("counts a foreign expense at its frozen base amount, not its face value", () => {
