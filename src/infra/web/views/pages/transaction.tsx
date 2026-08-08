@@ -1,5 +1,6 @@
 import type { Account } from "@/core/accounts/account";
 import type { Category } from "@/core/categories/category";
+import { currencyOf } from "@/core/money/currency";
 import { displayMoney } from "@/core/money/money";
 import { formatRate } from "@/core/rates/rate";
 import type { Receipt } from "@/core/receipts/receipt";
@@ -32,6 +33,7 @@ export function TransactionPage(props: TransactionPageProps) {
   const credit = tx.type === "income" || tx.type === "refund";
   const named = tx.note?.trim() ?? "";
   const foreign = tx.currency !== props.baseCurrency;
+  const refundable = plainAmount(tx.amountMinor, tx.currency);
 
   return (
     <Shell title={named === "" ? "Transaction" : named} tab="none">
@@ -137,7 +139,43 @@ export function TransactionPage(props: TransactionPageProps) {
         />
       </div>
 
-      <div class="rise mx-5 mt-5" style="--i:4">
+      {tx.type === "expense" ? (
+        <div class="rise mx-5 mt-4" style="--i:4" x-data="{ open: false }">
+          <button
+            type="button"
+            x-on:click="open = !open"
+            class="press card flex h-11 w-full items-center justify-center gap-2 text-[12.5px] font-semibold text-ink-2"
+          >
+            <Icon name="undo" size={15} />
+            Money came back
+          </button>
+
+          <form
+            method="post"
+            action={`/transactions/${tx.id}/refund`}
+            class="mt-2 flex gap-2"
+            x-show="open"
+            x-cloak
+          >
+            <input
+              type="text"
+              name="amountText"
+              inputmode="decimal"
+              value={refundable}
+              required
+              class="min-w-0 flex-1 rounded-tile bg-sunk px-3 py-2.5 text-[13px] font-semibold text-ink outline-none"
+            />
+            <button
+              type="submit"
+              class="press rounded-[13px] bg-money-deep px-4 text-[12.5px] font-bold text-on-money"
+            >
+              Refund
+            </button>
+          </form>
+        </div>
+      ) : null}
+
+      <div class="rise mx-5 mt-5" style="--i:5">
         <Receipts
           receipts={props.receipts}
           transactionId={props.transaction.id}
@@ -232,4 +270,11 @@ function Receipts(props: {
       )}
     </div>
   );
+}
+
+function plainAmount(minor: number, currency: string): string {
+  const found = currencyOf(currency);
+  const places = found.isOk() ? found.value.exponent : 2;
+  if (places === 0) return String(minor);
+  return (minor / 10 ** places).toFixed(places);
 }
