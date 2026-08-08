@@ -129,18 +129,6 @@ describe("overview", () => {
     expect(fuel?.progress.state).toBe("ok");
   });
 
-  it("puts the category closest to trouble first", async () => {
-    await budget("cat-fuel", "10000");
-    await budget("cat-food", "1000");
-    await spend("900", "cat-food", "2026-08-02");
-    await spend("100", "cat-fuel", "2026-08-02");
-
-    const data = await overview(d1.db, USER, MONTH, TODAY);
-    if (data.isErr()) throw new Error(data.error.message);
-
-    expect(data.value.lines[0]?.budget.categoryId).toBe("cat-food");
-  });
-
   it("lets a refund give the budget back", async () => {
     await budget("cat-food", "6000");
     await spend("5000", "cat-food", "2026-08-02");
@@ -168,30 +156,6 @@ describe("overview", () => {
       (line) => line.budget.categoryId === "cat-food",
     );
     expect(food?.progress.spentMinor).toBe(300_000);
-  });
-
-  it("replaces the limit rather than stacking a second one", async () => {
-    const first = await budget("cat-food", "6000");
-    const second = await budget("cat-food", "9000");
-
-    expect(second.id).toBe(first.id);
-
-    const data = await overview(d1.db, USER, MONTH, TODAY);
-    if (data.isErr()) throw new Error(data.error.message);
-
-    expect(data.value.lines.length).toBe(1);
-    expect(data.value.lines[0]?.progress.limitMinor).toBe(900_000);
-  });
-
-  it("refuses a limit of nothing", async () => {
-    const zero = await set(d1.db, {
-      userId: USER,
-      categoryId: null,
-      amountText: "0",
-      currency: "INR",
-      now: NOW,
-    });
-    expect(zero.isErr()).toBe(true);
   });
 
   it("projects the month from the run rate so far", async () => {

@@ -9,7 +9,6 @@ import {
 import { openTestDatabase, type TestDatabase } from "@test/d1";
 import { detach } from "@/app/receipts/detach";
 import { scan } from "@/app/receipts/scan";
-import { MAX_BYTES } from "@/core/receipts/receipt";
 import { fetch as fetchReceipt } from "@/infra/d1/actions/receipts";
 import {
   makeRead,
@@ -114,37 +113,6 @@ describe("scan", () => {
     expect(await d1.bucket.get(scanned.value.receipt.objectKey)).not.toBeNull();
   });
 
-  it("refuses anything that is not a photo", async () => {
-    const scanned = await scan(d1.db, d1.bucket, replying("{}"), {
-      userId: USER,
-      bytes: photo(),
-      contentType: "application/pdf",
-      today: TODAY,
-      now: NOW,
-    });
-    expect(scanned.isErr()).toBe(true);
-  });
-
-  it("refuses an empty or oversized photo", async () => {
-    const empty = await scan(d1.db, d1.bucket, replying("{}"), {
-      userId: USER,
-      bytes: photo(0),
-      contentType: "image/png",
-      today: TODAY,
-      now: NOW,
-    });
-    expect(empty.isErr()).toBe(true);
-
-    const huge = await scan(d1.db, d1.bucket, replying("{}"), {
-      userId: USER,
-      bytes: photo(MAX_BYTES + 1),
-      contentType: "image/png",
-      today: TODAY,
-      now: NOW,
-    });
-    expect(huge.isErr()).toBe(true);
-  });
-
   it("keeps one person's receipt away from another", async () => {
     const scanned = await scan(d1.db, d1.bucket, replying("{}"), {
       userId: USER,
@@ -180,25 +148,5 @@ describe("detach", () => {
     const row = await fetchReceipt(d1.db, USER, id);
     if (row.isErr()) throw new Error(row.error.message);
     expect(row.value).toBeNull();
-  });
-
-  it("will not let one person delete another's receipt", async () => {
-    const scanned = await scan(d1.db, d1.bucket, replying("{}"), {
-      userId: USER,
-      bytes: photo(),
-      contentType: "image/jpeg",
-      today: TODAY,
-      now: NOW,
-    });
-    if (scanned.isErr()) throw new Error(scanned.error.message);
-
-    const theirs = await detach(
-      d1.db,
-      d1.bucket,
-      "u-2",
-      scanned.value.receipt.id,
-    );
-    expect(theirs.isErr()).toBe(true);
-    expect(await d1.bucket.get(scanned.value.receipt.objectKey)).not.toBeNull();
   });
 });

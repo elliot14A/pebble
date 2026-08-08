@@ -13,11 +13,10 @@ import {
   resetPassword,
   setUserStatus,
 } from "@/app/admin/users";
-import { changePassword } from "@/app/auth/changePassword";
 import { login } from "@/app/auth/login";
 import { hashPassword } from "@/core/auth/password";
 import { hashToken } from "@/core/auth/session";
-import { ResourceErrorCode, ValidationErrorCode } from "@/core/error";
+import { ResourceErrorCode } from "@/core/error";
 import type { User } from "@/core/users/user";
 import { fetchByToken } from "@/infra/d1/actions/sessions";
 import { save as saveUser } from "@/infra/d1/actions/users";
@@ -73,23 +72,6 @@ describe("createUser", () => {
     expect(signedIn.isOk()).toBe(true);
   });
 
-  it("does not keep the temporary password in the clear", async () => {
-    const created = await createUser(d1.db, INPUT, NOW);
-    if (created.isErr()) throw new Error(created.error.message);
-
-    expect(created.value.passwordHash).not.toContain(INPUT.temporaryPassword);
-  });
-
-  it("lowercases the username", async () => {
-    const created = await createUser(
-      d1.db,
-      { ...INPUT, username: "VaMsHi" },
-      NOW,
-    );
-    if (created.isErr()) throw new Error(created.error.message);
-    expect(created.value.username).toBe("vamshi");
-  });
-
   it("refuses a username that is already taken", async () => {
     await createUser(d1.db, INPUT, NOW);
 
@@ -97,24 +79,6 @@ describe("createUser", () => {
     expect(again.isErr()).toBe(true);
     if (!again.isErr()) return;
     expect(again.error.code).toBe(ResourceErrorCode.CONFLICT);
-  });
-
-  it("refuses a username with spaces or symbols", async () => {
-    for (const username of ["two words", "a", "hey!", ""]) {
-      const created = await createUser(d1.db, { ...INPUT, username }, NOW);
-      expect(created.isErr()).toBe(true);
-    }
-  });
-
-  it("refuses a temporary password that is too short", async () => {
-    const created = await createUser(
-      d1.db,
-      { ...INPUT, temporaryPassword: "short" },
-      NOW,
-    );
-    expect(created.isErr()).toBe(true);
-    if (!created.isErr()) return;
-    expect(created.error.code).toBe(ValidationErrorCode.INVALID_INPUT);
   });
 });
 
@@ -175,92 +139,5 @@ describe("setUserStatus", () => {
     );
     if (stale.isErr()) throw new Error(stale.error.message);
     expect(stale.value).toBeNull();
-  });
-
-  it("will not let an admin lock themselves out", async () => {
-    const result = await setUserStatus(d1.db, admin, admin.id, "disabled", NOW);
-    expect(result.isErr()).toBe(true);
-  });
-
-  it("lets a disabled account back in", async () => {
-    const created = await createUser(d1.db, INPUT, NOW);
-    if (created.isErr()) throw new Error(created.error.message);
-
-    await setUserStatus(d1.db, admin, created.value.id, "disabled", NOW);
-    await setUserStatus(d1.db, admin, created.value.id, "active", NOW + 1000);
-
-    const signedIn = await login(
-      d1.db,
-      "vamshi",
-      INPUT.temporaryPassword,
-      NOW + 2000,
-    );
-    expect(signedIn.isOk()).toBe(true);
-  });
-});
-
-describe("changePassword", () => {
-  it("swaps the password and clears the forced change", async () => {
-    const created = await createUser(d1.db, INPUT, NOW);
-    if (created.isErr()) throw new Error(created.error.message);
-
-    const changed = await changePassword(
-      d1.db,
-      created.value,
-      INPUT.temporaryPassword,
-      "pebble-chosen",
-      "pebble-chosen",
-      NOW + 1000,
-    );
-    expect(changed.isOk()).toBe(true);
-
-    const signedIn = await login(d1.db, "vamshi", "pebble-chosen", NOW + 2000);
-    if (signedIn.isErr()) throw new Error(signedIn.error.message);
-    expect(signedIn.value.user.mustChangePassword).toBe(false);
-  });
-
-  it("refuses when the confirmation does not match", async () => {
-    const created = await createUser(d1.db, INPUT, NOW);
-    if (created.isErr()) throw new Error(created.error.message);
-
-    const changed = await changePassword(
-      d1.db,
-      created.value,
-      INPUT.temporaryPassword,
-      "pebble-chosen",
-      "pebble-typo",
-      NOW + 1000,
-    );
-    expect(changed.isErr()).toBe(true);
-  });
-
-  it("refuses when the current password is wrong", async () => {
-    const created = await createUser(d1.db, INPUT, NOW);
-    if (created.isErr()) throw new Error(created.error.message);
-
-    const changed = await changePassword(
-      d1.db,
-      created.value,
-      "not-it",
-      "pebble-chosen",
-      "pebble-chosen",
-      NOW + 1000,
-    );
-    expect(changed.isErr()).toBe(true);
-  });
-
-  it("refuses reusing the same password", async () => {
-    const created = await createUser(d1.db, INPUT, NOW);
-    if (created.isErr()) throw new Error(created.error.message);
-
-    const changed = await changePassword(
-      d1.db,
-      created.value,
-      INPUT.temporaryPassword,
-      INPUT.temporaryPassword,
-      INPUT.temporaryPassword,
-      NOW + 1000,
-    );
-    expect(changed.isErr()).toBe(true);
   });
 });

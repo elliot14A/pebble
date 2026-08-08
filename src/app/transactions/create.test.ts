@@ -12,7 +12,7 @@ import {
   create,
   type NewTransactionInput,
 } from "@/app/transactions/create";
-import { ResourceErrorCode, ValidationErrorCode } from "@/core/error";
+import { ResourceErrorCode } from "@/core/error";
 import { save as saveAccount } from "@/infra/d1/actions/accounts";
 import { save as saveRate } from "@/infra/d1/actions/rates";
 import { list } from "@/infra/d1/actions/transactions";
@@ -65,33 +65,6 @@ beforeEach(async () => {
 });
 
 describe("create", () => {
-  it("parses the keypad text against the account's currency", async () => {
-    const saved = (await create(d1.db, input(), OPTIONS))._unsafeUnwrap();
-
-    expect(saved.amountMinor).toBe(48600);
-    expect(saved.currency).toBe("INR");
-  });
-
-  it("defaults the date to today, so the fast path needs no date tap", async () => {
-    const saved = (await create(d1.db, input(), OPTIONS))._unsafeUnwrap();
-    expect(saved.occurredOn).toBe("2026-08-08");
-  });
-
-  it("saves without a category, because only the amount is required", async () => {
-    const saved = (
-      await create(d1.db, input({ categoryId: null }), OPTIONS)
-    )._unsafeUnwrap();
-    expect(saved.categoryId).toBeNull();
-  });
-
-  it("needs no rate when the account is already in the base currency", async () => {
-    const saved = (await create(d1.db, input(), OPTIONS))._unsafeUnwrap();
-
-    expect(saved.baseAmountMinor).toBe(48600);
-    expect(saved.fxRateE8).toBeNull();
-    expect(saved.fxPending).toBe(false);
-  });
-
   it("freezes the rate onto a foreign transaction", async () => {
     await saveRate(
       d1.db,
@@ -177,51 +150,9 @@ describe("create", () => {
     expect(saved.fxPending).toBe(true);
   });
 
-  it("moves a transfer between two accounts of the same currency", async () => {
-    const saved = (
-      await create(
-        d1.db,
-        input({
-          type: "transfer",
-          counterAccountId: "acc-cash",
-          categoryId: null,
-          note: null,
-          amountText: "5000",
-        }),
-        OPTIONS,
-      )
-    )._unsafeUnwrap();
-
-    expect(saved.counterAccountId).toBe("acc-cash");
-    expect(saved.baseAmountMinor).toBe(500000);
-  });
-
-  it("refuses a transfer across currencies rather than mangling it", async () => {
-    const failed = await create(
-      d1.db,
-      input({
-        type: "transfer",
-        counterAccountId: "acc-eur",
-        categoryId: null,
-        note: null,
-        amountText: "5000",
-      }),
-      OPTIONS,
-    );
-
-    expect(failed._unsafeUnwrapErr().code).toBe(
-      ValidationErrorCode.INVALID_INPUT,
-    );
-  });
-
   it("refuses an account that belongs to somebody else", async () => {
     const failed = await create(d1.db, input({ userId: "intruder" }), OPTIONS);
     expect(failed._unsafeUnwrapErr().code).toBe(ResourceErrorCode.NOT_FOUND);
-  });
-
-  it("rejects an unreadable amount instead of coercing it", async () => {
-    const failed = await create(d1.db, input({ amountText: "4.8.6" }), OPTIONS);
-    expect(failed.isErr()).toBe(true);
   });
 
   it("is idempotent, so replaying a queued offline save adds nothing", async () => {

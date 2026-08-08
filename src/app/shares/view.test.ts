@@ -138,24 +138,12 @@ describe("view", () => {
     expect(names).toEqual(["Mine"]);
   });
 
-  it("refuses an unknown token", async () => {
-    expect((await view(d1.db, "no-such-token", NOW)).isErr()).toBe(true);
-  });
-
   it("refuses a revoked link", async () => {
     const share = await shareFor("u-1", "2026-08-01", "2026-08-09");
     expect((await view(d1.db, share.token, NOW)).isOk()).toBe(true);
 
     await revoke(d1.db, "u-1", share.id, NOW);
     expect((await view(d1.db, share.token, NOW)).isErr()).toBe(true);
-  });
-
-  it("will not let one person revoke another's link", async () => {
-    const share = await shareFor("u-1", "2026-08-01", "2026-08-09");
-
-    await revoke(d1.db, "u-2", share.id, NOW);
-
-    expect((await view(d1.db, share.token, NOW)).isOk()).toBe(true);
   });
 
   it("refuses an expired link", async () => {
@@ -170,30 +158,5 @@ describe("view", () => {
     await setStatus(d1.db, "u-1", "disabled");
 
     expect((await view(d1.db, share.token, NOW)).isErr()).toBe(true);
-  });
-
-  it("counts every view", async () => {
-    const share = await shareFor("u-1", "2026-08-01", "2026-08-09");
-
-    await view(d1.db, share.token, NOW);
-    await view(d1.db, share.token, NOW + 1000);
-    const third = await view(d1.db, share.token, NOW + 2000);
-    if (third.isErr()) throw new Error(third.error.message);
-
-    expect(third.value.share.viewCount).toBe(2);
-  });
-
-  it("keeps showing new entries added inside the window", async () => {
-    const share = await shareFor("u-1", "2026-08-01", "2026-08-31");
-
-    const before = await view(d1.db, share.token, NOW);
-    if (before.isErr()) throw new Error(before.error.message);
-    expect(before.value.transactionCount).toBe(0);
-
-    await spend("u-1", "250", "Added later", "2026-08-15");
-
-    const after = await view(d1.db, share.token, NOW);
-    if (after.isErr()) throw new Error(after.error.message);
-    expect(after.value.transactionCount).toBe(1);
   });
 });

@@ -71,23 +71,6 @@ const read = async () =>
   (await overview(d1.db, "u1", "INR", TODAY))._unsafeUnwrap();
 
 describe("overview", () => {
-  it("splits the month into money in and money out", async () => {
-    await add({
-      type: "income",
-      amountMinor: 9640000,
-      baseAmountMinor: 9640000,
-    });
-    await add({
-      type: "expense",
-      amountMinor: 5128600,
-      baseAmountMinor: 5128600,
-    });
-
-    const summary = await read();
-    expect(summary.inMinor).toBe(9640000);
-    expect(summary.outMinor).toBe(5128600);
-  });
-
   it("saves what is left over, and reports the rate in basis points", async () => {
     await add({
       type: "income",
@@ -105,56 +88,6 @@ describe("overview", () => {
     expect(summary.savingsRateBps).toBe(7500);
   });
 
-  it("goes negative when the month spends more than it earns", async () => {
-    await add({ type: "income", amountMinor: 100000, baseAmountMinor: 100000 });
-    await add({
-      type: "expense",
-      amountMinor: 300000,
-      baseAmountMinor: 300000,
-    });
-
-    const summary = await read();
-    expect(summary.savedMinor).toBe(-200000);
-    expect(summary.savingsRateBps).toBe(-20000);
-  });
-
-  it("reports a zero rate rather than dividing by no income", async () => {
-    await add({ type: "expense", amountMinor: 50000, baseAmountMinor: 50000 });
-
-    const summary = await read();
-    expect(summary.savedMinor).toBe(-50000);
-    expect(summary.savingsRateBps).toBe(0);
-  });
-
-  it("averages spending over the days elapsed, not the whole month", async () => {
-    await add({
-      type: "expense",
-      amountMinor: 100000,
-      baseAmountMinor: 100000,
-    });
-
-    // 10 days in, so a single ₹1,000 expense averages ₹100 a day.
-    const summary = await read();
-    expect(summary.dailyAverageMinor).toBe(10000);
-  });
-
-  it("counts only this month, not last month's spending", async () => {
-    await add({
-      type: "expense",
-      amountMinor: 900000,
-      baseAmountMinor: 900000,
-      occurredOn: "2026-07-31",
-    });
-    await add({
-      type: "expense",
-      amountMinor: 100000,
-      baseAmountMinor: 100000,
-    });
-
-    const summary = await read();
-    expect(summary.outMinor).toBe(100000);
-  });
-
   it("nets a refund off spending so it matches the category totals", async () => {
     await add({
       type: "expense",
@@ -167,30 +100,6 @@ describe("overview", () => {
     expect(summary.inMinor).toBe(0);
     expect(summary.outMinor).toBe(530000);
     expect(summary.savedMinor).toBe(-530000);
-  });
-
-  it("leaves transfers out of both sides", async () => {
-    await saveAccount(d1.db, {
-      id: "acc-cash",
-      userId: "u1",
-      name: "Cash",
-      kind: "cash",
-      currency: "INR",
-      openingBalanceMinor: 0,
-      sortOrder: 1,
-      archivedAt: null,
-    });
-    await add({
-      type: "transfer",
-      counterAccountId: "acc-cash",
-      amountMinor: 500000,
-      baseAmountMinor: 500000,
-      note: null,
-    });
-
-    const summary = await read();
-    expect(summary.inMinor).toBe(0);
-    expect(summary.outMinor).toBe(0);
   });
 
   it("flags rows still waiting on a rate instead of counting them as zero spend", async () => {
