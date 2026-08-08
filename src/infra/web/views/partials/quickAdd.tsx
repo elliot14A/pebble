@@ -207,6 +207,7 @@ export function QuickAdd(props: QuickAddProps) {
               <input
                 type="text"
                 name="note"
+                x-bind:placeholder="type === 'income' ? 'Who paid you?' : type === 'transfer' ? 'What is this move?' : 'What was it?'"
                 placeholder="What was it?"
                 required
                 class="w-full bg-transparent text-center text-[15px] font-semibold tracking-[-0.015em] text-ink outline-none placeholder:font-normal placeholder:text-ink-4"
@@ -243,7 +244,12 @@ export function QuickAdd(props: QuickAddProps) {
           <div class="scroll-y -mx-5 min-h-0 flex-1 px-5 pt-1">
             <section x-show="type !== 'transfer'">
               <header class="mb-2 flex items-baseline justify-between">
-                <span class="label">Category</span>
+                <span
+                  class="label"
+                  x-text="type === 'income' ? 'What kind' : 'Category'"
+                >
+                  Category
+                </span>
                 <button
                   type="button"
                   class="press flex items-center gap-1 text-[12px] font-semibold tracking-[-0.01em] text-money"
@@ -298,7 +304,7 @@ export function QuickAdd(props: QuickAddProps) {
               <header class="mb-2">
                 <span
                   class="label"
-                  x-text="type === 'transfer' ? 'Out of' : 'Paid with'"
+                  x-text="type === 'transfer' ? 'Out of' : type === 'income' ? 'Paid into' : 'Paid with'"
                 >
                   Paid with
                 </span>
@@ -320,7 +326,12 @@ export function QuickAdd(props: QuickAddProps) {
 
             <section class="mt-4 pb-1" data-step="when">
               <header class="mb-2">
-                <span class="label">When</span>
+                <span
+                  class="label"
+                  x-text="type === 'income' ? 'Received on' : type === 'transfer' ? 'Moved on' : 'When'"
+                >
+                  When
+                </span>
               </header>
               <div
                 class="flex flex-wrap items-center gap-2"
