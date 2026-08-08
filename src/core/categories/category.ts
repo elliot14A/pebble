@@ -41,3 +41,22 @@ export type Category = Readonly<{
   sortOrder: number;
   archivedAt: number | null;
 }>;
+
+export const isKind = (value: string): value is CategoryKind =>
+  (CATEGORY_KINDS as ReadonlyArray<string>).includes(value);
+
+export const isTint = (value: string): value is Tint =>
+  (TINTS as ReadonlyArray<string>).includes(value);
+
+export const MAX_NAME = 24;
+
+export const slugFor = (name: string): string =>
+  name
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 32);
+
+export const isOwn = (category: Category, userId: string): boolean =>
+  category.ownerId === userId;

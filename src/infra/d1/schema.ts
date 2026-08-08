@@ -226,3 +226,16 @@ export const receipts = sqliteTable(
     index("receipts_transaction_idx").on(table.transactionId),
   ],
 );
+
+export const categoryPrefs = sqliteTable(
+  "category_prefs",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+    categoryId: text("category_id").notNull(),
+    hiddenAt: integer("hidden_at"),
+  },
+  (table) => [
+    uniqueIndex("category_prefs_unique_idx").on(table.userId, table.categoryId),
+  ],
+);

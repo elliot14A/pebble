@@ -1,4 +1,5 @@
 import type { Context } from "hono";
+import { visible as listCategories } from "@/app/categories/list";
 import { listInUse } from "@/app/rates/list";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { list as listShares } from "@/infra/d1/actions/shares";
@@ -13,12 +14,15 @@ export async function show(c: Context<Env>) {
   const data = await listAccounts(ctx.db, ctx.user.id).andThen((accounts) =>
     listInUse(ctx.db, ctx.user.id, ctx.baseCurrency).andThen((currencies) =>
       listUsers(ctx.db).andThen((users) =>
-        listShares(ctx.db, ctx.user.id).map((shares) => ({
-          accounts,
-          currencies,
-          users,
-          shares,
-        })),
+        listShares(ctx.db, ctx.user.id).andThen((shares) =>
+          listCategories(ctx.db, ctx.user.id).map((categories) => ({
+            accounts,
+            currencies,
+            users,
+            shares,
+            categories,
+          })),
+        ),
       ),
     ),
   );
@@ -34,6 +38,7 @@ export async function show(c: Context<Env>) {
       currencyCount={data.value.currencies.length}
       userCount={data.value.users.length}
       shareCount={data.value.shares.filter((s) => s.revokedAt === null).length}
+      categoryCount={data.value.categories.length}
       notice={c.req.query("saved") ?? null}
     />,
   );

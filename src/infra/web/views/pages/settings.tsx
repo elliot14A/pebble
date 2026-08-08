@@ -7,6 +7,7 @@ export type SettingsPageProps = Readonly<{
   currencyCount: number;
   userCount: number;
   shareCount: number;
+  categoryCount: number;
   notice: string | null;
 }>;
 
@@ -40,6 +41,12 @@ export function SettingsPage(props: SettingsPageProps) {
             }
           />
         ) : null}
+        <Row
+          href="/settings/categories"
+          icon="dots"
+          title="Categories"
+          detail={`${props.categoryCount} in use`}
+        />
         <Row
           href="/shares"
           icon="swap"
