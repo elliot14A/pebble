@@ -8,6 +8,7 @@ export type SettingsPageProps = Readonly<{
   userCount: number;
   shareCount: number;
   categoryCount: number;
+  repeatingCount: number;
   notice: string | null;
 }>;
 
@@ -46,6 +47,22 @@ export function SettingsPage(props: SettingsPageProps) {
           icon="dots"
           title="Categories"
           detail={`${props.categoryCount} in use`}
+        />
+        <Row
+          href="/settings/repeating"
+          icon="calendar"
+          title="Repeating"
+          detail={
+            props.repeatingCount === 0
+              ? "Bills and subscriptions"
+              : `${props.repeatingCount} set up`
+          }
+        />
+        <Row
+          href="/export.csv?span=month"
+          icon="receipt"
+          title="Export this month"
+          detail="A spreadsheet of every entry"
         />
         <Row
           href="/shares"

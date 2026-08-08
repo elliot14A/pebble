@@ -6,9 +6,11 @@ import { routes as analyticsRoutes } from "@/infra/web/routes/analytics/routes";
 import { routes as authRoutes } from "@/infra/web/routes/auth/routes";
 import { routes as budgetRoutes } from "@/infra/web/routes/budgets/routes";
 import { routes as categoryRoutes } from "@/infra/web/routes/categories/routes";
+import { routes as exportRoutes } from "@/infra/web/routes/exports/routes";
 import { routes as homeRoutes } from "@/infra/web/routes/home/routes";
 import { routes as profileRoutes } from "@/infra/web/routes/profile/routes";
 import { routes as receiptRoutes } from "@/infra/web/routes/receipts/routes";
+import { routes as recurringRoutes } from "@/infra/web/routes/recurring/routes";
 import { routes as settingsRoutes } from "@/infra/web/routes/settings/routes";
 import { routes as shareRoutes } from "@/infra/web/routes/shares/routes";
 import { routes as transactionRoutes } from "@/infra/web/routes/transactions/routes";
@@ -28,9 +30,11 @@ export const makeApp = (): Hono<Env> => {
   app.route("/", analyticsRoutes());
   app.route("/", budgetRoutes());
   app.route("/", categoryRoutes());
+  app.route("/", exportRoutes());
   app.route("/", adminRoutes());
   app.route("/", profileRoutes());
   app.route("/", receiptRoutes());
+  app.route("/", recurringRoutes());
   app.route("/", shareRoutes());
   app.route("/", settingsRoutes());
 
