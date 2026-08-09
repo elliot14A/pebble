@@ -14,6 +14,7 @@ import {
 } from "@/app/transactions/create";
 import { ResourceErrorCode } from "@/core/error";
 import { save as saveAccount } from "@/infra/d1/actions/accounts";
+import { save as saveCategory } from "@/infra/d1/actions/categories";
 import { save as saveRate } from "@/infra/d1/actions/rates";
 import { list } from "@/infra/d1/actions/transactions";
 
@@ -59,6 +60,18 @@ afterAll(async () => {
 
 beforeEach(async () => {
   await d1.reset();
+  await saveCategory(d1.db, {
+    id: "cat-food",
+    ownerId: null,
+    name: "Food",
+    slug: "food",
+    kind: "expense",
+    glyph: "food",
+    tint: "money",
+    parentId: null,
+    sortOrder: 0,
+    archivedAt: null,
+  });
   await saveAccount(d1.db, account("acc-inr", "HDFC Savings", "INR"));
   await saveAccount(d1.db, account("acc-cash", "Cash", "INR"));
   await saveAccount(d1.db, account("acc-eur", "Revolut", "EUR"));
@@ -163,5 +176,30 @@ describe("create", () => {
     expect((await list(d1.db, { userId: "u1" }))._unsafeUnwrap()).toHaveLength(
       1,
     );
+  });
+});
+
+describe("category scoping", () => {
+  it("refuses a category that belongs to somebody else", async () => {
+    const saved = await saveCategory(d1.db, {
+      id: "cat-theirs",
+      ownerId: "u-2",
+      name: "Theirs",
+      slug: "theirs",
+      kind: "expense",
+      glyph: "food",
+      tint: "money",
+      parentId: null,
+      sortOrder: 0,
+      archivedAt: null,
+    });
+    if (saved.isErr()) throw new Error(saved.error.message);
+
+    const made = await create(
+      d1.db,
+      input({ categoryId: "cat-theirs", clientId: "c-theirs" }),
+      OPTIONS,
+    );
+    expect(made.isErr()).toBe(true);
   });
 });

@@ -15,6 +15,7 @@ import {
   validateNewTransaction,
 } from "@/core/transactions";
 import { fetch as fetchAccount } from "@/infra/d1/actions/accounts";
+import { fetch as fetchCategory } from "@/infra/d1/actions/categories";
 import {
   ensure as ensureMerchant,
   remember as rememberMerchant,
@@ -107,6 +108,20 @@ export const create = (
             {
               meta: { from: account.value.currency, to: other.value.currency },
             },
+          ),
+        );
+      }
+    }
+
+    if (input.categoryId != null && input.categoryId !== "") {
+      const category = await fetchCategory(db, input.userId, input.categoryId);
+      if (category.isErr()) return err(category.error);
+      if (category.value === null) {
+        return err(
+          appError(
+            ValidationErrorCode.INVALID_INPUT,
+            "that category is not yours",
+            { meta: { categoryId: input.categoryId } },
           ),
         );
       }
