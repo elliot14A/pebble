@@ -15,6 +15,7 @@ import { routes as receiptRoutes } from "@/infra/web/routes/receipts/routes";
 import { routes as recurringRoutes } from "@/infra/web/routes/recurring/routes";
 import { routes as settingsRoutes } from "@/infra/web/routes/settings/routes";
 import { routes as shareRoutes } from "@/infra/web/routes/shares/routes";
+import { routes as statementRoutes } from "@/infra/web/routes/statements/routes";
 import { routes as transactionRoutes } from "@/infra/web/routes/transactions/routes";
 import { Shell } from "@/infra/web/views/layouts/shell";
 
@@ -40,6 +41,7 @@ export const makeApp = (): Hono<Env> => {
   app.route("/", receiptRoutes());
   app.route("/", recurringRoutes());
   app.route("/", shareRoutes());
+  app.route("/", statementRoutes());
   app.route("/", settingsRoutes());
 
   app.notFound((c) =>

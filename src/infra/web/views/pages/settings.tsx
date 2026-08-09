@@ -70,6 +70,12 @@ export function SettingsPage(props: SettingsPageProps) {
           }
         />
         <Row
+          href="/settings/import"
+          icon="receipt"
+          title="Import a statement"
+          detail="Fill the ledger from your bank's csv"
+        />
+        <Row
           href="/export.csv?span=month"
           icon="receipt"
           title="Export this month"
