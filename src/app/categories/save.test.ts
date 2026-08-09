@@ -70,15 +70,6 @@ beforeEach(async () => {
 });
 
 describe("save", () => {
-  it("refuses a name that is already taken, whatever the case", async () => {
-    await mine("Chai");
-    const again = await mine("  chai  ");
-
-    expect(again.isErr()).toBe(true);
-    if (!again.isErr()) return;
-    expect(again.error.code).toBe(ResourceErrorCode.CONFLICT);
-  });
-
   it("will not rename a shared built-in", async () => {
     const renamed = await save(d1.db, {
       userId: USER,

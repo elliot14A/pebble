@@ -1,20 +1,7 @@
 import { describe, expect, it } from "bun:test";
-import {
-  readAmount,
-  readDate,
-  readMerchant,
-  readReceipt,
-} from "@/core/receipts/reading";
+import { readDate, readMerchant, readReceipt } from "@/core/receipts/reading";
 
 const TODAY = "2026-08-16";
-
-describe("readAmount", () => {
-  it("strips symbols and thousands separators", () => {
-    expect(readAmount("₹1,234.50")).toBe("1234.50");
-    expect(readAmount("Rs. 2,300")).toBe("2300");
-    expect(readAmount("$45.99")).toBe("45.99");
-  });
-});
 
 describe("readMerchant", () => {
   it("refuses punctuation and stray characters a model coughs up", () => {

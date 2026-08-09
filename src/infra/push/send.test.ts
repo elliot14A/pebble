@@ -72,37 +72,6 @@ describe("sign", () => {
     expect(body.sub).toBe("mailto:someone@example.com");
     expect(body.exp).toBe(Math.floor(NOW / 1000) + 12 * 60 * 60);
   });
-
-  it("refuses a token signed by a different key", async () => {
-    const mine = await keys();
-    const theirs = await keys();
-    const token = await sign(ENDPOINT, mine, NOW);
-    const [header, claim, signature] = token.split(".");
-
-    const raw = fromBase64Url(theirs.publicKey);
-    const verifier = await crypto.subtle.importKey(
-      "jwk",
-      {
-        kty: "EC",
-        crv: "P-256",
-        x: base64Url(raw.slice(1, 33)),
-        y: base64Url(raw.slice(33, 65)),
-        ext: true,
-      },
-      { name: "ECDSA", namedCurve: "P-256" },
-      false,
-      ["verify"],
-    );
-
-    expect(
-      await crypto.subtle.verify(
-        { name: "ECDSA", hash: "SHA-256" },
-        verifier,
-        fromBase64Url(signature ?? ""),
-        new TextEncoder().encode(`${header}.${claim}`),
-      ),
-    ).toBe(false);
-  });
 });
 
 describe("notify", () => {

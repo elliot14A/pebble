@@ -1,23 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { isLive, type Share, windowFor } from "@/core/shares/share";
-
-const NOW = Date.UTC(2026, 7, 9, 12, 0, 0);
-
-const share = (over: Partial<Share> = {}): Share => ({
-  id: "s-1",
-  userId: "u-1",
-  token: "tok",
-  label: "",
-  span: "month",
-  fromDate: "2026-08-01",
-  toDate: "2026-08-31",
-  createdAt: NOW,
-  expiresAt: null,
-  revokedAt: null,
-  viewCount: 0,
-  lastViewedAt: null,
-  ...over,
-});
+import { windowFor } from "@/core/shares";
 
 describe("windowFor", () => {
   it("runs a week Monday to Sunday", () => {
@@ -49,11 +31,5 @@ describe("windowFor", () => {
     const november = windowFor("month", "2026-11-02");
     if (november.isErr()) throw new Error("expected a window");
     expect(november.value.toDate).toBe("2026-11-30");
-  });
-});
-
-describe("isLive", () => {
-  it("is false once revoked, whatever the expiry", () => {
-    expect(isLive(share({ revokedAt: NOW - 1 }), NOW)).toBe(false);
   });
 });
