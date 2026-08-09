@@ -17,6 +17,7 @@ const base: NewTransaction = {
   currency: "INR",
   occurredOn: "2026-08-08",
   note: "Swiggy",
+  tags: null,
   clientId: "c1",
 };
 

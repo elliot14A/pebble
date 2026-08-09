@@ -35,6 +35,7 @@ export type NewTransactionInput = Readonly<{
   amountText: string;
   occurredOn?: string;
   note?: string | null;
+  tags?: string | null;
   clientId: string;
 }>;
 
@@ -126,6 +127,7 @@ export const create = (
       currency: account.value.currency,
       occurredOn: input.occurredOn ?? options.today,
       note: input.note ?? null,
+      tags: input.tags ?? null,
       clientId: input.clientId,
     });
     if (draft.isErr()) return err(draft.error);

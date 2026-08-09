@@ -6,6 +6,7 @@ import { refund } from "@/infra/web/routes/transactions/refund";
 import { remove, undo } from "@/infra/web/routes/transactions/remove";
 import { repeat } from "@/infra/web/routes/transactions/repeat";
 import { show } from "@/infra/web/routes/transactions/show";
+import { tag } from "@/infra/web/routes/transactions/tag";
 
 export const routes = (): Hono<Env> =>
   new Hono<Env>()
@@ -17,4 +18,5 @@ export const routes = (): Hono<Env> =>
     .post("/transactions/:id/delete", remove)
     .post("/transactions/:id/repeat", repeat)
     .post("/transactions/:id/refund", refund)
+    .post("/transactions/:id/tags", tag)
     .post("/transactions/:id/undo", undo);

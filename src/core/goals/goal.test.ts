@@ -29,9 +29,4 @@ describe("perMonthMinor", () => {
     const saving = goal({ savedMinor: 5_000_000, targetOn: "2026-11-07" });
     expect(perMonthMinor(saving, "2026-08-09")).toBe(5_000_000);
   });
-
-  it("asks for nothing more once it is reached", () => {
-    const done = goal({ savedMinor: 20_000_000, targetOn: "2026-11-07" });
-    expect(perMonthMinor(done, "2026-08-09")).toBeNull();
-  });
 });

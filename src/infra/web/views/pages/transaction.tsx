@@ -3,6 +3,7 @@ import type { Category } from "@/core/categories";
 import { currencyOf, displayMoney } from "@/core/money";
 import { formatRate } from "@/core/rates";
 import type { Receipt } from "@/core/receipts";
+import { unpack } from "@/core/tags";
 import type { Transaction } from "@/core/transactions";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
@@ -175,6 +176,43 @@ export function TransactionPage(props: TransactionPageProps) {
       ) : null}
 
       <div class="rise mx-5 mt-5" style="--i:5">
+        <p class="label mb-2">Tags</p>
+        <form
+          method="post"
+          action={`/transactions/${tx.id}/tags`}
+          class="flex gap-2"
+        >
+          <input
+            type="text"
+            name="tags"
+            value={unpack(tx.tags).join(" ")}
+            placeholder="trip japan work"
+            class="min-w-0 flex-1 rounded-tile bg-sunk px-3 py-2.5 text-[12.5px] font-semibold text-ink outline-none"
+          />
+          <button
+            type="submit"
+            class="press grid h-[42px] w-[42px] flex-none place-items-center rounded-[13px] bg-sunk text-ink-2"
+            aria-label="Save tags"
+          >
+            <Icon name="check" size={15} />
+          </button>
+        </form>
+
+        {unpack(tx.tags).length === 0 ? null : (
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            {unpack(tx.tags).map((one) => (
+              <a
+                href={`/ledger?tag=${one}`}
+                class="press rounded-full bg-money-wash px-2.5 py-1 text-[11px] font-semibold text-money-deep no-underline"
+              >
+                #{one}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div class="rise mx-5 mt-5" style="--i:6">
         <Receipts
           receipts={props.receipts}
           transactionId={props.transaction.id}

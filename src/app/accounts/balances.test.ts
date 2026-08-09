@@ -54,6 +54,7 @@ const spend = async (index: number) => {
     fxPending: false,
     occurredOn: "2026-08-08",
     note: "Chai",
+    tags: null,
     clientId: `c-${index}`,
     createdAt: NOW + index,
     updatedAt: NOW + index,

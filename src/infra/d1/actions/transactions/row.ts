@@ -20,6 +20,7 @@ export const toTransaction = (row: TransactionRow): Transaction => ({
   fxPending: row.fxPending,
   occurredOn: row.occurredOn,
   note: row.note,
+  tags: row.tags,
   clientId: row.clientId,
   createdAt: row.createdAt,
   updatedAt: row.updatedAt,

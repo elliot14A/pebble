@@ -31,6 +31,7 @@ const tx = (
     fxPending: baseAmountMinor === null,
     occurredOn: "2026-08-08",
     note: "Swiggy",
+    tags: null,
     clientId: `c${counter}`,
     createdAt: counter,
     updatedAt: counter,

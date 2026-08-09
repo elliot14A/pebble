@@ -1,5 +1,6 @@
 import { and, desc, eq, gte, isNull, like, lt, lte, sql } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
+import { needle } from "@/core/tags";
 import type { Transaction, TransactionType } from "@/core/transactions";
 import { toTransaction } from "@/infra/d1/actions/transactions/row";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
@@ -14,6 +15,7 @@ export type TransactionQuery = Readonly<{
   walletId?: string;
   type?: TransactionType;
   search?: string;
+  tag?: string;
   before?: string;
   limit?: number;
   offset?: number;
@@ -37,6 +39,9 @@ export const list = (
     where.push(
       sql`(${transactions.accountId} = ${query.accountId} or ${transactions.counterAccountId} = ${query.accountId})`,
     );
+  }
+  if (query.tag !== undefined) {
+    where.push(like(transactions.tags, needle(query.tag)));
   }
   if (query.categoryId !== undefined) {
     where.push(eq(transactions.categoryId, query.categoryId));

@@ -58,6 +58,7 @@ const add = async (over: Partial<Transaction>) => {
     fxPending: false,
     occurredOn: TODAY,
     note: "Thing",
+    tags: null,
     clientId: `c${counter}`,
     createdAt: counter,
     updatedAt: counter,

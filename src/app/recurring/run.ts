@@ -84,6 +84,7 @@ export const runDue = (
           fxPending: base === null,
           occurredOn: on,
           note: rule.name,
+          tags: null,
           clientId: `recurring:${rule.id}:${on}`,
           createdAt: now,
           updatedAt: now,

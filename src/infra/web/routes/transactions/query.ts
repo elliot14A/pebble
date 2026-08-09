@@ -1,3 +1,4 @@
+import { clean } from "@/core/tags";
 import { isTransactionType } from "@/core/transactions";
 import type { TransactionQuery } from "@/infra/d1/actions/transactions";
 
@@ -54,7 +55,21 @@ export const parseQuery = (url: URL, userId: string): ParsedQuery => {
   }
 
   const search = params.get("q") ?? "";
-  if (search !== "") query.search = search;
+  if (search.startsWith("#")) {
+    const wanted = clean(search.slice(1));
+    if (wanted !== "") {
+      query.tag = wanted;
+      filters.push({ label: `#${wanted}`, href: without("q") });
+    }
+  } else if (search !== "") {
+    query.search = search;
+  }
+
+  const tag = params.get("tag");
+  if (tag !== null && tag !== "") {
+    query.tag = clean(tag);
+    filters.push({ label: `#${clean(tag)}`, href: without("tag") });
+  }
 
   const before = params.get("before");
   if (before !== null && before !== "") query.before = before;

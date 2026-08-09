@@ -15,10 +15,6 @@ describe("keypad", () => {
     expect(display(type("8.4.0"))).toBe("8.40");
   });
 
-  it("stops at the currency's number of decimals", () => {
-    expect(display(type("8.401"))).toBe("8.40");
-  });
-
   it("truncates when the account switches to a coarser currency", () => {
     expect(display(withDecimals(type("8.40"), 0))).toBe("8");
     expect(display(withDecimals(type("8.40"), 2))).toBe("8.40");

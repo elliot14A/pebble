@@ -33,6 +33,7 @@ const tx = (
     fxPending: false,
     occurredOn: "2026-08-08",
     note: null,
+    tags: null,
     clientId: `c${counter}`,
     createdAt: counter,
     updatedAt: counter,

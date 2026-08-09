@@ -32,6 +32,7 @@ export type Transaction = Readonly<{
   fxPending: boolean;
   occurredOn: string;
   note: string | null;
+  tags: string | null;
   clientId: string;
   createdAt: number;
   updatedAt: number;
@@ -50,6 +51,7 @@ export type NewTransaction = Readonly<{
   currency: string;
   occurredOn: string;
   note: string | null;
+  tags: string | null;
   clientId: string;
 }>;
 
