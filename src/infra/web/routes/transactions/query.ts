@@ -77,7 +77,6 @@ export const parseQuery = (url: URL, userId: string): ParsedQuery => {
   return { query: query as TransactionQuery, filters, search, before };
 };
 
-/** The same filters, minus paging, so "load more" and refresh stay in step. */
 export const filterHref = (url: URL, extra: Record<string, string>): string => {
   const params = new URLSearchParams(url.searchParams);
   params.delete("before");

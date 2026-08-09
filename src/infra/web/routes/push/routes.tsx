@@ -45,7 +45,6 @@ export const routes = (): Hono<Env> =>
       return c.json({ ok: true });
     })
 
-    /** What the woken service worker asks before it shows anything. */
     .get("/push/waiting", async (c) => {
       const ctx = c.get("ctx");
       const rules = await listRules(ctx.db, ctx.user.id);

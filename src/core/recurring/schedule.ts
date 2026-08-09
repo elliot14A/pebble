@@ -35,10 +35,6 @@ const iso = (year: number, month: number, day: number): string =>
     day,
   ).padStart(2, "0")}`;
 
-/**
- * A monthly bill on the 31st still has to land in February. It falls back to
- * the last day of the month rather than skipping or spilling into March.
- */
 export const onOrBefore = (
   year: number,
   month: number,
@@ -69,10 +65,6 @@ export const nextAfter = (
 export const isDue = (recurring: Recurring, today: string): boolean =>
   recurring.archivedAt === null && recurring.nextOn <= today;
 
-/**
- * A worker that missed a day, or a phone that was off for a fortnight, must not
- * silently drop the runs in between. Every date owed is caught up in order.
- */
 export const runsDueBy = (
   recurring: Recurring,
   today: string,

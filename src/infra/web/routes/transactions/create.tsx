@@ -10,12 +10,6 @@ const text = (form: FormData, key: string): string | null => {
   return typeof value === "string" && value !== "" ? value : null;
 };
 
-/**
- * Answers with nothing but a trigger. The ledger re-fetches its own list, which
- * is the only way the day grouping, the running total and any active filter can
- * stay in step with each other; assembling a partial swap here got all three
- * wrong in different ways.
- */
 export async function create(c: Context<Env>) {
   const ctx = c.get("ctx");
   const form = await c.req.formData();

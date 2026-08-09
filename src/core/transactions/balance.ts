@@ -24,11 +24,6 @@ export const netWorthMinor = (
 
 export type Flow = Readonly<{ inMinor: number; outMinor: number }>;
 
-/**
- * A refund reduces what you spent rather than counting as money earned. Both
- * readings leave savings identical, but only this one makes "out this month"
- * agree with the category totals underneath it.
- */
 export const flowMinor = (transactions: ReadonlyArray<Transaction>): Flow =>
   transactions.filter(isLive).reduce<Flow>(
     (flow, tx) => {

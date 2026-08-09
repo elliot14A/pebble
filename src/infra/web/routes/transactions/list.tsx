@@ -16,10 +16,6 @@ const PAGE_ROWS = 60;
 
 type Page = Readonly<{ days: ReadonlyArray<DayGroup>; cursor: string | null }>;
 
-/**
- * Pages by whole days, never by row, so a day can never be split across two
- * pages and render its header twice with half its rows under each.
- */
 const paginate = (
   rows: ReadonlyArray<unknown>,
   days: ReadonlyArray<DayGroup>,
@@ -27,7 +23,6 @@ const paginate = (
   const more = rows.length > PAGE_ROWS;
   if (!more) return { days, cursor: null };
 
-  // A single day bigger than a page still has to render, or paging stalls.
   const kept = days.length > 1 ? days.slice(0, -1) : days;
   return { days: kept, cursor: kept.at(-1)?.date ?? null };
 };
@@ -73,7 +68,6 @@ export async function list(c: Context<Env>) {
     />
   );
 
-  // "Load more" and the post-save refresh both swap this fragment in place.
   if (c.req.query("fragment") === "1") {
     return c.html(
       <>

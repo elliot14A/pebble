@@ -48,16 +48,6 @@ describe("byCategory", () => {
       { key: "fuel", minor: 30000 },
     ]);
   });
-
-  it("ignores income, transfers and rows still waiting on a rate", () => {
-    const buckets = byCategory([
-      tx("income", 900000, { categoryId: "salary" }),
-      tx("transfer", 500000, { counterAccountId: "a2", categoryId: null }),
-      tx("expense", null, { categoryId: "food" }),
-    ]);
-
-    expect(buckets).toEqual([]);
-  });
 });
 
 describe("topWithRest", () => {

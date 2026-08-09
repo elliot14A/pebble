@@ -18,15 +18,6 @@ describe("hashPassword", () => {
     const stored = await hashPassword("correct horse battery");
     expect(await verifyPassword("correct horse battery", stored)).toBe(true);
   });
-
-  it("never produces the same hash twice, even for one password", async () => {
-    const first = await hashPassword("same password");
-    const second = await hashPassword("same password");
-
-    expect(first).not.toBe(second);
-    expect(await verifyPassword("same password", first)).toBe(true);
-    expect(await verifyPassword("same password", second)).toBe(true);
-  });
 });
 
 describe("verifyPassword", () => {

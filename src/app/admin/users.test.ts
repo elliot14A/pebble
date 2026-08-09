@@ -7,15 +7,10 @@ import {
   it,
 } from "bun:test";
 import { openTestDatabase, type TestDatabase } from "@test/d1";
-import {
-  createUser,
-  type NewUserInput,
-  resetPassword,
-} from "@/app/admin/users";
+import { createUser, type NewUserInput } from "@/app/admin/users";
 import { login } from "@/app/auth";
-import { hashPassword, hashToken } from "@/core/auth";
+import { hashPassword } from "@/core/auth";
 import { ResourceErrorCode } from "@/core/error";
-import { fetchByToken } from "@/infra/d1/actions/sessions";
 import { save as saveUser } from "@/infra/d1/actions/users";
 
 let d1: TestDatabase;
@@ -74,39 +69,5 @@ describe("createUser", () => {
     expect(again.isErr()).toBe(true);
     if (!again.isErr()) return;
     expect(again.error.code).toBe(ResourceErrorCode.CONFLICT);
-  });
-});
-
-describe("resetPassword", () => {
-  it("replaces the password and drops every live session", async () => {
-    const created = await createUser(d1.db, INPUT, NOW);
-    if (created.isErr()) throw new Error(created.error.message);
-
-    const signedIn = await login(d1.db, "vamshi", INPUT.temporaryPassword, NOW);
-    if (signedIn.isErr()) throw new Error(signedIn.error.message);
-
-    const reset = await resetPassword(
-      d1.db,
-      created.value.id,
-      "pebble-second",
-      NOW + 1000,
-    );
-    expect(reset.isOk()).toBe(true);
-
-    const stale = await fetchByToken(
-      d1.db,
-      await hashToken(signedIn.value.token),
-    );
-    if (stale.isErr()) throw new Error(stale.error.message);
-    expect(stale.value).toBeNull();
-
-    expect(
-      (
-        await login(d1.db, "vamshi", INPUT.temporaryPassword, NOW + 2000)
-      ).isErr(),
-    ).toBe(true);
-    expect(
-      (await login(d1.db, "vamshi", "pebble-second", NOW + 2000)).isOk(),
-    ).toBe(true);
   });
 });

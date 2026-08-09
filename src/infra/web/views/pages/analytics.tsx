@@ -23,8 +23,6 @@ export type AnalyticsPageProps = Readonly<{
   quickAdd: QuickAddProps;
 }>;
 
-// Alternating light and dark so neighbouring slices separate. Four greens in a
-// row read as one blob, which is what a donut is for avoiding.
 const SLICES = [
   "var(--color-money-lift)",
   "var(--color-money-deep)",
@@ -114,10 +112,6 @@ export function AnalyticsPage(props: AnalyticsPageProps) {
   );
 }
 
-/**
- * Spending more is worse, earning more is better, so the same arrow has to mean
- * opposite things depending on which figure it sits next to.
- */
 function Delta(props: { change: Change; upIsGood: boolean }) {
   const { deltaMinor, deltaBps } = props.change;
   if (deltaMinor === 0) {
@@ -263,10 +257,6 @@ function Figure(props: {
   );
 }
 
-/**
- * Only a real category can be opened. "Everything else" is a bucket the chart
- * invented, so it stays inert rather than linking somewhere that cannot exist.
- */
 function Drill(props: {
   bucket: Bucket;
   month: string;

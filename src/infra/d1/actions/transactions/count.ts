@@ -14,10 +14,6 @@ import type { TransactionQuery } from "@/infra/d1/actions/transactions/list";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { transactions } from "@/infra/d1/schema";
 
-/**
- * Counts in SQL rather than by loading rows, so the ledger total is right no
- * matter how many pages are on screen.
- */
 export const count = (
   db: DrizzleD1Database,
   query: TransactionQuery,

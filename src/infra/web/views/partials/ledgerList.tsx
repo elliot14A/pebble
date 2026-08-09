@@ -10,7 +10,6 @@ export type LedgerListProps = Readonly<{
   refreshHref: string;
   search: string;
   emptyBecauseSearch: boolean;
-  /** True when this is a "load more" page, which appends rather than replaces. */
   append: boolean;
 }>;
 

@@ -4,12 +4,6 @@ export type Bucket = Readonly<{ key: string; minor: number }>;
 
 export const monthOf = (date: string): string => date.slice(0, 7);
 
-/**
- * What a transaction adds to spending, in the base currency. A refund gives
- * money back to the same category, so it subtracts. Transfers move money
- * without spending it, and a row still waiting on a rate has no base amount to
- * count, so both contribute nothing.
- */
 export const spendMinor = (transaction: Transaction): number => {
   const base = transaction.baseAmountMinor;
   if (base === null) return 0;
@@ -53,7 +47,6 @@ export type MonthFlow = Readonly<{
   outMinor: number;
 }>;
 
-/** Newest last, so it reads left to right as a timeline. */
 export const byMonth = (
   transactions: ReadonlyArray<Transaction>,
   months: ReadonlyArray<string>,
@@ -79,7 +72,6 @@ export const byMonth = (
   }));
 };
 
-/** Spend per month, keeping months with nothing so a trend has no gaps. */
 export const spendByMonth = (
   transactions: ReadonlyArray<Transaction>,
   months: ReadonlyArray<string>,
@@ -100,7 +92,6 @@ export const spendByMonth = (
   }));
 };
 
-/** Sunday first, matching how the weekday labels are drawn. */
 export const byWeekday = (
   transactions: ReadonlyArray<Transaction>,
 ): ReadonlyArray<number> => {
@@ -115,10 +106,6 @@ export const byWeekday = (
   return days;
 };
 
-/**
- * The biggest `count` buckets, with everything else folded into one. Charts
- * that draw a slice per category become unreadable past about five.
- */
 export const topWithRest = (
   buckets: ReadonlyArray<Bucket>,
   count: number,
@@ -137,7 +124,6 @@ export const topWithRest = (
 export const totalOf = (buckets: ReadonlyArray<Bucket>): number =>
   buckets.reduce((total, bucket) => total + bucket.minor, 0);
 
-/** The previous `count` months ending at `month`, oldest first. */
 export const monthsEnding = (
   month: string,
   count: number,

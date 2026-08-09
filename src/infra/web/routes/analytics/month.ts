@@ -30,7 +30,6 @@ export const monthLabel = (month: string, thisMonth: string): string => {
     : `${name} ${month.slice(0, 4)}`;
 };
 
-/** Never lets a hand-typed month run past the present or arrive malformed. */
 export const resolveMonth = (
   asked: string | undefined,
   today: string,

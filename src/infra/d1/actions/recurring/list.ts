@@ -16,7 +16,6 @@ export const list = (
       .orderBy(asc(recurring.nextOn)),
   );
 
-/** Everyone's, because the scheduled run has nobody signed in. */
 export const listDue = (
   db: DrizzleD1Database,
   today: string,

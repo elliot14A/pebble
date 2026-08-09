@@ -36,11 +36,6 @@ const baseFor = async (
   return converted.isOk() ? converted.value.minor : null;
 };
 
-/**
- * Runs for everybody, because nobody is signed in when the schedule fires. A
- * bill is only a reminder, so it is left standing until it is marked paid;
- * a recurring transaction writes itself into the ledger.
- */
 export const runDue = (
   db: DrizzleD1Database,
   baseCurrency: string,

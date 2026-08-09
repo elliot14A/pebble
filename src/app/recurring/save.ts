@@ -106,7 +106,6 @@ export const remove = (
   now: number,
 ): AppResultAsync<void> => archive(db, userId, id, now);
 
-/** Marking a bill paid is what writes it into the ledger and moves it on. */
 export const pay = (
   db: DrizzleD1Database,
   userId: string,

@@ -5,10 +5,6 @@ export type Change = Readonly<{
   nowMinor: number;
   thenMinor: number;
   deltaMinor: number;
-  /**
-   * Basis points, so no float. Null when there is nothing to compare against:
-   * going from zero to something is not a percentage, it is new.
-   */
   deltaBps: number | null;
 }>;
 
@@ -23,10 +19,6 @@ export const change = (key: string, now: number, then: number): Change => ({
   deltaBps: changeBps(now, then),
 });
 
-/**
- * Every key from either side, biggest mover first. A category that stopped
- * entirely matters as much as one that started, so both are kept.
- */
 export const compareBuckets = (
   now: ReadonlyArray<Bucket>,
   then: ReadonlyArray<Bucket>,

@@ -17,7 +17,6 @@ export const fromBase64Url = (value: string): Uint8Array<ArrayBuffer> => {
   return Uint8Array.from(atob(full), (character) => character.charCodeAt(0));
 };
 
-/** The audience is the push service's origin, never the whole endpoint. */
 export const audienceOf = (endpoint: string): string =>
   new URL(endpoint).origin;
 

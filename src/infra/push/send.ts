@@ -54,10 +54,6 @@ const sign = async (
   return `${body}.${base64Url(signature)}`;
 };
 
-/**
- * No payload, so there is nothing to encrypt: the push only wakes the service
- * worker, which then asks pebble what it should say.
- */
 export const notify = (
   endpoint: string,
   keys: VapidKeys,

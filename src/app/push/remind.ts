@@ -7,10 +7,6 @@ import { notify, type VapidKeys } from "@/infra/push";
 
 export type Nudged = Readonly<{ sent: number; dropped: number }>;
 
-/**
- * One wake-up per device that has a bill standing. The push carries nothing;
- * the service worker asks pebble what to say once it is awake.
- */
 export const remind = (
   db: DrizzleD1Database,
   keys: VapidKeys,

@@ -21,9 +21,6 @@ export const parse = (raw: string): ReadonlyArray<string> => {
   return seen;
 };
 
-/**
- * Stored wrapped in commas so a LIKE for ",trip," cannot match ",trip-japan,".
- */
 export const pack = (tags: ReadonlyArray<string>): string | null =>
   tags.length === 0 ? null : `,${tags.join(",")},`;
 

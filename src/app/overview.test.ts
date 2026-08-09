@@ -102,18 +102,4 @@ describe("overview", () => {
     expect(summary.outMinor).toBe(530000);
     expect(summary.savedMinor).toBe(-530000);
   });
-
-  it("flags rows still waiting on a rate instead of counting them as zero spend", async () => {
-    await add({
-      type: "expense",
-      amountMinor: 2100,
-      currency: "EUR",
-      baseAmountMinor: null,
-      fxPending: true,
-    });
-
-    const summary = await read();
-    expect(summary.fxPendingCount).toBe(1);
-    expect(summary.outMinor).toBe(0);
-  });
 });

@@ -52,8 +52,6 @@ export const categoryBreakdown = (
       .reduce((total, tx) => total + spendMinor(tx), 0);
 
     const trend = spendByMonth(all, window);
-    // Only months that actually have history count, or a new category looks
-    // cheaper than it is.
     const active = trend.filter((bucket) => bucket.minor !== 0);
     const average =
       active.length === 0
