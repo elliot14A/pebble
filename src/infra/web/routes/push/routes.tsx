@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { displayMoney } from "@/core/money";
 import { daysUntil } from "@/core/recurring";
 import { listFor, remove, save } from "@/infra/d1/actions/push";
 import { list as listRules } from "@/infra/d1/actions/recurring";
@@ -93,14 +94,23 @@ export const routes = (): Hono<Env> =>
       if (due.length === 0) return c.json({ title: null });
 
       const first = due[0];
+      const single = due.length === 1 && first !== undefined;
+
       return c.json({
-        title:
-          due.length === 1
-            ? `${first?.name} is due`
-            : `${due.length} bills are due`,
-        body:
-          due.length === 1
-            ? "Tap to log it once you have paid."
-            : due.map((rule) => rule.name).join(", "),
+        title: single ? `${first.name} is due` : `${due.length} bills are due`,
+        body: single
+          ? `${displayMoney(
+              { minor: first.amountMinor, currency: first.currency },
+              { decimals: "never" },
+            )} · ${when(first.nextOn, ctx.today)}`
+          : due.map((rule) => rule.name).join(", "),
+        ruleId: single ? first.id : null,
       });
     });
+
+const when = (nextOn: string, today: string): string => {
+  const days = daysUntil(nextOn, today);
+  if (days === 0) return "due today";
+  if (days === -1) return "a day late";
+  return `${Math.abs(days)} days late`;
+};

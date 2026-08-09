@@ -6,7 +6,8 @@ type FetchEvent = {
 
 type PushEvent = { waitUntil: (work: Promise<unknown>) => void };
 type NotificationEvent = {
-  notification: { close: () => void };
+  action: string;
+  notification: { close: () => void; data?: { ruleId?: string | null } };
   waitUntil: (work: Promise<unknown>) => void;
 };
 
@@ -50,6 +51,8 @@ const SHELL = [
   "/fonts/GeistMono-SemiBold.woff2",
   "/fonts/GeistMono-Bold.woff2",
   "/manifest.webmanifest",
+  "/icons/icon-192.png",
+  "/icons/badge-96.png",
 ];
 
 worker.addEventListener("install", (event) => {
@@ -131,7 +134,35 @@ worker.addEventListener("push", (event) => {
   event.waitUntil(askWhatToSay());
 });
 
+const markPaid = async (ruleId: string): Promise<void> => {
+  const body = new FormData();
+  body.append("id", ruleId);
+
+  try {
+    await fetch("/recurring/pay", {
+      method: "POST",
+      body,
+      credentials: "include",
+      redirect: "manual",
+    });
+    await worker.registration.showNotification("Logged it", {
+      body: "The bill is in your ledger and moved to next time.",
+      icon: "/icons/icon-192.png",
+      badge: "/icons/badge-96.png",
+      tag: "pebble-bills",
+    });
+  } catch {
+    await worker.clients.openWindow("/settings/repeating");
+  }
+};
+
 worker.addEventListener("notificationclick", (event) => {
+  const ruleId = event.notification.data?.ruleId ?? null;
   event.notification.close();
-  event.waitUntil(worker.clients.openWindow("/settings/repeating"));
+
+  event.waitUntil(
+    event.action === "paid" && ruleId !== null
+      ? markPaid(ruleId)
+      : worker.clients.openWindow("/settings/repeating"),
+  );
 });
