@@ -94,6 +94,18 @@ export function RecurringPage(props: RecurringPageProps) {
             <span class="switch-knob" />
           </span>
         </button>
+
+        <button
+          type="button"
+          x-show="on"
+          x-cloak
+          x-on:click="test()"
+          x-bind:disabled="busy"
+          class="press mt-2 flex h-10 w-full items-center justify-center gap-2 rounded-[13px] bg-sunk text-[12px] font-semibold text-ink-2"
+        >
+          <Icon name="bell" size={14} />
+          Send a test
+        </button>
       </div>
 
       <Section

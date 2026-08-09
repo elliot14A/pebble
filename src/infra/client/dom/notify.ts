@@ -60,6 +60,25 @@ export const turnOff = async (): Promise<string> => {
   return "Off.";
 };
 
+export const sendTest = async (): Promise<string> => {
+  const reply = await window.fetch("/push/test", { method: "POST" });
+  const said = (await reply.json()) as {
+    error?: string;
+    devices?: number;
+    accepted?: number;
+    replies?: ReadonlyArray<number>;
+  };
+
+  if (!reply.ok) return said.error ?? "Could not send it.";
+  if ((said.accepted ?? 0) === 0) {
+    return `Refused by the push service (${(said.replies ?? []).join(", ")}).`;
+  }
+
+  return said.accepted === said.devices
+    ? "Sent. It should arrive in a moment."
+    : `Sent to ${said.accepted} of ${said.devices} devices.`;
+};
+
 export const notifyToggle = () => ({
   on: false,
   note: "",
@@ -73,6 +92,17 @@ export const notifyToggle = () => ({
     this.busy = true;
     this.note = this.on ? await turnOff() : await turnOn();
     this.on = await subscribed();
+    this.busy = false;
+  },
+
+  async test(this: { note: string; busy: boolean }) {
+    this.busy = true;
+    this.note = "Sending…";
+    try {
+      this.note = await sendTest();
+    } catch {
+      this.note = "Could not reach pebble.";
+    }
     this.busy = false;
   },
 });
