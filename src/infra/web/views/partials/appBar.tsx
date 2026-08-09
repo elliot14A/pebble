@@ -30,6 +30,11 @@ export function AppBar(props: AppBarProps) {
         aria-label="Settings"
       >
         <Icon name="gear" size={18} />
+        <span
+          data-outbox
+          hidden
+          class="absolute -bottom-5 right-0 whitespace-nowrap text-[10px] text-warn"
+        />
         {props.alert ? (
           <span class="absolute top-[7px] right-2 h-1.5 w-1.5 rounded-full border-[1.5px] border-surface bg-warn" />
         ) : null}
