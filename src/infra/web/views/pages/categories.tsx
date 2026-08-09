@@ -60,9 +60,9 @@ export function CategoriesPage(props: CategoriesPageProps) {
           <p class="label mb-2">Hidden</p>
           <div class="grid gap-2.5">
             {props.board.hidden.map((line) => (
-              <div class="card flex items-center gap-3 p-3.5 opacity-70">
-                <span class="glyph h-9 w-9 flex-none rounded-[12px]">
-                  <Icon name={line.category.glyph} size={16} />
+              <div class="card flex items-center gap-3.5 p-4 opacity-70">
+                <span class="glyph h-[42px] w-[42px] flex-none rounded-[13px]">
+                  <Icon name={line.category.glyph} size={19} />
                 </span>
                 <span class="min-w-0 flex-1 truncate text-[13px] font-bold tracking-[-0.015em]">
                   {line.category.name}
@@ -94,9 +94,9 @@ function Row(props: { line: CategoryLine; index: number }) {
       style={`--i:${props.index}`}
       x-data="{ open: false }"
     >
-      <div class="flex items-center gap-3">
-        <span class="glyph h-9 w-9 flex-none rounded-[12px]">
-          <Icon name={category.glyph} size={16} />
+      <div class="flex items-center gap-3.5">
+        <span class="glyph h-[42px] w-[42px] flex-none rounded-[13px]">
+          <Icon name={category.glyph} size={19} />
         </span>
         <span class="min-w-0 flex-1">
           <b class="block truncate text-[13px] font-bold tracking-[-0.015em]">

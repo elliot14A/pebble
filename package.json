@@ -6,7 +6,7 @@
     "build": "bun scripts/buildIcons.ts && bun scripts/buildClient.ts",
     "dev": "bun run build && wrangler dev --port 3000",
     "deploy": "bun run build && wrangler deploy",
-    "check": "biome check && tsc --noEmit",
+    "check": "bun scripts/buildIcons.ts && biome check && tsc --noEmit",
     "check:fix": "biome check --write",
     "test": "bun test",
     "db:generate": "drizzle-kit generate",
@@ -14,7 +14,8 @@
     "db:migrate": "wrangler d1 migrations apply pebble --remote",
     "seed": "bun scripts/seed.ts",
     "seed:remote": "bun scripts/seed.ts --remote",
-    "vapid": "bun scripts/vapidKeys.ts"
+    "vapid": "bun scripts/vapidKeys.ts",
+    "icons": "bun scripts/buildIcons.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",

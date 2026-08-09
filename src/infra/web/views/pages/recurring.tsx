@@ -70,14 +70,14 @@ export function RecurringPage(props: RecurringPageProps) {
           x-on:click="toggle()"
           x-bind:disabled="busy"
           x-bind:class="busy ? 'opacity-60' : ''"
-          class="press card flex w-full items-center gap-3 p-3.5 text-left"
+          class="press card rise flex w-full items-center gap-3.5 p-4 text-left"
         >
-          <span class="glyph h-9 w-9 flex-none rounded-[12px]">
-            <Icon name="bell" size={16} />
+          <span class="glyph h-[42px] w-[42px] flex-none rounded-[13px]">
+            <Icon name="bell" size={19} />
           </span>
 
           <span class="min-w-0 flex-1">
-            <b class="block text-[12.5px] font-bold tracking-[-0.015em] text-ink">
+            <b class="block text-[13px] font-bold tracking-[-0.015em] text-ink">
               Bill reminders
             </b>
             <span
@@ -214,8 +214,14 @@ function Section(props: {
             const late = daysUntil(rule.nextOn, props.today) < 0;
 
             return (
-              <div class="card rise p-3.5" style={`--i:${index}`}>
-                <div class="flex items-center gap-3">
+              <div class="card rise p-4" style={`--i:${index}`}>
+                <div class="flex items-center gap-3.5">
+                  <span class="glyph h-[42px] w-[42px] flex-none rounded-[13px]">
+                    <Icon
+                      name={props.payable ? "calendar" : "swap"}
+                      size={19}
+                    />
+                  </span>
                   <span class="min-w-0 flex-1">
                     <b class="block truncate text-[13px] font-bold tracking-[-0.015em]">
                       {rule.name}
