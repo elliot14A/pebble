@@ -37,6 +37,15 @@ In production these are Worker vars, and the key is a secret:
 bunx wrangler secret put PEBBLE_OPENAI_API_KEY
 ```
 
+## Notifications
+
+```bash
+bun run vapid
+```
+
+Public key goes in `wrangler.jsonc` vars, private key in a secret. Without
+them the reminder switch stays off.
+
 ## Layout
 
 ```

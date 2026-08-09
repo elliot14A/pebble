@@ -29,6 +29,9 @@ export type Env = {
     PEBBLE_OPENAI_API_KEY?: string;
     PEBBLE_OPENAI_MODEL?: string;
     PEBBLE_OPENAI_EXTRA_BODY?: string;
+    PEBBLE_VAPID_PUBLIC_KEY?: string;
+    PEBBLE_VAPID_PRIVATE_KEY?: string;
+    PEBBLE_VAPID_SUBJECT?: string;
   };
   Variables: {
     ctx: Context;

@@ -12,3 +12,10 @@ PEBBLE_OPENAI_MODEL=qwen/qwen3.7-flash
 # for provider specifics, such as pinning one OpenRouter provider so prompt
 # caching actually hits. Leave empty for a plain OpenAI-compatible API.
 PEBBLE_OPENAI_EXTRA_BODY=
+
+# Notifications. Generate a pair with `bun run vapid`, put the public key in
+# wrangler.jsonc vars and the private key in a secret. Without them the
+# reminder switch stays off and nothing else changes.
+PEBBLE_VAPID_PUBLIC_KEY=
+PEBBLE_VAPID_PRIVATE_KEY=
+PEBBLE_VAPID_SUBJECT=mailto:you@example.com

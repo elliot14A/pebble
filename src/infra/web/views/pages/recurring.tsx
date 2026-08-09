@@ -60,6 +60,19 @@ export function RecurringPage(props: RecurringPageProps) {
         </p>
       )}
 
+      <div class="px-5 pt-2" x-data="notifyToggle">
+        <button
+          type="button"
+          x-on:click="toggle()"
+          x-bind:disabled="busy"
+          class="press card flex h-11 w-full items-center gap-2.5 px-4 text-[12.5px] font-semibold text-ink-2"
+        >
+          <Icon name="bell" size={15} />
+          <span x-text="on ? 'Reminders are on' : 'Remind me when a bill is due'" />
+          <span class="ml-auto text-[11px] text-ink-3" x-text="note" />
+        </button>
+      </div>
+
       <Section
         title="Bills to pay"
         empty="No bills set up."

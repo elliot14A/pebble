@@ -10,6 +10,7 @@ import { routes as exportRoutes } from "@/infra/web/routes/exports/routes";
 import { routes as goalRoutes } from "@/infra/web/routes/goals/routes";
 import { routes as homeRoutes } from "@/infra/web/routes/home/routes";
 import { routes as profileRoutes } from "@/infra/web/routes/profile/routes";
+import { routes as pushRoutes } from "@/infra/web/routes/push/routes";
 import { routes as receiptRoutes } from "@/infra/web/routes/receipts/routes";
 import { routes as recurringRoutes } from "@/infra/web/routes/recurring/routes";
 import { routes as settingsRoutes } from "@/infra/web/routes/settings/routes";
@@ -35,6 +36,7 @@ export const makeApp = (): Hono<Env> => {
   app.route("/", goalRoutes());
   app.route("/", adminRoutes());
   app.route("/", profileRoutes());
+  app.route("/", pushRoutes());
   app.route("/", receiptRoutes());
   app.route("/", recurringRoutes());
   app.route("/", shareRoutes());

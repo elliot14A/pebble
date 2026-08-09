@@ -7,6 +7,9 @@ export type Env = Readonly<{
   PEBBLE_OPENAI_API_KEY?: string;
   PEBBLE_OPENAI_MODEL?: string;
   PEBBLE_OPENAI_EXTRA_BODY?: string;
+  PEBBLE_VAPID_PUBLIC_KEY?: string;
+  PEBBLE_VAPID_PRIVATE_KEY?: string;
+  PEBBLE_VAPID_SUBJECT?: string;
 }>;
 
 export type Config = Readonly<{
@@ -47,6 +50,22 @@ export const readConfig = (env: unknown): Config => {
     baseCurrency: isCurrency(declared) ? declared : BASE_CURRENCY,
   });
 };
+
+export type PushConfig = Readonly<{
+  publicKey: string;
+  privateKey: string;
+  subject: string;
+}>;
+
+export const readPushConfig = (env: unknown): PushConfig => ({
+  publicKey: envString(env, "PEBBLE_VAPID_PUBLIC_KEY"),
+  privateKey: envString(env, "PEBBLE_VAPID_PRIVATE_KEY"),
+  subject: envString(
+    env,
+    "PEBBLE_VAPID_SUBJECT",
+    "mailto:pebble@elliot14a.work",
+  ),
+});
 
 export const readLlmConfig = (env: unknown): LlmConfig => ({
   baseUrl: envString(

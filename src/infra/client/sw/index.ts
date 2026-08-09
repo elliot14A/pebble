@@ -4,6 +4,12 @@ type FetchEvent = {
   respondWith: (response: Promise<Response>) => void;
 };
 
+type PushEvent = { waitUntil: (work: Promise<unknown>) => void };
+type NotificationEvent = {
+  notification: { close: () => void };
+  waitUntil: (work: Promise<unknown>) => void;
+};
+
 type WorkerScope = {
   addEventListener: {
     (
@@ -11,9 +17,23 @@ type WorkerScope = {
       handler: (event: InstallEvent) => void,
     ): void;
     (type: "fetch", handler: (event: FetchEvent) => void): void;
+    (type: "push", handler: (event: PushEvent) => void): void;
+    (
+      type: "notificationclick",
+      handler: (event: NotificationEvent) => void,
+    ): void;
   };
   skipWaiting: () => Promise<void>;
-  clients: { claim: () => Promise<void> };
+  registration: {
+    showNotification: (
+      title: string,
+      options?: Record<string, unknown>,
+    ) => Promise<void>;
+  };
+  clients: {
+    claim: () => Promise<void>;
+    openWindow: (url: string) => Promise<unknown>;
+  };
   location: { origin: string };
 };
 
@@ -82,4 +102,36 @@ worker.addEventListener("fetch", (event) => {
   if (url.origin !== worker.location.origin) return;
 
   event.respondWith(networkFirst(request));
+});
+
+const askWhatToSay = async (): Promise<void> => {
+  try {
+    const reply = await fetch("/push/waiting", { credentials: "include" });
+    if (!reply.ok) return;
+
+    const said = (await reply.json()) as {
+      title?: string | null;
+      body?: string;
+    };
+    if (!said.title) return;
+
+    await worker.registration.showNotification(said.title, {
+      body: said.body ?? "",
+      icon: "/icons/icon-180.png",
+      badge: "/icons/icon.svg",
+      tag: "pebble-bills",
+      data: { url: "/settings/repeating" },
+    });
+  } catch {
+    return;
+  }
+};
+
+worker.addEventListener("push", (event) => {
+  event.waitUntil(askWhatToSay());
+});
+
+worker.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(worker.clients.openWindow("/settings/repeating"));
 });

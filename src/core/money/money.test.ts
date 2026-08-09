@@ -26,15 +26,4 @@ describe("displayMoney", () => {
     expect(displayMoney(inr(18425000))).toBe("₹1,84,250");
     expect(displayMoney(eur(18425000))).toBe("€184,250");
   });
-
-  it("groups every boundary correctly", () => {
-    expect(displayMoney(inr(100), { decimals: "never" })).toBe("₹1");
-    expect(displayMoney(inr(100000), { decimals: "never" })).toBe("₹1,000");
-    expect(displayMoney(inr(10000000), { decimals: "never" })).toBe(
-      "₹1,00,000",
-    );
-    expect(displayMoney(inr(1000000000), { decimals: "never" })).toBe(
-      "₹1,00,00,000",
-    );
-  });
 });

@@ -288,3 +288,18 @@ export const goals = sqliteTable(
   },
   (table) => [index("goals_owner_idx").on(table.userId, table.archivedAt)],
 );
+
+export const pushSubscriptions = sqliteTable(
+  "push_subscriptions",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+    endpoint: text("endpoint").notNull(),
+    createdAt: integer("created_at").notNull(),
+    failedAt: integer("failed_at"),
+  },
+  (table) => [
+    uniqueIndex("push_endpoint_idx").on(table.endpoint),
+    index("push_owner_idx").on(table.userId),
+  ],
+);

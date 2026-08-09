@@ -1,9 +1,16 @@
+import { remind } from "@/app/push";
 import { runDue } from "@/app/recurring";
 import { connect } from "@/infra/d1/connection";
 import { makeApp } from "@/infra/web/app";
-import { readConfig } from "@/infra/web/config";
+import { readConfig, readPushConfig } from "@/infra/web/config";
 
-type Bindings = { DB: D1Database; PEBBLE_BASE_CURRENCY?: string };
+type Bindings = {
+  DB: D1Database;
+  PEBBLE_BASE_CURRENCY?: string;
+  PEBBLE_VAPID_PUBLIC_KEY?: string;
+  PEBBLE_VAPID_PRIVATE_KEY?: string;
+  PEBBLE_VAPID_SUBJECT?: string;
+};
 
 let app: ReturnType<typeof makeApp> | undefined;
 
@@ -32,5 +39,10 @@ export default {
     );
 
     if (done.isErr()) throw new Error(done.error.message);
+
+    const keys = readPushConfig(env);
+    if (keys.publicKey !== "" && keys.privateKey !== "") {
+      await remind(connect(env.DB), keys, today, now);
+    }
   },
 };

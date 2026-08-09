@@ -13,7 +13,8 @@
     "db:migrate:local": "wrangler d1 migrations apply pebble --local",
     "db:migrate": "wrangler d1 migrations apply pebble --remote",
     "seed": "bun scripts/seed.ts",
-    "seed:remote": "bun scripts/seed.ts --remote"
+    "seed:remote": "bun scripts/seed.ts --remote",
+    "vapid": "bun scripts/vapidKeys.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",

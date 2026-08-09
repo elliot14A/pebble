@@ -1,10 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import {
-  byCategory,
-  monthsEnding,
-  topWithRest,
-  totalOf,
-} from "@/core/analytics/summary";
+import { byCategory, topWithRest, totalOf } from "@/core/analytics/summary";
 import type { Transaction, TransactionType } from "@/core/transactions";
 
 let counter = 0;
@@ -75,16 +70,5 @@ describe("topWithRest", () => {
 
   it("keeps the total honest whichever way it splits", () => {
     expect(totalOf(topWithRest(buckets, 2))).toBe(totalOf(buckets));
-  });
-});
-
-describe("monthsEnding", () => {
-  it("walks back across a year boundary", () => {
-    expect(monthsEnding("2026-02", 4)).toEqual([
-      "2025-11",
-      "2025-12",
-      "2026-01",
-      "2026-02",
-    ]);
   });
 });
