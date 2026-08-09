@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { fingerprint, read } from "@/core/statements";
+import { fingerprints, read } from "@/core/statements";
 
 const HDFC = `Statement of account
 Account No: XXXXXX1234
@@ -28,11 +28,16 @@ describe("read", () => {
 
   it("takes a single signed amount column when there is no debit and credit pair", () => {
     const found = read(
-      `Transaction Date,Description,Amount\n2026-08-02,Netflix,-499.00\n2026-08-03,Refund,199.00\n`,
+      `Transaction Date,Description,Amount\n2026-08-02,Netflix,-499.00\n2026-08-03,Refund,199.00\n2026-08-04,MMT/IMPS/608499287446/Payout,1.00\n`,
     );
 
-    expect(found.lines.map((line) => line.direction)).toEqual(["out", "in"]);
+    expect(found.lines.map((line) => line.direction)).toEqual([
+      "out",
+      "in",
+      "in",
+    ]);
     expect(found.lines[0]?.amountText).toBe("499");
+    expect(found.lines[2]?.amountText).toBe("1");
   });
 
   it("gives up rather than guessing when there is no date column", () => {
@@ -76,12 +81,20 @@ describe("the format pebble asks for", () => {
   });
 });
 
-describe("fingerprint", () => {
-  it("is the same for a row imported twice and different across accounts", () => {
-    const line = read(HDFC).lines[0];
-    if (line === undefined) throw new Error("expected a line");
+describe("fingerprints", () => {
+  it("repeats for the same file and separates rows a statement genuinely repeats", () => {
+    const lines = read(HDFC).lines;
 
-    expect(fingerprint("acc-1", line)).toBe(fingerprint("acc-1", line));
-    expect(fingerprint("acc-1", line)).not.toBe(fingerprint("acc-2", line));
+    expect(fingerprints("acc-1", lines)).toEqual(fingerprints("acc-1", lines));
+    expect(fingerprints("acc-1", lines)[0]).not.toBe(
+      fingerprints("acc-2", lines)[0],
+    );
+
+    const twice = read(
+      `date,description,amount\n2026-08-02,Chai,-20\n2026-08-02,Chai,-20\n`,
+    ).lines;
+    const marks = fingerprints("acc-1", twice);
+    expect(marks[0]).not.toBe(marks[1]);
+    expect(marks[1]?.endsWith("#2")).toBe(true);
   });
 });

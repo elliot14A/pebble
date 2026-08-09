@@ -27,30 +27,39 @@ const IN_WORDS = ["deposit", "credit", "paid in", "money in", "cr"];
 const AMOUNT_WORDS = ["amount", "amt"];
 const CATEGORY_WORDS = ["category", "tag"];
 
-const tidy = (value: string): string =>
+const wordsIn = (value: string): ReadonlyArray<string> =>
   value
     .toLowerCase()
-    .replace(/[^a-z ]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+    .replace(/[^a-z]/g, " ")
+    .split(" ")
+    .filter((word) => word !== "");
+
+const holds = (name: ReadonlyArray<string>, phrase: string): boolean => {
+  const wanted = phrase.split(" ");
+  return name.some((_, at) =>
+    wanted.every((word, step) => name[at + step] === word),
+  );
+};
 
 const findColumn = (
   header: ReadonlyArray<string>,
-  words: ReadonlyArray<string>,
+  wanted: ReadonlyArray<string>,
   avoid: ReadonlyArray<string> = [],
+  taken: ReadonlySet<number> = new Set(),
 ): number =>
-  header.findIndex((cell) => {
-    const name = tidy(cell);
-    if (name === "") return false;
-    if (avoid.some((word) => name.includes(word))) return false;
-    return words.some((word) => name.includes(word));
+  header.findIndex((cell, at) => {
+    if (taken.has(at)) return false;
+    const name = wordsIn(cell);
+    if (name.length === 0) return false;
+    if (avoid.some((phrase) => holds(name, phrase))) return false;
+    return wanted.some((phrase) => holds(name, phrase));
   });
 
 export const readAmount = (value: string): number | null => {
-  const cleaned = value.replace(/[^0-9.,-]/g, "").replace(/,/g, "");
-  if (cleaned === "" || cleaned === "-") return null;
+  const text = value.replace(/[\s₹$€£]/g, "").replace(/,/g, "");
+  if (!/^-?\d+(\.\d+)?$/.test(text)) return null;
 
-  const amount = Number(cleaned);
+  const amount = Number(text);
   return Number.isFinite(amount) ? amount : null;
 };
 
@@ -104,15 +113,21 @@ export const read = (text: string): Reading => {
   if (headerAt === -1) return { lines: [], skipped: rows.length };
 
   const header = rows[headerAt] ?? [];
-  const nameAt = findColumn(header, NAME_WORDS);
-  const outAt = findColumn(header, OUT_WORDS);
-  const inAt = findColumn(header, IN_WORDS);
-  const categoryAt = findColumn(header, CATEGORY_WORDS);
-  const amountAt = findColumn(header, AMOUNT_WORDS, [
-    ...OUT_WORDS,
-    ...IN_WORDS,
-    "balance",
-  ]);
+  const taken = new Set([dateAt]);
+  const claim = (
+    wanted: ReadonlyArray<string>,
+    avoid: ReadonlyArray<string> = [],
+  ): number => {
+    const at = findColumn(header, wanted, avoid, taken);
+    if (at !== -1) taken.add(at);
+    return at;
+  };
+
+  const nameAt = claim(NAME_WORDS);
+  const categoryAt = claim(CATEGORY_WORDS);
+  const outAt = claim(OUT_WORDS);
+  const inAt = claim(IN_WORDS);
+  const amountAt = claim(AMOUNT_WORDS, [...OUT_WORDS, ...IN_WORDS, "balance"]);
 
   const lines: Line[] = [];
   let skipped = 0;
@@ -162,8 +177,22 @@ export const read = (text: string): Reading => {
   return { lines, skipped };
 };
 
-export const fingerprint = (accountId: string, line: Line): string =>
+const mark = (accountId: string, line: Line): string =>
   `import:${accountId}:${line.occurredOn}:${line.direction}:${line.amountText}:${line.description
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "")
     .slice(0, 24)}`;
+
+export const fingerprints = (
+  accountId: string,
+  lines: ReadonlyArray<Line>,
+): ReadonlyArray<string> => {
+  const runs = new Map<string, number>();
+
+  return lines.map((line) => {
+    const base = mark(accountId, line);
+    const run = (runs.get(base) ?? 0) + 1;
+    runs.set(base, run);
+    return run === 1 ? base : `${base}#${run}`;
+  });
+};
