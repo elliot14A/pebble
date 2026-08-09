@@ -65,6 +65,7 @@ export function RecurringPage(props: RecurringPageProps) {
         <button
           type="button"
           role="switch"
+          aria-checked="false"
           x-bind:aria-checked="on ? 'true' : 'false'"
           x-on:click="toggle()"
           x-bind:disabled="busy"
