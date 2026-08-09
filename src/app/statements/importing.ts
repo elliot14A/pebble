@@ -1,20 +1,33 @@
 import { err, ok, ResultAsync } from "neverthrow";
 import { visible } from "@/app/categories";
-import { create } from "@/app/transactions";
 import {
   type AppResult,
   type AppResultAsync,
   appError,
   ValidationErrorCode,
 } from "@/core/error";
-import { fingerprint, type Line, read } from "@/core/statements";
+import { newId } from "@/core/id";
+import { normalizeMerchant } from "@/core/merchants";
+import { parseAmount } from "@/core/money";
+import { convert, rateOn } from "@/core/rates";
+import { fingerprints, type Line, read } from "@/core/statements";
+import { type Transaction, validateNewTransaction } from "@/core/transactions";
 import { fetch as fetchAccount } from "@/infra/d1/actions/accounts";
-import { list as listTransactions } from "@/infra/d1/actions/transactions";
+import { list as listMerchants } from "@/infra/d1/actions/merchants";
+import { list as listRates } from "@/infra/d1/actions/rates";
+import {
+  createMany,
+  list as listTransactions,
+} from "@/infra/d1/actions/transactions";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 
-export const MAX_LINES = 2_000;
+export const MAX_LINES = 1_500;
 
-export type Seen = Readonly<{ line: Line; already: boolean }>;
+export type Seen = Readonly<{
+  line: Line;
+  clientId: string;
+  already: boolean;
+}>;
 
 export type Preview = Readonly<{
   accountId: string;
@@ -67,10 +80,12 @@ export const preview = (
 
     const lines = found.lines.slice(0, MAX_LINES);
     const already = await known(db, userId, accountId, lines);
+    const marks = fingerprints(accountId, lines);
 
-    const seen = lines.map((line) => ({
+    const seen = lines.map((line, at) => ({
       line,
-      already: already.has(fingerprint(accountId, line)),
+      clientId: marks[at] ?? "",
+      already: already.has(marks[at] ?? ""),
     }));
 
     return ok({
@@ -92,21 +107,35 @@ export const bring = (
   accountId: string,
   text: string,
   now: number,
-  today: string,
   baseCurrency: string,
 ): AppResultAsync<Imported> => {
   const run = async (): Promise<AppResult<Imported>> => {
+    const account = await fetchAccount(db, userId, accountId);
+    if (account.isErr()) return err(account.error);
+
     const seen = await preview(db, userId, accountId, text);
     if (seen.isErr()) return err(seen.error);
 
-    const known = await visible(db, userId);
+    const currency = account.value.currency;
+    const categories = await visible(db, userId);
     const byName = new Map(
-      known.isOk()
-        ? known.value.map((one) => [one.name.trim().toLowerCase(), one.id])
+      categories.isOk()
+        ? categories.value.map((one) => [one.name.trim().toLowerCase(), one.id])
         : [],
     );
 
-    let added = 0;
+    const merchants = await listMerchants(db, userId, 5_000);
+    const byMerchant = new Map(
+      merchants.isOk()
+        ? merchants.value.map((one) => [one.normalizedName, one.id])
+        : [],
+    );
+
+    const rates =
+      currency === baseCurrency ? null : await listRates(db, userId);
+    if (rates !== null && rates.isErr()) return err(rates.error);
+
+    const rows: Transaction[] = [];
     let skipped = 0;
 
     for (const row of seen.value.seen) {
@@ -115,30 +144,73 @@ export const bring = (
         continue;
       }
 
-      const made = await create(
-        db,
-        {
-          userId,
-          accountId,
-          type: row.line.direction === "in" ? "income" : "expense",
-          categoryId:
-            byName.get(row.line.category.trim().toLowerCase()) ?? null,
-          amountText: row.line.amountText,
-          occurredOn: row.line.occurredOn,
-          note:
-            row.line.description === ""
-              ? "From the statement"
-              : row.line.description,
-          clientId: fingerprint(accountId, row.line),
-        },
-        { baseCurrency, now, today },
-      );
+      const amount = parseAmount(row.line.amountText, currency);
+      if (amount.isErr()) {
+        skipped += 1;
+        continue;
+      }
 
-      if (made.isOk()) added += 1;
-      else skipped += 1;
+      const note =
+        row.line.description === ""
+          ? "From the statement"
+          : row.line.description;
+
+      const draft = validateNewTransaction({
+        userId,
+        walletId: null,
+        accountId,
+        counterAccountId: null,
+        categoryId: byName.get(row.line.category.trim().toLowerCase()) ?? null,
+        merchantId: byMerchant.get(normalizeMerchant(note)) ?? null,
+        type: row.line.direction === "in" ? "income" : "expense",
+        amountMinor: amount.value.minor,
+        currency,
+        occurredOn: row.line.occurredOn,
+        note,
+        tags: null,
+        clientId: row.clientId,
+      });
+      if (draft.isErr()) {
+        skipped += 1;
+        continue;
+      }
+
+      const rate =
+        rates === null || rates.isErr()
+          ? null
+          : rateOn(rates.value, currency, draft.value.occurredOn);
+      const based =
+        rates === null
+          ? { minor: draft.value.amountMinor }
+          : rate === null
+            ? null
+            : convert(
+                { minor: draft.value.amountMinor, currency },
+                baseCurrency,
+                rate.rateE8,
+              ).unwrapOr(null);
+
+      rows.push({
+        ...draft.value,
+        id: newId(now),
+        baseAmountMinor: based === null ? null : based.minor,
+        fxRateE8: rate === null ? null : rate.rateE8,
+        fxPending: based === null,
+        createdAt: now,
+        updatedAt: now,
+        deletedAt: null,
+      });
     }
 
-    return ok({ added, skipped });
+    if (rows.length === 0) return ok({ added: 0, skipped });
+
+    const saved = await createMany(db, rows);
+    if (saved.isErr()) return err(saved.error);
+
+    return ok({
+      added: saved.value,
+      skipped: skipped + (rows.length - saved.value),
+    });
   };
 
   return new ResultAsync(run());

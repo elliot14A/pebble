@@ -112,7 +112,6 @@ export const routes = (): Hono<Env> =>
         accountId,
         text,
         ctx.now,
-        ctx.today,
         ctx.baseCurrency,
       );
 
