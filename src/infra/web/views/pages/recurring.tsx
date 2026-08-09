@@ -26,9 +26,10 @@ const EVERY_LABEL: Readonly<Record<string, string>> = {
 
 const when = (rule: Recurring, today: string): string => {
   const days = daysUntil(rule.nextOn, today);
-  if (days < 0) return `${Math.abs(days)} days late`;
   if (days === 0) return "Due today";
   if (days === 1) return "Due tomorrow";
+  if (days === -1) return "A day late";
+  if (days < 0) return `${Math.abs(days)} days late`;
   return `In ${days} days`;
 };
 
@@ -63,13 +64,34 @@ export function RecurringPage(props: RecurringPageProps) {
       <div class="px-5 pt-2" x-data="notifyToggle">
         <button
           type="button"
+          role="switch"
+          x-bind:aria-checked="on ? 'true' : 'false'"
           x-on:click="toggle()"
           x-bind:disabled="busy"
-          class="press card flex h-11 w-full items-center gap-2.5 px-4 text-[12.5px] font-semibold text-ink-2"
+          x-bind:class="busy ? 'opacity-60' : ''"
+          class="press card flex w-full items-center gap-3 p-3.5 text-left"
         >
-          <Icon name="bell" size={15} />
-          <span x-text="on ? 'Reminders are on' : 'Remind me when a bill is due'" />
-          <span class="ml-auto text-[11px] text-ink-3" x-text="note" />
+          <span class="glyph h-9 w-9 flex-none rounded-[12px]">
+            <Icon name="bell" size={16} />
+          </span>
+
+          <span class="min-w-0 flex-1">
+            <b class="block text-[12.5px] font-bold tracking-[-0.015em] text-ink">
+              Bill reminders
+            </b>
+            <span
+              class="block truncate text-[10.5px] text-ink-3"
+              x-text="note !== '' ? note : (on ? 'A nudge when one is due' : 'Off')"
+            />
+          </span>
+
+          <span
+            class="switch flex-none"
+            x-bind:class="on ? 'switch-on' : ''"
+            aria-hidden="true"
+          >
+            <span class="switch-knob" />
+          </span>
         </button>
       </div>
 

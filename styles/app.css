@@ -564,6 +564,33 @@
     }
   }
 
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 25px;
+    border-radius: 999px;
+    background: var(--color-line);
+    transition: background-color 0.18s var(--ease-pebble);
+  }
+  .switch-on {
+    background: var(--color-money-deep);
+  }
+  .switch-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 19px;
+    height: 19px;
+    border-radius: 999px;
+    background: var(--color-paper);
+    box-shadow: 0 1px 3px rgb(9 17 13 / 0.28);
+    transition: transform 0.2s var(--ease-spring);
+  }
+  .switch-on .switch-knob {
+    transform: translateX(17px);
+  }
+
   .busy {
     display: none;
   }
