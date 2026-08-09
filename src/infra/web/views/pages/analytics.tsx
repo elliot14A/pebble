@@ -34,6 +34,24 @@ const SLICES = [
 
 const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"] as const;
 
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+] as const;
+
+const monthName = (month: string): string =>
+  MONTHS[Number(month.slice(5, 7)) - 1] ?? month.slice(5);
+
 export function AnalyticsPage(props: AnalyticsPageProps) {
   const { data } = props;
   const money = (minor: number) =>
@@ -391,7 +409,8 @@ function Months(props: {
   const tallest = maxOf(
     props.months.flatMap((month) => [month.inMinor, month.outMinor]),
   );
-  const AREA = 60;
+  const AREA = 52;
+  const BASE = 96;
   const step = 320 / Math.max(1, props.months.length);
 
   return (
@@ -405,22 +424,29 @@ function Months(props: {
         <Empty>No activity in this window yet.</Empty>
       ) : (
         <svg
-          viewBox="0 0 320 108"
+          viewBox="0 0 320 124"
           width="100%"
-          height="104"
+          height="120"
           role="img"
           aria-label="Money in versus money out by month"
         >
-          <line x1="0" y1="88" x2="320" y2="88" stroke="var(--color-line)" />
+          <line
+            x1="0"
+            y1={BASE}
+            x2="320"
+            y2={BASE}
+            stroke="var(--color-line)"
+          />
           {props.months.map((month, index) => {
             const left = index * step + step / 2;
             const inHeight = barHeight(month.inMinor, tallest, AREA);
             const outHeight = barHeight(month.outMinor, tallest, AREA);
+            const top = BASE - Math.max(inHeight, outHeight);
             return (
               <>
                 <rect
                   x={left - 17}
-                  y={88 - inHeight}
+                  y={BASE - inHeight}
                   width="15"
                   height={inHeight}
                   rx="4"
@@ -428,7 +454,7 @@ function Months(props: {
                 />
                 <rect
                   x={left + 2}
-                  y={88 - outHeight}
+                  y={BASE - outHeight}
                   width="15"
                   height={outHeight}
                   rx="4"
@@ -436,40 +462,36 @@ function Months(props: {
                 />
                 {month.inMinor === 0 ? null : (
                   <text
-                    x={left - 9}
-                    y={
-                      82 -
-                      inHeight -
-                      (Math.abs(inHeight - outHeight) < 9 ? 9 : 0)
-                    }
+                    x={left}
+                    y={top - 12}
                     text-anchor="middle"
-                    font-size="8"
+                    font-size="8.5"
                     font-weight="600"
                     fill="var(--color-ink-2)"
                   >
-                    {props.brief(month.inMinor)}
+                    +{props.brief(month.inMinor)}
                   </text>
                 )}
                 {month.outMinor === 0 ? null : (
                   <text
-                    x={left + 9}
-                    y={82 - outHeight}
+                    x={left}
+                    y={top - 3}
                     text-anchor="middle"
-                    font-size="8"
+                    font-size="8.5"
                     font-weight="600"
                     fill="var(--color-ink-2)"
                   >
-                    {props.brief(month.outMinor)}
+                    −{props.brief(month.outMinor)}
                   </text>
                 )}
                 <text
                   x={left}
-                  y="102"
+                  y={BASE + 14}
                   text-anchor="middle"
                   font-size="9"
                   fill="var(--color-ink-4)"
                 >
-                  {month.month.slice(5)}
+                  {monthName(month.month)}
                 </text>
               </>
             );
@@ -545,9 +567,9 @@ function Weekdays(props: {
         <Empty>Nothing spent this month.</Empty>
       ) : (
         <svg
-          viewBox="0 0 320 96"
+          viewBox="0 0 320 100"
           width="100%"
-          height="92"
+          height="96"
           role="img"
           aria-label="Spending by day of the week"
         >
@@ -569,7 +591,7 @@ function Weekdays(props: {
                 {minor === 0 ? null : (
                   <text
                     x={left + 16}
-                    y={76 - height}
+                    y={78 - height}
                     text-anchor="middle"
                     font-size="9"
                     font-weight="600"
@@ -580,7 +602,7 @@ function Weekdays(props: {
                 )}
                 <text
                   x={left + 16}
-                  y="94"
+                  y="96"
                   text-anchor="middle"
                   font-size="9"
                   fill="var(--color-ink-4)"

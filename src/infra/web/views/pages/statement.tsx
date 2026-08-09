@@ -62,6 +62,7 @@ export function StatementPage(props: StatementPageProps) {
           action="/settings/import"
           enctype="multipart/form-data"
           class="card mx-5 grid gap-2.5 p-4"
+          onsubmit="this.classList.add('sending')"
         >
           <select name="accountId" class={field}>
             {props.accounts.map((one) => (
@@ -76,7 +77,11 @@ export function StatementPage(props: StatementPageProps) {
               <Icon name="receipt" size={17} />
             </span>
             <span class="min-w-0 flex-1 text-[12.5px] font-semibold text-ink-2">
-              Choose the csv your bank gave you
+              <span class="idle">Choose the csv your bank gave you</span>
+              <span class="busy items-center gap-2">
+                Reading the file
+                <Spinner />
+              </span>
             </span>
             <input
               type="file"
@@ -141,7 +146,11 @@ export function StatementPage(props: StatementPageProps) {
           ) : null}
 
           <div class="grid gap-2 px-5 pt-5 pb-2">
-            <form method="post" action="/settings/import/confirm">
+            <form
+              method="post"
+              action="/settings/import/confirm"
+              onsubmit="this.classList.add('sending')"
+            >
               <input
                 type="hidden"
                 name="accountId"
@@ -157,8 +166,14 @@ export function StatementPage(props: StatementPageProps) {
                 disabled={props.preview.fresh === 0}
                 class="press flex h-12 w-full items-center justify-center gap-2 rounded-[15px] bg-money-deep text-[13px] font-bold text-on-money disabled:opacity-40"
               >
-                <Icon name="check" size={16} />
-                Add {props.preview.fresh}
+                <span class="idle flex items-center gap-2">
+                  <Icon name="check" size={16} />
+                  Add {props.preview.fresh}
+                </span>
+                <span class="busy items-center gap-2">
+                  Adding {props.preview.fresh}
+                  <Spinner />
+                </span>
               </button>
             </form>
             <a
@@ -171,6 +186,30 @@ export function StatementPage(props: StatementPageProps) {
         </>
       )}
     </Shell>
+  );
+}
+
+function Spinner() {
+  return (
+    <svg
+      class="spinner"
+      width="16"
+      height="16"
+      viewBox="0 0 18 18"
+      aria-hidden="true"
+    >
+      <circle
+        cx="9"
+        cy="9"
+        r="7"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-dasharray="33"
+        stroke-dashoffset="10"
+      />
+    </svg>
   );
 }
 

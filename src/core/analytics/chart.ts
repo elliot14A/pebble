@@ -28,7 +28,10 @@ export const barHeight = (
   value: number,
   max: number,
   available: number,
-): number => (max <= 0 ? 0 : Math.round((value / max) * available));
+): number => {
+  if (max <= 0 || value <= 0) return 0;
+  return Math.max(3, Math.round((value / max) * available));
+};
 
 export const maxOf = (values: ReadonlyArray<number>): number =>
   values.reduce((highest, value) => (value > highest ? value : highest), 0);

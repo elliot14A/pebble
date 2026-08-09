@@ -600,6 +600,15 @@
   .htmx-request .idle {
     display: none;
   }
+  .sending .busy {
+    display: inline-flex;
+  }
+  .sending .idle {
+    display: none;
+  }
+  .sending {
+    pointer-events: none;
+  }
 }
 
 @layer utilities {
