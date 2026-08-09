@@ -1,4 +1,4 @@
-import { monthOf } from "@/core/analytics/summary";
+import { monthOf } from "@/core/analytics";
 
 const NAMES = [
   "January",

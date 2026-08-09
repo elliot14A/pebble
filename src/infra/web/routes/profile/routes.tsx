@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { rename } from "@/app/users/rename";
+import { rename } from "@/app/users";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { count as countTransactions } from "@/infra/d1/actions/transactions";
 import type { Env } from "@/infra/web/context";

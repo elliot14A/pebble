@@ -1,6 +1,6 @@
-import { normalizeMerchant } from "@/core/merchants/merchant";
-import { displayMoney, parseAmount } from "@/core/money/money";
-import { convert, formatRate } from "@/core/rates/rate";
+import { normalizeMerchant } from "@/core/merchants";
+import { displayMoney, parseAmount } from "@/core/money";
+import { convert, formatRate } from "@/core/rates";
 import {
   backspace,
   display,

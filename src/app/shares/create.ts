@@ -8,7 +8,7 @@ import {
   type Share,
   type Span,
   windowFor,
-} from "@/core/shares/share";
+} from "@/core/shares";
 import { create as insert } from "@/infra/d1/actions/shares";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 

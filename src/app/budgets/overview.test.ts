@@ -9,7 +9,7 @@ import {
 import { openTestDatabase, type TestDatabase } from "@test/d1";
 import { overview } from "@/app/budgets/overview";
 import { set } from "@/app/budgets/set";
-import { create as addTransaction } from "@/app/transactions/create";
+import { create as addTransaction } from "@/app/transactions";
 import { save as saveAccount } from "@/infra/d1/actions/accounts";
 import { save as saveCategory } from "@/infra/d1/actions/categories";
 

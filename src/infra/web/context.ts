@@ -6,8 +6,8 @@ import {
   hashToken,
   isExpired,
   shouldExtend,
-} from "@/core/auth/session";
-import type { User } from "@/core/users/user";
+} from "@/core/auth";
+import type { User } from "@/core/users";
 import { fetchByToken, remove, touch } from "@/infra/d1/actions/sessions";
 import { connect, type DrizzleD1Database } from "@/infra/d1/connection";
 import { readConfig } from "@/infra/web/config";

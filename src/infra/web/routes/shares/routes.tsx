@@ -1,7 +1,6 @@
 import { Hono } from "hono";
-import { create } from "@/app/shares/create";
-import { view } from "@/app/shares/view";
-import { isSpan } from "@/core/shares/share";
+import { create, view } from "@/app/shares";
+import { isSpan } from "@/core/shares";
 import { list, revoke } from "@/infra/d1/actions/shares";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";

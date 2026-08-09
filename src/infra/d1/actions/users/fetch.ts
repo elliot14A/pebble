@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { errAsync, okAsync } from "neverthrow";
 import { type AppResultAsync, appError, ResourceErrorCode } from "@/core/error";
-import type { User } from "@/core/users/user";
+import type { User } from "@/core/users";
 import { toUser, type UserRow } from "@/infra/d1/actions/users/list";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { users } from "@/infra/d1/schema";

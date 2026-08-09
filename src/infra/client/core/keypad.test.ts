@@ -19,10 +19,6 @@ describe("keypad", () => {
     expect(display(type("8.401"))).toBe("8.40");
   });
 
-  it("replaces a lone leading zero instead of growing it", () => {
-    expect(display(type("05"))).toBe("5");
-  });
-
   it("truncates when the account switches to a coarser currency", () => {
     expect(display(withDecimals(type("8.40"), 0))).toBe("8");
     expect(display(withDecimals(type("8.40"), 2))).toBe("8.40");

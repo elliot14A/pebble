@@ -1,6 +1,6 @@
 import { err, ok, ResultAsync } from "neverthrow";
-import { signOutEverywhere } from "@/app/auth/session";
-import { checkPassword, hashPassword } from "@/core/auth/password";
+import { signOutEverywhere } from "@/app/auth";
+import { checkPassword, hashPassword } from "@/core/auth";
 import {
   type AppResult,
   type AppResultAsync,
@@ -9,7 +9,7 @@ import {
   ValidationErrorCode,
 } from "@/core/error";
 import { newId } from "@/core/id";
-import type { User } from "@/core/users/user";
+import type { User } from "@/core/users";
 import {
   fetchByUsername,
   fetch as fetchUser,

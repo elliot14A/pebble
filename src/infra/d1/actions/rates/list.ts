@@ -1,6 +1,6 @@
 import { asc, eq } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
-import type { Rate } from "@/core/rates/rate";
+import type { Rate } from "@/core/rates";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { fxRates } from "@/infra/d1/schema";
 

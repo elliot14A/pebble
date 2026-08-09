@@ -1,4 +1,4 @@
-import { runDue } from "@/app/recurring/run";
+import { runDue } from "@/app/recurring";
 import { connect } from "@/infra/d1/connection";
 import { makeApp } from "@/infra/web/app";
 import { readConfig } from "@/infra/web/config";

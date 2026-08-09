@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { overview as budgetOverview } from "@/app/budgets/overview";
+import { overview as budgetOverview } from "@/app/budgets";
 import { overview } from "@/app/overview";
 import { quickAdd } from "@/app/quickAdd";
 import type { Env } from "@/infra/web/context";

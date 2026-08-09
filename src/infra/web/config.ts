@@ -1,4 +1,4 @@
-import { BASE_CURRENCY, isCurrency } from "@/core/money/currency";
+import { BASE_CURRENCY, isCurrency } from "@/core/money";
 
 export type Env = Readonly<{
   DB: D1Database;

@@ -1,6 +1,6 @@
 import { and, asc, eq, isNull, lte } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
-import type { Recurring } from "@/core/recurring/schedule";
+import type { Recurring } from "@/core/recurring";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { recurring } from "@/infra/d1/schema";
 

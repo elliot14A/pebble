@@ -9,8 +9,8 @@ import {
 import { openTestDatabase, type TestDatabase } from "@test/d1";
 import { create } from "@/app/shares/create";
 import { view } from "@/app/shares/view";
-import { create as addTransaction } from "@/app/transactions/create";
-import { hashPassword } from "@/core/auth/password";
+import { create as addTransaction } from "@/app/transactions";
+import { hashPassword } from "@/core/auth";
 import { save as saveAccount } from "@/infra/d1/actions/accounts";
 import { revoke } from "@/infra/d1/actions/shares";
 import { save as saveUser } from "@/infra/d1/actions/users";

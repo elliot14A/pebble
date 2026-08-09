@@ -2,7 +2,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { errAsync, okAsync } from "neverthrow";
 import { type AppResultAsync, appError, ResourceErrorCode } from "@/core/error";
 import { newId } from "@/core/id";
-import { type Merchant, normalizeMerchant } from "@/core/merchants/merchant";
+import { type Merchant, normalizeMerchant } from "@/core/merchants";
 import { toMerchant } from "@/infra/d1/actions/merchants/list";
 import { type DrizzleD1Database, read, write } from "@/infra/d1/connection";
 import { merchants } from "@/infra/d1/schema";

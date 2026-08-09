@@ -1,5 +1,5 @@
 import type { AppResultAsync } from "@/core/error";
-import { type DayGroup, groupByDay } from "@/core/transactions/balance";
+import { type DayGroup, groupByDay } from "@/core/transactions";
 import { list, type TransactionQuery } from "@/infra/d1/actions/transactions";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 

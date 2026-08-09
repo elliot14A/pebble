@@ -1,7 +1,4 @@
-import {
-  isTransactionType,
-  type Transaction,
-} from "@/core/transactions/transaction";
+import { isTransactionType, type Transaction } from "@/core/transactions";
 import type { transactions } from "@/infra/d1/schema";
 
 export type TransactionRow = typeof transactions.$inferSelect;

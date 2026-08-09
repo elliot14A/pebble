@@ -1,6 +1,6 @@
-import type { Account } from "@/core/accounts/account";
-import type { Category } from "@/core/categories/category";
-import { CURRENCIES } from "@/core/money/currency";
+import type { Account } from "@/core/accounts";
+import type { Category } from "@/core/categories";
+import { CURRENCIES } from "@/core/money";
 import { Icon } from "@/infra/web/views/components/icons";
 
 export type QuickAddProps = Readonly<{

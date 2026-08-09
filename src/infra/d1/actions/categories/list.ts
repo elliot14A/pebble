@@ -4,7 +4,7 @@ import {
   type CategoryKind,
   isGlyph,
   type Tint,
-} from "@/core/categories/category";
+} from "@/core/categories";
 import type { AppResultAsync } from "@/core/error";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { categories } from "@/infra/d1/schema";

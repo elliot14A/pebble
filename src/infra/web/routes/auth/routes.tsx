@@ -1,9 +1,7 @@
 import { type Context, Hono } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
-import { changePassword } from "@/app/auth/changePassword";
-import { login } from "@/app/auth/login";
-import { signOut, startSession } from "@/app/auth/session";
-import { COOKIE_NAME, SESSION_DAYS } from "@/core/auth/session";
+import { changePassword, login, signOut, startSession } from "@/app/auth";
+import { COOKIE_NAME, SESSION_DAYS } from "@/core/auth";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
 import { LoginPage } from "@/infra/web/views/pages/login";

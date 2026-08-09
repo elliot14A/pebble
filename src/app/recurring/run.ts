@@ -1,12 +1,8 @@
 import { err, ok, ResultAsync } from "neverthrow";
 import type { AppResult, AppResultAsync } from "@/core/error";
 import { newId } from "@/core/id";
-import { convert, rateOn } from "@/core/rates/rate";
-import {
-  nextAfter,
-  type Recurring,
-  runsDueBy,
-} from "@/core/recurring/schedule";
+import { convert, rateOn } from "@/core/rates";
+import { nextAfter, type Recurring, runsDueBy } from "@/core/recurring";
 import { list as listRates } from "@/infra/d1/actions/rates";
 import { advance, listDue } from "@/infra/d1/actions/recurring";
 import { create } from "@/infra/d1/actions/transactions";

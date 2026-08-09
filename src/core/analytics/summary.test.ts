@@ -5,10 +5,7 @@ import {
   topWithRest,
   totalOf,
 } from "@/core/analytics/summary";
-import type {
-  Transaction,
-  TransactionType,
-} from "@/core/transactions/transaction";
+import type { Transaction, TransactionType } from "@/core/transactions";
 
 let counter = 0;
 

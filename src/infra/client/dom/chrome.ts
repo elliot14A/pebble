@@ -1,4 +1,4 @@
-import { displayMoney } from "@/core/money/money";
+import { displayMoney } from "@/core/money";
 
 const COUNT_MS = 620;
 

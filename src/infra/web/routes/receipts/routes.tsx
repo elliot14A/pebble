@@ -1,6 +1,5 @@
 import { Hono } from "hono";
-import { detach } from "@/app/receipts/detach";
-import { scan } from "@/app/receipts/scan";
+import { detach, scan } from "@/app/receipts";
 import { attach, fetch as fetchReceipt } from "@/infra/d1/actions/receipts";
 import { makeClient } from "@/infra/openai/client";
 import { keepUnread, makeRead } from "@/infra/openai/receipt";

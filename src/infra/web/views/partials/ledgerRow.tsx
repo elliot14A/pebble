@@ -1,6 +1,6 @@
-import type { Account } from "@/core/accounts/account";
-import type { Category, Tint } from "@/core/categories/category";
-import type { Transaction } from "@/core/transactions/transaction";
+import type { Account } from "@/core/accounts";
+import type { Category, Tint } from "@/core/categories";
+import type { Transaction } from "@/core/transactions";
 import { Amount } from "@/infra/web/views/components/amount";
 import { Icon } from "@/infra/web/views/components/icons";
 

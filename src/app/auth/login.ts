@@ -5,7 +5,7 @@ import {
   hashPassword,
   needsRehash,
   verifyPassword,
-} from "@/core/auth/password";
+} from "@/core/auth";
 import {
   type AppResult,
   type AppResultAsync,
@@ -13,7 +13,7 @@ import {
   ResourceErrorCode,
   ValidationErrorCode,
 } from "@/core/error";
-import type { User } from "@/core/users/user";
+import type { User } from "@/core/users";
 import { fetchByUsername } from "@/infra/d1/actions/users";
 import {
   clearFailures,

@@ -1,17 +1,13 @@
 import { err, ok, ResultAsync } from "neverthrow";
 import { signOutEverywhere } from "@/app/auth/session";
-import {
-  checkPassword,
-  hashPassword,
-  verifyPassword,
-} from "@/core/auth/password";
+import { checkPassword, hashPassword, verifyPassword } from "@/core/auth";
 import {
   type AppResult,
   type AppResultAsync,
   appError,
   ValidationErrorCode,
 } from "@/core/error";
-import type { User } from "@/core/users/user";
+import type { User } from "@/core/users";
 import { setPassword } from "@/infra/d1/actions/users";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 

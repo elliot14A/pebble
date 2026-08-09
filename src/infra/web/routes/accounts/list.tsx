@@ -1,9 +1,11 @@
 import type { Context } from "hono";
-import { balances } from "@/app/accounts/balances";
-import { remove as removeAccount } from "@/app/accounts/remove";
-import { save as saveAccount } from "@/app/accounts/save";
+import {
+  balances,
+  remove as removeAccount,
+  save as saveAccount,
+} from "@/app/accounts";
 import { quickAdd } from "@/app/quickAdd";
-import { listInUse } from "@/app/rates/list";
+import { listInUse } from "@/app/rates";
 import { list as listAccounts, restore } from "@/infra/d1/actions/accounts";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";

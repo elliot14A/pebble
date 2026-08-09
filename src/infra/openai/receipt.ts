@@ -1,8 +1,8 @@
 import { errAsync, ResultAsync } from "neverthrow";
 import type OpenAI from "openai";
 import { type AppResultAsync, appError, SystemErrorCode } from "@/core/error";
-import type { Reading } from "@/core/receipts/reading";
-import { readReceipt as parseReply } from "@/core/receipts/reading";
+import type { Reading } from "@/core/receipts";
+import { readReceipt as parseReply } from "@/core/receipts";
 
 export type ExtraBody = Readonly<Record<string, unknown>>;
 

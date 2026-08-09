@@ -1,8 +1,8 @@
-import type { BudgetLine } from "@/app/budgets/overview";
+import type { BudgetLine } from "@/app/budgets";
 import type { Overview } from "@/app/overview";
-import { displayMoney } from "@/core/money/money";
-import type { User } from "@/core/users/user";
-import { initials } from "@/core/users/user";
+import { displayMoney } from "@/core/money";
+import type { User } from "@/core/users";
+import { initials } from "@/core/users";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import { AppBar } from "@/infra/web/views/partials/appBar";

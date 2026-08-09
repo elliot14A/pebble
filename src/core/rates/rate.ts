@@ -1,7 +1,6 @@
 import { err, ok } from "neverthrow";
 import { type AppResult, appError, MoneyErrorCode } from "@/core/error";
-import { currencyOf } from "@/core/money/currency";
-import { type Money, money } from "@/core/money/money";
+import { currencyOf, type Money, money } from "@/core/money";
 
 export const RATE_SCALE = 100_000_000;
 const RATE_SCALE_BIG = 100_000_000n;

@@ -1,7 +1,5 @@
 import type { Context } from "hono";
-import { listInUse } from "@/app/rates/list";
-import { remove as removeCurrency } from "@/app/rates/remove";
-import { set } from "@/app/rates/set";
+import { listInUse, remove as removeCurrency, set } from "@/app/rates";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
 import { CurrenciesPage } from "@/infra/web/views/pages/currencies";

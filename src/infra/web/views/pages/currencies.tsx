@@ -1,6 +1,6 @@
-import type { CurrencyInUse } from "@/app/rates/list";
-import { currencyList } from "@/core/money/currency";
-import { formatRate } from "@/core/rates/rate";
+import type { CurrencyInUse } from "@/app/rates";
+import { currencyList } from "@/core/money";
+import { formatRate } from "@/core/rates";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import { Confirm } from "@/infra/web/views/partials/confirm";

@@ -1,7 +1,8 @@
 import type { Context } from "hono";
-import { visible as listCategories } from "@/app/categories/list";
-import { listInUse } from "@/app/rates/list";
+import { visible as listCategories } from "@/app/categories";
+import { listInUse } from "@/app/rates";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
+import { list as listGoals } from "@/infra/d1/actions/goals";
 import { list as listRules } from "@/infra/d1/actions/recurring";
 import { list as listShares } from "@/infra/d1/actions/shares";
 import { list as listUsers } from "@/infra/d1/actions/users";
@@ -17,14 +18,17 @@ export async function show(c: Context<Env>) {
       listUsers(ctx.db).andThen((users) =>
         listShares(ctx.db, ctx.user.id).andThen((shares) =>
           listCategories(ctx.db, ctx.user.id).andThen((categories) =>
-            listRules(ctx.db, ctx.user.id).map((rules) => ({
-              accounts,
-              currencies,
-              users,
-              shares,
-              categories,
-              rules,
-            })),
+            listRules(ctx.db, ctx.user.id).andThen((rules) =>
+              listGoals(ctx.db, ctx.user.id).map((goalList) => ({
+                accounts,
+                currencies,
+                users,
+                shares,
+                categories,
+                rules,
+                goalList,
+              })),
+            ),
           ),
         ),
       ),
@@ -44,6 +48,7 @@ export async function show(c: Context<Env>) {
       shareCount={data.value.shares.filter((s) => s.revokedAt === null).length}
       categoryCount={data.value.categories.length}
       repeatingCount={data.value.rules.length}
+      goalCount={data.value.goalList.length}
       notice={c.req.query("saved") ?? null}
     />,
   );

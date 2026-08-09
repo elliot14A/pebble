@@ -1,5 +1,5 @@
 import type { AppResultAsync } from "@/core/error";
-import type { Rate } from "@/core/rates/rate";
+import type { Rate } from "@/core/rates";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { list as listRates } from "@/infra/d1/actions/rates";
 import { list as listTransactions } from "@/infra/d1/actions/transactions";

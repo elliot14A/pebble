@@ -1,7 +1,7 @@
-import { type AccountBalance, balances } from "@/app/accounts/balances";
+import { type AccountBalance, balances } from "@/app/accounts";
 import type { AppResultAsync } from "@/core/error";
-import { flowMinor } from "@/core/transactions/balance";
-import type { Transaction } from "@/core/transactions/transaction";
+import type { Transaction } from "@/core/transactions";
+import { flowMinor } from "@/core/transactions";
 import { list as listTransactions } from "@/infra/d1/actions/transactions";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 

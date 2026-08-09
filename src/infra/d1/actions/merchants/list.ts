@@ -1,6 +1,6 @@
 import { asc, desc, eq } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
-import type { Merchant } from "@/core/merchants/merchant";
+import type { Merchant } from "@/core/merchants";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { merchants } from "@/infra/d1/schema";
 

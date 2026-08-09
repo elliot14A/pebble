@@ -7,6 +7,7 @@ import { routes as authRoutes } from "@/infra/web/routes/auth/routes";
 import { routes as budgetRoutes } from "@/infra/web/routes/budgets/routes";
 import { routes as categoryRoutes } from "@/infra/web/routes/categories/routes";
 import { routes as exportRoutes } from "@/infra/web/routes/exports/routes";
+import { routes as goalRoutes } from "@/infra/web/routes/goals/routes";
 import { routes as homeRoutes } from "@/infra/web/routes/home/routes";
 import { routes as profileRoutes } from "@/infra/web/routes/profile/routes";
 import { routes as receiptRoutes } from "@/infra/web/routes/receipts/routes";
@@ -31,6 +32,7 @@ export const makeApp = (): Hono<Env> => {
   app.route("/", budgetRoutes());
   app.route("/", categoryRoutes());
   app.route("/", exportRoutes());
+  app.route("/", goalRoutes());
   app.route("/", adminRoutes());
   app.route("/", profileRoutes());
   app.route("/", receiptRoutes());

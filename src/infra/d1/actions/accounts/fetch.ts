@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { errAsync, okAsync } from "neverthrow";
-import type { Account } from "@/core/accounts/account";
+import type { Account } from "@/core/accounts";
 import { type AppResultAsync, appError, ResourceErrorCode } from "@/core/error";
 import { toAccount } from "@/infra/d1/actions/accounts/list";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";

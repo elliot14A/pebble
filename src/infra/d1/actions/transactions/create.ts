@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { errAsync, okAsync } from "neverthrow";
 import { type AppResultAsync, appError, ResourceErrorCode } from "@/core/error";
-import type { Transaction } from "@/core/transactions/transaction";
+import type { Transaction } from "@/core/transactions";
 import { toRow, toTransaction } from "@/infra/d1/actions/transactions/row";
 import { type DrizzleD1Database, read, write } from "@/infra/d1/connection";
 import { transactions } from "@/infra/d1/schema";

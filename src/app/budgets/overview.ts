@@ -1,4 +1,4 @@
-import { byCategory, spendMinor } from "@/core/analytics/summary";
+import { byCategory, spendMinor } from "@/core/analytics";
 import {
   type Budget,
   dailyLeftMinor,
@@ -7,10 +7,10 @@ import {
   type Progress,
   progress,
   projectedMinor,
-} from "@/core/budgets/budget";
-import type { Category } from "@/core/categories/category";
+} from "@/core/budgets";
+import type { Category } from "@/core/categories";
 import type { AppResultAsync } from "@/core/error";
-import { isLive } from "@/core/transactions/transaction";
+import { isLive } from "@/core/transactions";
 import { list as listBudgets } from "@/infra/d1/actions/budgets";
 import { list as listCategories } from "@/infra/d1/actions/categories";
 import { list as listTransactions } from "@/infra/d1/actions/transactions";

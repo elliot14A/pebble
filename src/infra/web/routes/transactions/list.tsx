@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import { quickAdd } from "@/app/quickAdd";
-import { type DayGroup, groupByDay } from "@/core/transactions/balance";
+import { type DayGroup, groupByDay } from "@/core/transactions";
 import {
   count,
   list as listTransactions,

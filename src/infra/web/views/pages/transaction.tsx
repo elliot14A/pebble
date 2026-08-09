@@ -1,10 +1,9 @@
-import type { Account } from "@/core/accounts/account";
-import type { Category } from "@/core/categories/category";
-import { currencyOf } from "@/core/money/currency";
-import { displayMoney } from "@/core/money/money";
-import { formatRate } from "@/core/rates/rate";
-import type { Receipt } from "@/core/receipts/receipt";
-import type { Transaction } from "@/core/transactions/transaction";
+import type { Account } from "@/core/accounts";
+import type { Category } from "@/core/categories";
+import { currencyOf, displayMoney } from "@/core/money";
+import { formatRate } from "@/core/rates";
+import type { Receipt } from "@/core/receipts";
+import type { Transaction } from "@/core/transactions";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import { Confirm } from "@/infra/web/views/partials/confirm";

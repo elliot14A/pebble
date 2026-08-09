@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
-import type { User } from "@/core/users/user";
+import type { User } from "@/core/users";
 import { toUser } from "@/infra/d1/actions/users/list";
 import { type DrizzleD1Database, read, write } from "@/infra/d1/connection";
 import { sessions, users } from "@/infra/d1/schema";

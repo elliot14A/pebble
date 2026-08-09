@@ -1,6 +1,6 @@
-import type { Account } from "@/core/accounts/account";
-import type { Category } from "@/core/categories/category";
-import type { User } from "@/core/users/user";
+import type { Account } from "@/core/accounts";
+import type { Category } from "@/core/categories";
+import type { User } from "@/core/users";
 
 export const defaultCategories: ReadonlyArray<Category> = [
   ["food", "Food", "expense", "food", "money"],

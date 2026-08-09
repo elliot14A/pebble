@@ -1,6 +1,5 @@
 import { Hono } from "hono";
-import { overview } from "@/app/budgets/overview";
-import { set } from "@/app/budgets/set";
+import { overview, set } from "@/app/budgets";
 import { remove } from "@/infra/d1/actions/budgets";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";

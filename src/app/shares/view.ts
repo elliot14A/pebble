@@ -1,25 +1,21 @@
 import { err, ok, ResultAsync } from "neverthrow";
-import type { Account } from "@/core/accounts/account";
+import type { Account } from "@/core/accounts";
 import {
   type Bucket,
   byCategory,
   topWithRest,
   totalOf,
-} from "@/core/analytics/summary";
-import type { Category } from "@/core/categories/category";
+} from "@/core/analytics";
+import type { Category } from "@/core/categories";
 import {
   type AppResult,
   type AppResultAsync,
   appError,
   ResourceErrorCode,
 } from "@/core/error";
-import { isLive, type Share } from "@/core/shares/share";
-import {
-  type DayGroup,
-  flowMinor,
-  groupByDay,
-} from "@/core/transactions/balance";
-import type { User } from "@/core/users/user";
+import { isLive, type Share } from "@/core/shares";
+import { type DayGroup, flowMinor, groupByDay } from "@/core/transactions";
+import type { User } from "@/core/users";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { list as listCategories } from "@/infra/d1/actions/categories";
 import { fetchByToken, touch } from "@/infra/d1/actions/shares";

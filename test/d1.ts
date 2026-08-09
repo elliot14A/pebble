@@ -15,6 +15,7 @@ export type TestDatabase = Readonly<{
 }>;
 
 const TABLES = [
+  "goals",
   "recurring",
   "category_prefs",
   "receipts",

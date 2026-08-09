@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { visible as listCategories } from "@/app/categories/list";
-import { pay, remove, save } from "@/app/recurring/save";
+import { visible as listCategories } from "@/app/categories";
+import { pay, remove, save } from "@/app/recurring";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { list as listRules } from "@/infra/d1/actions/recurring";
 import type { Env } from "@/infra/web/context";

@@ -8,7 +8,7 @@ import {
 } from "bun:test";
 import { openTestDatabase, type TestDatabase } from "@test/d1";
 import { overview } from "@/app/overview";
-import type { Transaction } from "@/core/transactions/transaction";
+import type { Transaction } from "@/core/transactions";
 import { save as saveAccount } from "@/infra/d1/actions/accounts";
 import { create as insert } from "@/infra/d1/actions/transactions";
 

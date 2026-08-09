@@ -5,8 +5,8 @@ import {
   appError,
   ValidationErrorCode,
 } from "@/core/error";
-import { isCurrency } from "@/core/money/currency";
-import { parseRate, type Rate } from "@/core/rates/rate";
+import { isCurrency } from "@/core/money";
+import { parseRate, type Rate } from "@/core/rates";
 import { applyPending, save } from "@/infra/d1/actions/rates";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 

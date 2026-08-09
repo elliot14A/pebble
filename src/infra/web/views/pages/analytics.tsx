@@ -1,11 +1,10 @@
 import type { Child } from "hono/jsx";
 import type { Analytics } from "@/app/analytics";
 import { REST_KEY } from "@/app/analytics";
-import { arcs, barHeight, maxOf, shareOf } from "@/core/analytics/chart";
-import type { Change } from "@/core/analytics/compare";
-import type { Bucket, MonthFlow } from "@/core/analytics/summary";
-import type { Category } from "@/core/categories/category";
-import { displayMoney } from "@/core/money/money";
+import type { Bucket, Change, MonthFlow } from "@/core/analytics";
+import { arcs, barHeight, maxOf, shareOf } from "@/core/analytics";
+import type { Category } from "@/core/categories";
+import { displayMoney } from "@/core/money";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import {

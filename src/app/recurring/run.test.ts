@@ -9,7 +9,7 @@ import {
 import { openTestDatabase, type TestDatabase } from "@test/d1";
 import { runDue } from "@/app/recurring/run";
 import { pay, save } from "@/app/recurring/save";
-import type { Recurring } from "@/core/recurring/schedule";
+import type { Recurring } from "@/core/recurring";
 import { save as saveAccount } from "@/infra/d1/actions/accounts";
 import { fetch as fetchRule } from "@/infra/d1/actions/recurring";
 import { list } from "@/infra/d1/actions/transactions";

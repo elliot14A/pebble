@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 import { err, ok, ResultAsync } from "neverthrow";
 import type { AppResult, AppResultAsync } from "@/core/error";
-import { convert, rateOn } from "@/core/rates/rate";
+import { convert, rateOn } from "@/core/rates";
 import { list as listRates } from "@/infra/d1/actions/rates/list";
 import { type DrizzleD1Database, read, write } from "@/infra/d1/connection";
 import { transactions } from "@/infra/d1/schema";

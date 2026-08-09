@@ -8,7 +8,7 @@ import {
 } from "bun:test";
 import { openTestDatabase, type TestDatabase } from "@test/d1";
 import { login } from "@/app/auth/login";
-import { hashPassword } from "@/core/auth/password";
+import { hashPassword } from "@/core/auth";
 import { ResourceErrorCode, ValidationErrorCode } from "@/core/error";
 import { save as saveUser } from "@/infra/d1/actions/users";
 import { setStatus } from "@/infra/d1/actions/users/security";

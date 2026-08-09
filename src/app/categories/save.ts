@@ -9,7 +9,7 @@ import {
   MAX_NAME,
   slugFor,
   type Tint,
-} from "@/core/categories/category";
+} from "@/core/categories";
 import {
   type AppResult,
   type AppResultAsync,

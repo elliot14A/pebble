@@ -10,7 +10,7 @@ import { openTestDatabase, type TestDatabase } from "@test/d1";
 import { board, visible } from "@/app/categories/list";
 import { remove } from "@/app/categories/remove";
 import { save } from "@/app/categories/save";
-import { create as addTransaction } from "@/app/transactions/create";
+import { create as addTransaction } from "@/app/transactions";
 import { ResourceErrorCode } from "@/core/error";
 import { save as saveAccount } from "@/infra/d1/actions/accounts";
 import { save as saveCategory } from "@/infra/d1/actions/categories";

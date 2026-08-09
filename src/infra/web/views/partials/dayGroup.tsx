@@ -1,5 +1,5 @@
-import { displayMoney } from "@/core/money/money";
-import type { DayGroup as Day } from "@/core/transactions/balance";
+import { displayMoney } from "@/core/money";
+import type { DayGroup as Day } from "@/core/transactions";
 import {
   type LedgerLookups,
   LedgerRow,

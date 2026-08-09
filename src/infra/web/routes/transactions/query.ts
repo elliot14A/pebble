@@ -1,4 +1,4 @@
-import { isTransactionType } from "@/core/transactions/transaction";
+import { isTransactionType } from "@/core/transactions";
 import type { TransactionQuery } from "@/infra/d1/actions/transactions";
 
 export type Filter = Readonly<{ label: string; href: string }>;

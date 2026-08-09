@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { analytics } from "@/app/analytics";
 import { categoryBreakdown } from "@/app/categoryBreakdown";
-import { totalOf } from "@/core/analytics/summary";
+import { totalOf } from "@/core/analytics";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
 import { lookups } from "@/infra/web/lookups";

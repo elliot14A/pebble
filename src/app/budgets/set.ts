@@ -1,5 +1,5 @@
 import { err, ResultAsync } from "neverthrow";
-import type { Budget } from "@/core/budgets/budget";
+import type { Budget } from "@/core/budgets";
 import {
   type AppResult,
   type AppResultAsync,
@@ -7,7 +7,7 @@ import {
   ValidationErrorCode,
 } from "@/core/error";
 import { newId } from "@/core/id";
-import { parseAmount } from "@/core/money/money";
+import { parseAmount } from "@/core/money";
 import { list as listBudgets, save } from "@/infra/d1/actions/budgets";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 

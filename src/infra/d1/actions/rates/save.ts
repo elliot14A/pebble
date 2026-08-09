@@ -1,6 +1,6 @@
 import type { AppResultAsync } from "@/core/error";
 import { newId } from "@/core/id";
-import type { Rate } from "@/core/rates/rate";
+import type { Rate } from "@/core/rates";
 import { type DrizzleD1Database, write } from "@/infra/d1/connection";
 import { fxRates } from "@/infra/d1/schema";
 

@@ -1,9 +1,9 @@
 import { raw } from "hono/html";
-import { REST_KEY, type SharedView } from "@/app/shares/view";
-import { arcs, shareOf } from "@/core/analytics/chart";
-import type { Bucket } from "@/core/analytics/summary";
-import { displayMoney } from "@/core/money/money";
-import { formatRange } from "@/core/shares/share";
+import { REST_KEY, type SharedView } from "@/app/shares";
+import type { Bucket } from "@/core/analytics";
+import { arcs, shareOf } from "@/core/analytics";
+import { displayMoney } from "@/core/money";
+import { formatRange } from "@/core/shares";
 import { IconSprite } from "@/infra/web/views/components/icons";
 import { DayGroup } from "@/infra/web/views/partials/dayGroup";
 

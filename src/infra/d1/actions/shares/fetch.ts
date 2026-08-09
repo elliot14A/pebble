@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
-import type { Share } from "@/core/shares/share";
-import type { User } from "@/core/users/user";
+import type { Share } from "@/core/shares";
+import type { User } from "@/core/users";
 import { toUser } from "@/infra/d1/actions/users/list";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { shares, users } from "@/infra/d1/schema";

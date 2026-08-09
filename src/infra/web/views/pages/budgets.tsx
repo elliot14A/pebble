@@ -1,5 +1,5 @@
-import type { BudgetLine, BudgetOverview } from "@/app/budgets/overview";
-import { displayMoney } from "@/core/money/money";
+import type { BudgetLine, BudgetOverview } from "@/app/budgets";
+import { displayMoney } from "@/core/money";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import { Confirm } from "@/infra/web/views/partials/confirm";

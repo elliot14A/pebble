@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { money } from "@/core/money/money";
+import { money } from "@/core/money";
 import {
   convert,
   parseRate,

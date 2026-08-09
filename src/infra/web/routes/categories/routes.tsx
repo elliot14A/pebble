@@ -1,7 +1,5 @@
 import { Hono } from "hono";
-import { board } from "@/app/categories/list";
-import { remove } from "@/app/categories/remove";
-import { save } from "@/app/categories/save";
+import { board, remove, save } from "@/app/categories";
 import { show } from "@/infra/d1/actions/categories";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";

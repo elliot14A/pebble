@@ -1,5 +1,5 @@
-import type { CategoryBoard, CategoryLine } from "@/app/categories/list";
-import { CATEGORY_KINDS, GLYPHS, TINTS } from "@/core/categories/category";
+import type { CategoryBoard, CategoryLine } from "@/app/categories";
+import { CATEGORY_KINDS, GLYPHS, TINTS } from "@/core/categories";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import { Confirm } from "@/infra/web/views/partials/confirm";

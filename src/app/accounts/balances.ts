@@ -1,7 +1,7 @@
-import type { Account } from "@/core/accounts/account";
+import type { Account } from "@/core/accounts";
 import type { AppResultAsync } from "@/core/error";
-import { convert, type Rate, rateOn } from "@/core/rates/rate";
-import { accountBalanceMinor } from "@/core/transactions/balance";
+import { convert, type Rate, rateOn } from "@/core/rates";
+import { accountBalanceMinor } from "@/core/transactions";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { list as listRates } from "@/infra/d1/actions/rates";
 import { list as listTransactions } from "@/infra/d1/actions/transactions";

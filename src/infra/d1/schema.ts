@@ -267,3 +267,23 @@ export const recurring = sqliteTable(
     index("recurring_owner_idx").on(table.userId, table.archivedAt),
   ],
 );
+
+export const goals = sqliteTable(
+  "goals",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull(),
+
+    name: text("name").notNull(),
+    targetMinor: integer("target_minor").notNull(),
+    savedMinor: integer("saved_minor").notNull().default(0),
+    currency: text("currency").notNull(),
+    accountId: text("account_id"),
+    targetOn: text("target_on"),
+
+    createdAt: integer("created_at").notNull(),
+    reachedAt: integer("reached_at"),
+    archivedAt: integer("archived_at"),
+  },
+  (table) => [index("goals_owner_idx").on(table.userId, table.archivedAt)],
+);

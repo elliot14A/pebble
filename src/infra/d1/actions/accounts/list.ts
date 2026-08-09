@@ -1,5 +1,5 @@
 import { asc, eq } from "drizzle-orm";
-import { type Account, isAccountKind } from "@/core/accounts/account";
+import { type Account, isAccountKind } from "@/core/accounts";
 import type { AppResultAsync } from "@/core/error";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { accounts } from "@/infra/d1/schema";

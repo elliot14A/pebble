@@ -1,8 +1,4 @@
-import {
-  baseSignedMinor,
-  isLive,
-  type Transaction,
-} from "@/core/transactions/transaction";
+import { baseSignedMinor, isLive, type Transaction } from "@/core/transactions";
 
 export type Bucket = Readonly<{ key: string; minor: number }>;
 

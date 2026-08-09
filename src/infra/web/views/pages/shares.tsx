@@ -1,4 +1,4 @@
-import { formatDay, isLive, type Share, spanLabel } from "@/core/shares/share";
+import { formatDay, isLive, type Share, spanLabel } from "@/core/shares";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import { Confirm } from "@/infra/web/views/partials/confirm";

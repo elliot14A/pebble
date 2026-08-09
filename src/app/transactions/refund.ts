@@ -6,8 +6,8 @@ import {
   ValidationErrorCode,
 } from "@/core/error";
 import { newId } from "@/core/id";
-import { parseAmount } from "@/core/money/money";
-import type { Transaction } from "@/core/transactions/transaction";
+import { parseAmount } from "@/core/money";
+import type { Transaction } from "@/core/transactions";
 import {
   create,
   fetch as fetchTransaction,

@@ -1,6 +1,6 @@
-import { visible as listCategories } from "@/app/categories/list";
-import type { Account } from "@/core/accounts/account";
-import type { Category } from "@/core/categories/category";
+import { visible as listCategories } from "@/app/categories";
+import type { Account } from "@/core/accounts";
+import type { Category } from "@/core/categories";
 import type { AppResultAsync } from "@/core/error";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { list as listMerchants } from "@/infra/d1/actions/merchants";

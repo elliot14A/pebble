@@ -1,5 +1,5 @@
 import { err, ok, ResultAsync } from "neverthrow";
-import { expiryFrom, hashToken, newSessionToken } from "@/core/auth/session";
+import { expiryFrom, hashToken, newSessionToken } from "@/core/auth";
 import type { AppResult, AppResultAsync } from "@/core/error";
 import { create, remove, removeForUser } from "@/infra/d1/actions/sessions";
 import type { DrizzleD1Database } from "@/infra/d1/connection";

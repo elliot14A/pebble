@@ -7,13 +7,13 @@ import {
   ValidationErrorCode,
 } from "@/core/error";
 import { newId, newId as nextId } from "@/core/id";
-import { parseAmount } from "@/core/money/money";
+import { parseAmount } from "@/core/money";
 import {
   isEvery,
   nextAfter,
   type Recurring,
   type RecurringKind,
-} from "@/core/recurring/schedule";
+} from "@/core/recurring";
 import { fetch as fetchAccount } from "@/infra/d1/actions/accounts";
 import {
   advance,

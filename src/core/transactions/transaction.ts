@@ -1,6 +1,6 @@
 import { err, ok } from "neverthrow";
 import { type AppResult, appError, ValidationErrorCode } from "@/core/error";
-import { isCurrency } from "@/core/money/currency";
+import { isCurrency } from "@/core/money";
 
 export const TRANSACTION_TYPES = [
   "expense",

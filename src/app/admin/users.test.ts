@@ -12,9 +12,8 @@ import {
   type NewUserInput,
   resetPassword,
 } from "@/app/admin/users";
-import { login } from "@/app/auth/login";
-import { hashPassword } from "@/core/auth/password";
-import { hashToken } from "@/core/auth/session";
+import { login } from "@/app/auth";
+import { hashPassword, hashToken } from "@/core/auth";
 import { ResourceErrorCode } from "@/core/error";
 import { fetchByToken } from "@/infra/d1/actions/sessions";
 import { save as saveUser } from "@/infra/d1/actions/users";

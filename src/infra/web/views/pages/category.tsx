@@ -1,7 +1,7 @@
 import type { CategoryBreakdown } from "@/app/categoryBreakdown";
-import { barHeight, maxOf, shareOf } from "@/core/analytics/chart";
-import type { Category } from "@/core/categories/category";
-import { displayMoney } from "@/core/money/money";
+import { barHeight, maxOf, shareOf } from "@/core/analytics";
+import type { Category } from "@/core/categories";
+import { displayMoney } from "@/core/money";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import { DayGroup } from "@/infra/web/views/partials/dayGroup";

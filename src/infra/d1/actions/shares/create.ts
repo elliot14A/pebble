@@ -1,5 +1,5 @@
 import type { AppResultAsync } from "@/core/error";
-import type { Share } from "@/core/shares/share";
+import type { Share } from "@/core/shares";
 import { type DrizzleD1Database, write } from "@/infra/d1/connection";
 import { shares } from "@/infra/d1/schema";
 

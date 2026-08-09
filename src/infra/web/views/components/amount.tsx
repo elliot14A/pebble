@@ -1,5 +1,4 @@
-import { CURRENCIES } from "@/core/money/currency";
-import { displayMoney, type FormatOptions } from "@/core/money/money";
+import { CURRENCIES, displayMoney, type FormatOptions } from "@/core/money";
 
 const symbolOf = (code: string): string => CURRENCIES[code]?.symbol ?? code;
 

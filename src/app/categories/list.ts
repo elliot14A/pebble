@@ -1,4 +1,4 @@
-import type { Category } from "@/core/categories/category";
+import type { Category } from "@/core/categories";
 import type { AppResultAsync } from "@/core/error";
 import { list, listHidden } from "@/infra/d1/actions/categories";
 import { count } from "@/infra/d1/actions/transactions";

@@ -1,5 +1,5 @@
 import { and, eq, isNull, or } from "drizzle-orm";
-import type { Category } from "@/core/categories/category";
+import type { Category } from "@/core/categories";
 import type { AppResultAsync } from "@/core/error";
 import { toCategory } from "@/infra/d1/actions/categories/list";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";

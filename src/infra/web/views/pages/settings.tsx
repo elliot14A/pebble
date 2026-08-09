@@ -1,4 +1,4 @@
-import type { User } from "@/core/users/user";
+import type { User } from "@/core/users";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 
@@ -9,6 +9,7 @@ export type SettingsPageProps = Readonly<{
   shareCount: number;
   categoryCount: number;
   repeatingCount: number;
+  goalCount: number;
   notice: string | null;
 }>;
 
@@ -47,6 +48,16 @@ export function SettingsPage(props: SettingsPageProps) {
           icon="dots"
           title="Categories"
           detail={`${props.categoryCount} in use`}
+        />
+        <Row
+          href="/settings/goals"
+          icon="target"
+          title="Goals"
+          detail={
+            props.goalCount === 0
+              ? "Save toward something"
+              : `${props.goalCount} on the go`
+          }
         />
         <Row
           href="/settings/repeating"

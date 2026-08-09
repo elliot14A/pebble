@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import { hashPassword } from "@/core/auth/password";
+import { hashPassword } from "@/core/auth";
 import { accountsFor, defaultCategories, userNamed } from "@/infra/d1/seedData";
 
 const PEOPLE = [["u-akshith", "akshith", "Akshith", "super_admin"]] as const;

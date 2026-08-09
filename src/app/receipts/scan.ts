@@ -6,13 +6,14 @@ import {
   ValidationErrorCode,
 } from "@/core/error";
 import { newId } from "@/core/id";
-import { NOTHING, type Reading } from "@/core/receipts/reading";
 import {
   ALLOWED,
   keyFor,
   MAX_BYTES,
+  NOTHING,
+  type Reading,
   type Receipt,
-} from "@/core/receipts/receipt";
+} from "@/core/receipts";
 import { create } from "@/infra/d1/actions/receipts";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 import type { ReadReceipt } from "@/infra/openai/receipt";

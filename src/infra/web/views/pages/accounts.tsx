@@ -1,11 +1,11 @@
-import type { AccountBalance } from "@/app/accounts/balances";
+import type { AccountBalance } from "@/app/accounts";
 import {
   ACCOUNT_KIND_LABEL,
   ACCOUNT_KINDS,
   type Account,
   isLiability,
-} from "@/core/accounts/account";
-import { displayMoney } from "@/core/money/money";
+} from "@/core/accounts";
+import { displayMoney } from "@/core/money";
 import { Amount } from "@/infra/web/views/components/amount";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";

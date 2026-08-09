@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { refund as makeRefund } from "@/app/transactions/refund";
+import { refund as makeRefund } from "@/app/transactions";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
 

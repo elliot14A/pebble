@@ -1,7 +1,7 @@
-import type { Account } from "@/core/accounts/account";
-import type { Category } from "@/core/categories/category";
-import { displayMoney } from "@/core/money/money";
-import { daysUntil, type Recurring } from "@/core/recurring/schedule";
+import type { Account } from "@/core/accounts";
+import type { Category } from "@/core/categories";
+import { displayMoney } from "@/core/money";
+import { daysUntil, type Recurring } from "@/core/recurring";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import { Confirm } from "@/infra/web/views/partials/confirm";

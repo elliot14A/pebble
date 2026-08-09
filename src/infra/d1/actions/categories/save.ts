@@ -1,4 +1,4 @@
-import type { Category } from "@/core/categories/category";
+import type { Category } from "@/core/categories";
 import type { AppResultAsync } from "@/core/error";
 import { type DrizzleD1Database, write } from "@/infra/d1/connection";
 import { categories } from "@/infra/d1/schema";

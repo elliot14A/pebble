@@ -1,5 +1,5 @@
 import type { AppResultAsync } from "@/core/error";
-import type { Recurring } from "@/core/recurring/schedule";
+import type { Recurring } from "@/core/recurring";
 import { type DrizzleD1Database, write } from "@/infra/d1/connection";
 import { recurring } from "@/infra/d1/schema";
 

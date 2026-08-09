@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
-import type { Receipt } from "@/core/receipts/receipt";
+import type { Receipt } from "@/core/receipts";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { receipts } from "@/infra/d1/schema";
 

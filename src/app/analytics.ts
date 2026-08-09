@@ -1,18 +1,20 @@
-import { type Change, change, compareBuckets } from "@/core/analytics/compare";
 import {
   type Bucket,
   byCategory,
   byMerchant,
   byMonth,
   byWeekday,
+  type Change,
+  change,
+  compareBuckets,
   type MonthFlow,
   monthOf,
   monthsEnding,
   topWithRest,
   totalOf,
-} from "@/core/analytics/summary";
+} from "@/core/analytics";
 import type { AppResultAsync } from "@/core/error";
-import { flowMinor } from "@/core/transactions/balance";
+import { flowMinor } from "@/core/transactions";
 import { list as listTransactions } from "@/infra/d1/actions/transactions";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 

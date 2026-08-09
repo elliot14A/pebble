@@ -1,9 +1,6 @@
 import { and, desc, eq, gte, isNull, like, lt, lte, sql } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
-import type {
-  Transaction,
-  TransactionType,
-} from "@/core/transactions/transaction";
+import type { Transaction, TransactionType } from "@/core/transactions";
 import { toTransaction } from "@/infra/d1/actions/transactions/row";
 import { type DrizzleD1Database, read } from "@/infra/d1/connection";
 import { transactions } from "@/infra/d1/schema";

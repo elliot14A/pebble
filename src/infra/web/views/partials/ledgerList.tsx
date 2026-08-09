@@ -1,4 +1,4 @@
-import type { DayGroup as Day } from "@/core/transactions/balance";
+import type { DayGroup as Day } from "@/core/transactions";
 import { DayGroup } from "@/infra/web/views/partials/dayGroup";
 import type { LedgerLookups } from "@/infra/web/views/partials/ledgerRow";
 

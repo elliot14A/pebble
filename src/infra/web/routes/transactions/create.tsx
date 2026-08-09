@@ -1,6 +1,6 @@
 import type { Context } from "hono";
-import { create as createTransaction } from "@/app/transactions/create";
-import { isTransactionType } from "@/core/transactions/transaction";
+import { create as createTransaction } from "@/app/transactions";
+import { isTransactionType } from "@/core/transactions";
 import { attach as attachReceipt } from "@/infra/d1/actions/receipts";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";

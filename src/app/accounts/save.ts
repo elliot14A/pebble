@@ -1,9 +1,5 @@
 import { err, ok, ResultAsync } from "neverthrow";
-import {
-  type Account,
-  type AccountKind,
-  isAccountKind,
-} from "@/core/accounts/account";
+import { type Account, type AccountKind, isAccountKind } from "@/core/accounts";
 import {
   type AppResult,
   type AppResultAsync,
@@ -11,8 +7,7 @@ import {
   ValidationErrorCode,
 } from "@/core/error";
 import { newId } from "@/core/id";
-import { isCurrency } from "@/core/money/currency";
-import { parseAmount } from "@/core/money/money";
+import { isCurrency, parseAmount } from "@/core/money";
 import {
   fetch as fetchAccount,
   list as listAccounts,

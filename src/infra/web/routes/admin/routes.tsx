@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { createUser, resetPassword, setUserStatus } from "@/app/admin/users";
+import { createUser, resetPassword, setUserStatus } from "@/app/admin";
 import { list as listUsers } from "@/infra/d1/actions/users";
 import { adminOnly, type Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";

@@ -1,5 +1,5 @@
 import type { AppResultAsync } from "@/core/error";
-import type { User } from "@/core/users/user";
+import type { User } from "@/core/users";
 import { type DrizzleD1Database, write } from "@/infra/d1/connection";
 import { users } from "@/infra/d1/schema";
 
