@@ -18,7 +18,9 @@
   "vars": {
     "PEBBLE_BASE_CURRENCY": "INR",
     "PEBBLE_OPENAI_BASE_URL": "https://openrouter.ai/api/v1",
-    "PEBBLE_OPENAI_MODEL": "qwen/qwen3.7-flash"
+    "PEBBLE_OPENAI_MODEL": "qwen/qwen3.7-flash",
+    "PEBBLE_VAPID_PUBLIC_KEY": "BJP7lY3864-q2HDBLEl_-MW7xffw4miBoM7R9BDn3XQB0P3YDpK4uu8wP-9N8OAB2yhB3cmG6S9Xvur5e0SRh8E",
+    "PEBBLE_VAPID_SUBJECT": "mailto:akshithkatkuri14@gmail.com"
   },
   "d1_databases": [
     {
