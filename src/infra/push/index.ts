@@ -1,1 +1,1 @@
-export { notify, type VapidKeys } from "./send";
+export { notify, sign, type VapidKeys } from "./send";

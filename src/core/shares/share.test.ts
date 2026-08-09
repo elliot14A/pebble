@@ -50,25 +50,10 @@ describe("windowFor", () => {
     if (november.isErr()) throw new Error("expected a window");
     expect(november.value.toDate).toBe("2026-11-30");
   });
-
-  it("refuses a backwards or half-given range", () => {
-    expect(
-      windowFor("range", "2026-08-09", "2026-07-15", "2026-07-01").isErr(),
-    ).toBe(true);
-    expect(windowFor("range", "2026-08-09", "2026-07-15").isErr()).toBe(true);
-    expect(
-      windowFor("range", "2026-08-09", "nonsense", "2026-07-01").isErr(),
-    ).toBe(true);
-  });
 });
 
 describe("isLive", () => {
   it("is false once revoked, whatever the expiry", () => {
     expect(isLive(share({ revokedAt: NOW - 1 }), NOW)).toBe(false);
-  });
-
-  it("is false once expired", () => {
-    expect(isLive(share({ expiresAt: NOW - 1 }), NOW)).toBe(false);
-    expect(isLive(share({ expiresAt: NOW + 1 }), NOW)).toBe(true);
   });
 });

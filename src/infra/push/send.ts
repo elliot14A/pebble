@@ -29,7 +29,7 @@ const importKey = (
   );
 };
 
-const sign = async (
+export const sign = async (
   endpoint: string,
   keys: VapidKeys,
   now: number,

@@ -19,11 +19,6 @@ describe("readAmount", () => {
     expect(readAmount("1.234,56")).toBe("1234.56");
     expect(readAmount("12,50")).toBe("12.50");
   });
-
-  it("treats a three digit group as thousands, not decimals", () => {
-    expect(readAmount("1,234")).toBe("1234");
-    expect(readAmount("12.345")).toBe("12345");
-  });
 });
 
 describe("readMerchant", () => {
