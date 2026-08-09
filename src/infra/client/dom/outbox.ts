@@ -4,6 +4,7 @@ import {
   drop,
   type Queued,
   read,
+  verdictOf,
   write,
 } from "@/infra/client/core/outbox";
 
@@ -20,9 +21,7 @@ const load = (): ReadonlyArray<Queued> => {
 const store = (queue: ReadonlyArray<Queued>): void => {
   try {
     window.localStorage.setItem(KEY, write(queue));
-  } catch {
-    // a full or blocked store is not worth breaking the page over
-  }
+  } catch {}
 };
 
 export const waiting = (): number => load().length;
@@ -57,15 +56,14 @@ export const flush = async (): Promise<number> => {
       const reply = await window.fetch("/transactions", {
         method: "POST",
         body: bodyOf(entry),
+        redirect: "manual",
       });
-      if (!reply.ok && reply.status < 500) {
-        store(drop(load(), entry.clientId));
-        continue;
-      }
-      if (!reply.ok) break;
+
+      const verdict = verdictOf(reply.status, reply.type);
+      if (verdict === "keep") break;
 
       store(drop(load(), entry.clientId));
-      sent += 1;
+      if (verdict === "sent") sent += 1;
     } catch {
       break;
     }
@@ -81,6 +79,7 @@ export const watchOutbox = (): void => {
 
   window.addEventListener("online", () => {
     void flush().then((sent) => {
+      show();
       if (sent > 0) window.location.reload();
     });
   });

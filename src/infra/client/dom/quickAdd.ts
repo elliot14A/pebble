@@ -274,7 +274,6 @@ export const quickAdd = (config: QuickAddConfig) => ({
   setType(next: "expense" | "income" | "transfer"): void {
     this.type = next;
     this.showAll = false;
-    // A category that does not belong to the new type would submit silently.
     if (this.categoryId !== "" && !this.allows(this.categoryId, next)) {
       this.categoryId = "";
     }
@@ -318,10 +317,17 @@ export const quickAdd = (config: QuickAddConfig) => ({
 
   saved(event: CustomEvent & { detail?: { successful?: boolean } }): void {
     if (event.detail?.successful === false) return;
+    this.stow(true);
+  },
+
+  stow(
+    this: { open: boolean; pad: Keypad; decimals: () => number },
+    reload: boolean,
+  ): void {
     this.open = false;
     this.pad = empty(this.decimals());
 
-    if (config.reloadOnSave) {
+    if (reload && config.reloadOnSave) {
       window.setTimeout(() => window.location.reload(), 220);
     }
   },

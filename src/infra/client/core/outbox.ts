@@ -46,3 +46,15 @@ export const bodyOf = (entry: Queued): FormData => {
   for (const [name, value] of entry.fields) body.append(name, value);
   return body;
 };
+
+export type Verdict = "sent" | "keep" | "give-up";
+
+export const verdictOf = (status: number, type = "basic"): Verdict => {
+  if (type === "opaqueredirect") return "keep";
+  if (status === 0) return "keep";
+  if (status >= 300 && status < 400) return "keep";
+  if (status === 401 || status === 403) return "keep";
+  if (status === 204 || status === 200 || status === 409) return "sent";
+  if (status >= 400 && status < 500) return "give-up";
+  return "keep";
+};

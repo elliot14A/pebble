@@ -28,7 +28,7 @@ document.body.addEventListener("htmx:sendError", (event) => {
   if (form.getAttribute("hx-post") !== "/transactions") return;
 
   queue(form);
-  window.dispatchEvent(new CustomEvent("pebble:queued"));
+  window.dispatchEvent(new CustomEvent("pebble-queued"));
 });
 
 const isLocal =

@@ -32,8 +32,6 @@ export function QuickAdd(props: QuickAddProps) {
     ]),
   );
 
-  // Salary is not a way to spend money and Fuel is not a way to earn it, so
-  // each type gets its own ordering and its own idea of which eight come first.
   const usableFor = (kind: string, type: "income" | "expense") =>
     kind === "both" || kind === type;
   const rankFor = (type: "income" | "expense") => {
@@ -92,7 +90,10 @@ export function QuickAdd(props: QuickAddProps) {
           hx-post="/transactions"
           hx-target="this"
           hx-swap="none"
-          {...{ "x-on:htmx:after-request": "saved($event)" }}
+          {...{
+            "x-on:htmx:after-request": "saved($event)",
+            "x-on:pebble-queued.window": "stow(false)",
+          }}
         >
           <div class="flex flex-none gap-0.5 rounded-full bg-sunk p-0.5">
             {(["expense", "income", "transfer"] as const).map((kind) => (
