@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { createUser, resetPassword, setUserStatus } from "@/app/admin";
-import { list as listUsers } from "@/infra/d1/actions/users";
+import { activity, list as listUsers } from "@/infra/d1/actions/users";
 import { adminOnly, type Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
 import { backTo, field } from "@/infra/web/form";
@@ -15,17 +15,21 @@ export const routes = (): Hono<Env> =>
 
     .get("/admin/users", async (c) => {
       const ctx = c.get("ctx");
-      const users = await listUsers(ctx.db);
+      const data = await listUsers(ctx.db).andThen((users) =>
+        activity(ctx.db).map((seen) => ({ users, seen })),
+      );
 
-      if (users.isErr()) {
-        const { status, message } = errorToHttp(users.error);
+      if (data.isErr()) {
+        const { status, message } = errorToHttp(data.error);
         return c.text(message, status);
       }
 
       return c.html(
         <AdminPage
           actor={ctx.user}
-          users={users.value}
+          users={data.value.users}
+          activity={data.value.seen}
+          today={ctx.today}
           baseCurrency={ctx.baseCurrency}
           message={c.req.query("saved") ?? null}
           error={c.req.query("error") ?? null}

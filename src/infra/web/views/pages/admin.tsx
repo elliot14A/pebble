@@ -1,10 +1,13 @@
 import type { User } from "@/core/users";
+import type { Activity } from "@/infra/d1/actions/users";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 
 export type AdminPageProps = Readonly<{
   actor: User;
   users: ReadonlyArray<User>;
+  activity: ReadonlyMap<string, Activity>;
+  today: string;
   baseCurrency: string;
   message: string | null;
   error: string | null;
@@ -59,7 +62,15 @@ export function AdminPage(props: AdminPageProps) {
                   {user.username}
                   {user.role === "super_admin" ? " · admin" : ""}
                   {user.status === "disabled" ? " · disabled" : ""}
-                  {user.mustChangePassword ? " · must set a password" : ""}
+                </span>
+                <span
+                  class={`mt-0.5 block text-[10.5px] ${
+                    standing(user, props.activity.get(user.id)) === "using"
+                      ? "text-money-deep"
+                      : "text-warn"
+                  }`}
+                >
+                  {tell(user, props.activity.get(user.id), props.today)}
                 </span>
               </span>
             </div>
@@ -168,3 +179,44 @@ export function AdminPage(props: AdminPageProps) {
     </Shell>
   );
 }
+
+type Standing = "never" | "stalled" | "quiet" | "using";
+
+const standing = (user: User, seen: Activity | undefined): Standing => {
+  if (seen === undefined || seen.lastSeenAt === null) return "never";
+  if (user.mustChangePassword) return "stalled";
+  return seen.entries === 0 ? "quiet" : "using";
+};
+
+const dayOf = (millis: number): string =>
+  new Date(millis).toISOString().slice(0, 10);
+
+const ago = (millis: number, today: string): string => {
+  const days = Math.round(
+    (Date.parse(`${today}T00:00:00Z`) -
+      Date.parse(`${dayOf(millis)}T00:00:00Z`)) /
+      86_400_000,
+  );
+  if (days <= 0) return "today";
+  if (days === 1) return "yesterday";
+  return `${days} days ago`;
+};
+
+const tell = (
+  user: User,
+  seen: Activity | undefined,
+  today: string,
+): string => {
+  const where = standing(user, seen);
+
+  if (where === "never") return "Has never signed in";
+  if (where === "stalled") {
+    return `Signed in ${ago(seen?.lastSeenAt ?? 0, today)}, but stopped at picking a password`;
+  }
+  if (where === "quiet") {
+    return `Last seen ${ago(seen?.lastSeenAt ?? 0, today)}, nothing logged yet`;
+  }
+
+  const entries = seen?.entries ?? 0;
+  return `Last seen ${ago(seen?.lastSeenAt ?? 0, today)} · ${entries} ${entries === 1 ? "entry" : "entries"}`;
+};
