@@ -125,7 +125,7 @@ export function QuickAdd(props: QuickAddProps) {
 
             <div class="mt-4 px-1" x-show="type !== 'transfer'">
               <div
-                class="scan-tile relative flex items-center gap-3 overflow-hidden rounded-[16px] border border-money-edge bg-money-wash px-4 py-3 text-left"
+                class="scan-tile relative flex items-center gap-3 overflow-hidden rounded-[16px] border bg-money-wash px-4 py-3 text-left"
                 x-bind:class="scanning ? 'reading pointer-events-none' : ''"
               >
                 <span class="relative grid h-11 w-11 flex-none place-items-center overflow-hidden rounded-[13px] bg-money-deep text-on-money">

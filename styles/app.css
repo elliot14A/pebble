@@ -479,6 +479,7 @@
   }
 
   .scan-tile {
+    border-color: var(--color-money-edge);
     transition: border-color 0.2s var(--ease-pebble);
   }
   .scan-tile.reading {
