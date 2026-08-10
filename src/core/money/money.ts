@@ -146,7 +146,7 @@ const SHORT_WESTERN = [
 ] as const;
 
 const trim = (value: number): string =>
-  value >= 10 ? String(Math.round(value)) : String(Math.round(value * 10) / 10);
+  value >= 10 ? String(Math.round(value)) : String(Math.floor(value * 10) / 10);
 
 export const briefAmount = (minor: number, currency: string): string => {
   const found = currencyOf(currency);

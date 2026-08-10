@@ -434,16 +434,32 @@ function Months(props: {
                   rx="4"
                   fill="var(--color-over)"
                 />
-                {month.inMinor === 0 && month.outMinor === 0 ? null : (
+                {month.inMinor === 0 ? null : (
                   <text
-                    x={left}
-                    y={82 - Math.max(inHeight, outHeight)}
+                    x={left - 9}
+                    y={
+                      82 -
+                      inHeight -
+                      (Math.abs(inHeight - outHeight) < 9 ? 9 : 0)
+                    }
                     text-anchor="middle"
-                    font-size="9"
+                    font-size="8"
                     font-weight="600"
                     fill="var(--color-ink-2)"
                   >
-                    {props.brief(Math.max(month.inMinor, month.outMinor))}
+                    {props.brief(month.inMinor)}
+                  </text>
+                )}
+                {month.outMinor === 0 ? null : (
+                  <text
+                    x={left + 9}
+                    y={82 - outHeight}
+                    text-anchor="middle"
+                    font-size="8"
+                    font-weight="600"
+                    fill="var(--color-ink-2)"
+                  >
+                    {props.brief(month.outMinor)}
                   </text>
                 )}
                 <text
