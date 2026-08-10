@@ -3,17 +3,11 @@ import { createUser, resetPassword, setUserStatus } from "@/app/admin";
 import { list as listUsers } from "@/infra/d1/actions/users";
 import { adminOnly, type Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
+import { backTo, field } from "@/infra/web/form";
 import { AdminPage } from "@/infra/web/views/pages/admin";
 
-const field = (form: FormData, key: string): string => {
-  const value = form.get(key);
-  return typeof value === "string" ? value : "";
-};
-
-const back = (params: Record<string, string>): string => {
-  const query = new URLSearchParams(params).toString();
-  return `/admin/users${query === "" ? "" : `?${query}`}`;
-};
+const back = (params: Record<string, string>): string =>
+  backTo("/admin/users", params);
 
 export const routes = (): Hono<Env> =>
   new Hono<Env>()

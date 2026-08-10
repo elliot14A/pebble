@@ -3,15 +3,11 @@ import { overview, set } from "@/app/budgets";
 import { remove } from "@/infra/d1/actions/budgets";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
+import { backTo, field } from "@/infra/web/form";
 import { BudgetsPage } from "@/infra/web/views/pages/budgets";
 
-const field = (form: FormData, key: string): string => {
-  const value = form.get(key);
-  return typeof value === "string" ? value : "";
-};
-
 const back = (params: Record<string, string>): string =>
-  `/budgets?${new URLSearchParams(params).toString()}`;
+  backTo("/budgets", params);
 
 export const routes = (): Hono<Env> =>
   new Hono<Env>()

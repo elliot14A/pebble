@@ -9,16 +9,12 @@ import { listInUse } from "@/app/rates";
 import { list as listAccounts, restore } from "@/infra/d1/actions/accounts";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
+import { field } from "@/infra/web/form";
 import { AccountsPage } from "@/infra/web/views/pages/accounts";
 
 const back = (c: Context<Env>, params: Record<string, string>) => {
   const query = new URLSearchParams(params).toString();
   return c.redirect(`/accounts${query === "" ? "" : `?${query}`}`, 303);
-};
-
-const field = (form: FormData, key: string): string => {
-  const found = form.get(key);
-  return typeof found === "string" ? found : "";
 };
 
 export async function list(c: Context<Env>) {

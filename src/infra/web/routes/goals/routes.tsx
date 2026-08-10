@@ -3,15 +3,11 @@ import { putAway, save } from "@/app/goals";
 import { list, remove } from "@/infra/d1/actions/goals";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
+import { backTo, field } from "@/infra/web/form";
 import { GoalsPage } from "@/infra/web/views/pages/goals";
 
-const field = (form: FormData, key: string): string => {
-  const value = form.get(key);
-  return typeof value === "string" ? value : "";
-};
-
 const back = (params: Record<string, string>): string =>
-  `/settings/goals?${new URLSearchParams(params).toString()}`;
+  backTo("/settings/goals", params);
 
 export const routes = (): Hono<Env> =>
   new Hono<Env>()

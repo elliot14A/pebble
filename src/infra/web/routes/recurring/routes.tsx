@@ -5,15 +5,11 @@ import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { list as listRules } from "@/infra/d1/actions/recurring";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
+import { backTo, field } from "@/infra/web/form";
 import { RecurringPage } from "@/infra/web/views/pages/recurring";
 
-const field = (form: FormData, key: string): string => {
-  const value = form.get(key);
-  return typeof value === "string" ? value : "";
-};
-
 const back = (params: Record<string, string>): string =>
-  `/settings/repeating?${new URLSearchParams(params).toString()}`;
+  backTo("/settings/repeating", params);
 
 export const routes = (): Hono<Env> =>
   new Hono<Env>()

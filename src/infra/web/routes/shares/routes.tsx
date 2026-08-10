@@ -4,16 +4,12 @@ import { isSpan } from "@/core/shares";
 import { list, revoke } from "@/infra/d1/actions/shares";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
+import { backTo, field } from "@/infra/web/form";
 import { SharePage } from "@/infra/web/views/pages/share";
 import { SharesPage } from "@/infra/web/views/pages/shares";
 
-const field = (form: FormData, key: string): string => {
-  const value = form.get(key);
-  return typeof value === "string" ? value : "";
-};
-
 const back = (params: Record<string, string>): string =>
-  `/shares?${new URLSearchParams(params).toString()}`;
+  backTo("/shares", params);
 
 const originOf = (url: string, host: string | undefined): string => {
   const parsed = new URL(url);

@@ -4,15 +4,11 @@ import { changePassword, login, signOut, startSession } from "@/app/auth";
 import { COOKIE_NAME, SESSION_DAYS } from "@/core/auth";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
+import { field } from "@/infra/web/form";
 import { LoginPage } from "@/infra/web/views/pages/login";
 import { PasswordPage } from "@/infra/web/views/pages/password";
 
 const DAY_SECONDS = 24 * 60 * 60;
-
-const field = (form: FormData, key: string): string => {
-  const value = form.get(key);
-  return typeof value === "string" ? value : "";
-};
 
 const setSession = (c: Context<Env>, token: string) => {
   setCookie(c, COOKIE_NAME, token, {

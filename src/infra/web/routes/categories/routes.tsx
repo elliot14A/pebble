@@ -3,15 +3,11 @@ import { board, remove, save } from "@/app/categories";
 import { show } from "@/infra/d1/actions/categories";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
+import { backTo, field } from "@/infra/web/form";
 import { CategoriesPage } from "@/infra/web/views/pages/categories";
 
-const field = (form: FormData, key: string): string => {
-  const value = form.get(key);
-  return typeof value === "string" ? value : "";
-};
-
 const back = (params: Record<string, string>): string =>
-  `/settings/categories?${new URLSearchParams(params).toString()}`;
+  backTo("/settings/categories", params);
 
 export const routes = (): Hono<Env> =>
   new Hono<Env>()

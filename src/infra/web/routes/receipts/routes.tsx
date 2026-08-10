@@ -7,11 +7,7 @@ import { getReceipt } from "@/infra/r2/receipts";
 import { readLlmConfig } from "@/infra/web/config";
 import type { Env } from "@/infra/web/context";
 import { errorToHttp } from "@/infra/web/errorMapper";
-
-const field = (form: FormData, key: string): string => {
-  const value = form.get(key);
-  return typeof value === "string" ? value : "";
-};
+import { field } from "@/infra/web/form";
 
 export const routes = (): Hono<Env> =>
   new Hono<Env>()
