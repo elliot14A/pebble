@@ -4,7 +4,7 @@ import { REST_KEY } from "@/app/analytics";
 import type { Bucket, Change, MonthFlow } from "@/core/analytics";
 import { arcs, barHeight, maxOf, shareOf } from "@/core/analytics";
 import type { Category } from "@/core/categories";
-import { displayMoney } from "@/core/money";
+import { briefAmount, displayMoney } from "@/core/money";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
 import {
@@ -41,6 +41,7 @@ export function AnalyticsPage(props: AnalyticsPageProps) {
       { minor, currency: props.baseCurrency },
       { decimals: "never" },
     );
+  const brief = (minor: number) => briefAmount(minor, props.baseCurrency);
 
   const nameOf = (bucket: Bucket): string =>
     bucket.key === REST_KEY
@@ -104,9 +105,9 @@ export function AnalyticsPage(props: AnalyticsPageProps) {
           nameOf={nameOf}
           money={money}
         />
-        <Months months={data.months} money={money} />
+        <Months months={data.months} money={money} brief={brief} />
         <Merchants merchants={data.merchants} money={money} />
-        <Weekdays weekdays={data.weekdays} money={money} />
+        <Weekdays weekdays={data.weekdays} money={money} brief={brief} />
       </div>
     </Shell>
   );
@@ -385,11 +386,12 @@ function Spending(props: {
 function Months(props: {
   months: ReadonlyArray<MonthFlow>;
   money: (minor: number) => string;
+  brief: (minor: number) => string;
 }) {
   const tallest = maxOf(
     props.months.flatMap((month) => [month.inMinor, month.outMinor]),
   );
-  const AREA = 74;
+  const AREA = 60;
   const step = 320 / Math.max(1, props.months.length);
 
   return (
@@ -432,6 +434,18 @@ function Months(props: {
                   rx="4"
                   fill="var(--color-over)"
                 />
+                {month.inMinor === 0 && month.outMinor === 0 ? null : (
+                  <text
+                    x={left}
+                    y={82 - Math.max(inHeight, outHeight)}
+                    text-anchor="middle"
+                    font-size="9"
+                    font-weight="600"
+                    fill="var(--color-ink-2)"
+                  >
+                    {props.brief(Math.max(month.inMinor, month.outMinor))}
+                  </text>
+                )}
                 <text
                   x={left}
                   y="102"
@@ -495,6 +509,7 @@ function Merchants(props: {
 function Weekdays(props: {
   weekdays: ReadonlyArray<number>;
   money: (minor: number) => string;
+  brief: (minor: number) => string;
 }) {
   const tallest = maxOf(props.weekdays);
   const worst = props.weekdays.indexOf(tallest);
@@ -521,7 +536,7 @@ function Weekdays(props: {
           aria-label="Spending by day of the week"
         >
           {props.weekdays.map((minor, index) => {
-            const height = barHeight(minor, tallest, 74);
+            const height = barHeight(minor, tallest, 60);
             const left = index * 45.7 + 6;
             return (
               <>
@@ -535,6 +550,18 @@ function Weekdays(props: {
                     index === worst ? "var(--color-over)" : "var(--color-money)"
                   }
                 />
+                {minor === 0 ? null : (
+                  <text
+                    x={left + 16}
+                    y={76 - height}
+                    text-anchor="middle"
+                    font-size="9"
+                    font-weight="600"
+                    fill="var(--color-ink-2)"
+                  >
+                    {props.brief(minor)}
+                  </text>
+                )}
                 <text
                   x={left + 16}
                   y="94"

@@ -132,3 +132,36 @@ export const displayMoney = (
   options: FormatOptions = {},
 ): string =>
   formatMoney(amount, options).unwrapOr(`${amount.currency} ${amount.minor}`);
+
+const SHORT_INDIAN = [
+  { at: 10_000_000, suffix: "Cr" },
+  { at: 100_000, suffix: "L" },
+  { at: 1_000, suffix: "k" },
+] as const;
+
+const SHORT_WESTERN = [
+  { at: 1_000_000_000, suffix: "B" },
+  { at: 1_000_000, suffix: "M" },
+  { at: 1_000, suffix: "k" },
+] as const;
+
+const trim = (value: number): string =>
+  value >= 10 ? String(Math.round(value)) : String(Math.round(value * 10) / 10);
+
+export const briefAmount = (minor: number, currency: string): string => {
+  const found = currencyOf(currency);
+  const exponent = found.isOk() ? found.value.exponent : 2;
+  const grouping = found.isOk() ? found.value.grouping : "western";
+
+  const major = Math.abs(minor) / 10 ** exponent;
+  const sign = minor < 0 ? "-" : "";
+  const scale = grouping === "indian" ? SHORT_INDIAN : SHORT_WESTERN;
+
+  for (const step of scale) {
+    if (major >= step.at) {
+      return `${sign}${trim(major / step.at)}${step.suffix}`;
+    }
+  }
+
+  return `${sign}${Math.round(major)}`;
+};
