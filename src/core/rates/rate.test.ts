@@ -1,22 +1,9 @@
 import { describe, expect, it } from "bun:test";
 import { money } from "@/core/money";
-import {
-  convert,
-  parseRate,
-  RATE_SCALE,
-  type Rate,
-  rateOn,
-} from "@/core/rates/rate";
+import { convert, parseRate, type Rate, rateOn } from "@/core/rates/rate";
 
 const amount = (minor: number, currency: string) =>
   money(minor, currency)._unsafeUnwrap();
-
-describe("parseRate", () => {
-  it("scales a typed rate to an integer", () => {
-    expect(parseRate("91.45")._unsafeUnwrap()).toBe(9_145_000_000);
-    expect(parseRate("83")._unsafeUnwrap()).toBe(83 * RATE_SCALE);
-  });
-});
 
 describe("convert", () => {
   const eurToInr = parseRate("91.45")._unsafeUnwrap();

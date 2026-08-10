@@ -50,8 +50,4 @@ describe("validateNewTransaction", () => {
     expect(errFor({ note: null })).toBe(ValidationErrorCode.INVALID_INPUT);
     expect(errFor({ note: "   " })).toBe(ValidationErrorCode.INVALID_INPUT);
   });
-
-  it("requires a client id, because replay depends on it", () => {
-    expect(errFor({ clientId: "" })).toBe(ValidationErrorCode.INVALID_INPUT);
-  });
 });

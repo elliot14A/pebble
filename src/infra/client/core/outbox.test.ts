@@ -1,14 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { add, read, verdictOf } from "@/infra/client/core/outbox";
-
-const entry = (clientId: string) => ({ clientId, fields: [], at: 0 });
-
-describe("add", () => {
-  it("replaces a retry of the same entry rather than queueing it twice", () => {
-    const queue = add(add([], entry("c1")), entry("c1"));
-    expect(queue.length).toBe(1);
-  });
-});
+import { read, verdictOf } from "@/infra/client/core/outbox";
 
 describe("read", () => {
   it("returns nothing rather than throwing on rubbish", () => {

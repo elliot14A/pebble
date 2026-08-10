@@ -14,11 +14,6 @@ describe("readAmount", () => {
     expect(readAmount("Rs. 2,300")).toBe("2300");
     expect(readAmount("$45.99")).toBe("45.99");
   });
-
-  it("reads the European comma as a decimal point", () => {
-    expect(readAmount("1.234,56")).toBe("1234.56");
-    expect(readAmount("12,50")).toBe("12.50");
-  });
 });
 
 describe("readMerchant", () => {

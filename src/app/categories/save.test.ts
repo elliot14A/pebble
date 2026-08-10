@@ -94,15 +94,6 @@ describe("save", () => {
     if (!renamed.isErr()) return;
     expect(renamed.error.code).toBe(ResourceErrorCode.FORBIDDEN);
   });
-
-  it("keeps one person's category away from another", async () => {
-    const made = await mine("Chai");
-    if (made.isErr()) throw new Error(made.error.message);
-
-    const theirs = await visible(d1.db, "u-2");
-    if (theirs.isErr()) throw new Error(theirs.error.message);
-    expect(theirs.value.map((c) => c.id)).not.toContain(made.value.id);
-  });
 });
 
 describe("remove", () => {

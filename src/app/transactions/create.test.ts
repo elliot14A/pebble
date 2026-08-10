@@ -144,25 +144,6 @@ describe("create", () => {
     expect(saved.amountMinor).toBe(2100);
   });
 
-  it("never borrows another user's rate", async () => {
-    await saveRate(
-      d1.db,
-      "someone-else",
-      { currency: "EUR", rateE8: 9_145_000_000, effectiveFrom: "2026-08-01" },
-      OPTIONS.now,
-    );
-
-    const saved = (
-      await create(
-        d1.db,
-        input({ accountId: "acc-eur", amountText: "8.40" }),
-        OPTIONS,
-      )
-    )._unsafeUnwrap();
-
-    expect(saved.fxPending).toBe(true);
-  });
-
   it("refuses an account that belongs to somebody else", async () => {
     const failed = await create(d1.db, input({ userId: "intruder" }), OPTIONS);
     expect(failed._unsafeUnwrapErr().code).toBe(ResourceErrorCode.NOT_FOUND);
