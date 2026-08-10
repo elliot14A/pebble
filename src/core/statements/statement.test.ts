@@ -43,6 +43,25 @@ describe("read", () => {
   it("gives up rather than guessing when there is no date column", () => {
     expect(read("a,b,c\n1,2,3\n").lines).toEqual([]);
   });
+
+  it("keeps quoted delimiters, escaped quotes and wrapped lines whole", () => {
+    const found = read(
+      `date,description,amount\n2026-08-01,"Bakery, the good one",-120\n2026-08-02,"he said ""hi""",-40\n2026-08-03,"two\nlines",-60\n`,
+    );
+
+    expect(found.lines.map((line) => line.description)).toEqual([
+      "Bakery, the good one",
+      'he said "hi"',
+      "two lines",
+    ]);
+    expect(found.skipped).toBe(0);
+
+    const tabbed = read(
+      "Date\tNarration\tAmount\n2026-08-01\tSwiggy\t-240\n2026-08-02\tSalary\t85000\n",
+    );
+    expect(tabbed.lines.map((line) => line.direction)).toEqual(["out", "in"]);
+    expect(tabbed.lines[0]?.description).toBe("Swiggy");
+  });
 });
 
 describe("the format pebble asks for", () => {

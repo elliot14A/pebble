@@ -10,7 +10,7 @@ import { newId } from "@/core/id";
 import { normalizeMerchant } from "@/core/merchants";
 import { parseAmount } from "@/core/money";
 import { convert, rateOn } from "@/core/rates";
-import { fingerprints, type Line, read } from "@/core/statements";
+import { fingerprints, type Line, type Reading, read } from "@/core/statements";
 import { type Transaction, validateNewTransaction } from "@/core/transactions";
 import { fetch as fetchAccount } from "@/infra/d1/actions/accounts";
 import { list as listMerchants } from "@/infra/d1/actions/merchants";
@@ -35,6 +35,15 @@ export type Preview = Readonly<{
   skipped: number;
   fresh: number;
 }>;
+
+const complaintAbout = (found: Reading): string =>
+  found.header.length === 0
+    ? "Nothing in that file looked like a statement. It needs a header row with a date column."
+    : `pebble found the columns ${found.header
+        .filter((cell) => cell !== "")
+        .join(
+          ", ",
+        )} but could not tell which one holds the amount. Rename it to amount.`;
 
 const known = async (
   db: DrizzleD1Database,
@@ -71,10 +80,7 @@ export const preview = (
     const found = read(text);
     if (found.lines.length === 0) {
       return err(
-        appError(
-          ValidationErrorCode.INVALID_INPUT,
-          "Nothing in that file looked like a statement. It needs a header row with a date column.",
-        ),
+        appError(ValidationErrorCode.INVALID_INPUT, complaintAbout(found)),
       );
     }
 

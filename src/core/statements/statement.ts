@@ -11,49 +11,80 @@ export type Line = Readonly<{
 export type Reading = Readonly<{
   lines: ReadonlyArray<Line>;
   skipped: number;
+  header: ReadonlyArray<string>;
 }>;
 
-const DATE_WORDS = ["date", "txn date", "value date", "transaction date"];
-const NAME_WORDS = [
-  "narration",
+const DATE_NAMES = [
+  "date",
+  "txn date",
+  "tran date",
+  "value date",
+  "posting date",
+  "transaction date",
+  "date of transaction",
+];
+const NAME_NAMES = [
   "description",
+  "narration",
   "particulars",
   "remarks",
   "details",
-  "transaction",
+  "transaction details",
+  "transaction description",
+  "transaction remarks",
+  "payee",
+  "merchant",
+  "name",
 ];
-const OUT_WORDS = ["withdrawal", "debit", "paid out", "money out", "dr"];
-const IN_WORDS = ["deposit", "credit", "paid in", "money in", "cr"];
-const AMOUNT_WORDS = ["amount", "amt"];
-const CATEGORY_WORDS = ["category", "tag"];
+const OUT_NAMES = [
+  "withdrawal",
+  "withdrawals",
+  "withdrawal amt",
+  "withdrawal amount",
+  "debit",
+  "debits",
+  "debit amt",
+  "debit amount",
+  "paid out",
+  "money out",
+  "dr",
+];
+const IN_NAMES = [
+  "deposit",
+  "deposits",
+  "deposit amt",
+  "deposit amount",
+  "credit",
+  "credits",
+  "credit amt",
+  "credit amount",
+  "paid in",
+  "money in",
+  "cr",
+];
+const AMOUNT_NAMES = [
+  "amount",
+  "amt",
+  "transaction amount",
+  "txn amount",
+  "value",
+];
+const CATEGORY_NAMES = ["category", "categories", "tag", "tags"];
 
-const wordsIn = (value: string): ReadonlyArray<string> =>
+const plainly = (value: string): string =>
   value
     .toLowerCase()
-    .replace(/[^a-z]/g, " ")
-    .split(" ")
-    .filter((word) => word !== "");
-
-const holds = (name: ReadonlyArray<string>, phrase: string): boolean => {
-  const wanted = phrase.split(" ");
-  return name.some((_, at) =>
-    wanted.every((word, step) => name[at + step] === word),
-  );
-};
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 
 const findColumn = (
   header: ReadonlyArray<string>,
-  wanted: ReadonlyArray<string>,
-  avoid: ReadonlyArray<string> = [],
+  names: ReadonlyArray<string>,
   taken: ReadonlySet<number> = new Set(),
 ): number =>
-  header.findIndex((cell, at) => {
-    if (taken.has(at)) return false;
-    const name = wordsIn(cell);
-    if (name.length === 0) return false;
-    if (avoid.some((phrase) => holds(name, phrase))) return false;
-    return wanted.some((phrase) => holds(name, phrase));
-  });
+  header.findIndex(
+    (cell, at) => !taken.has(at) && names.includes(plainly(cell)),
+  );
 
 export const readAmount = (value: string): number | null => {
   const text = value.replace(/[\s₹$€£]/g, "").replace(/,/g, "");
@@ -102,7 +133,7 @@ export const read = (text: string): Reading => {
   let headerAt = -1;
   let dateAt = -1;
   for (let index = 0; index < Math.min(rows.length, 25); index += 1) {
-    const found = findColumn(rows[index] ?? [], DATE_WORDS);
+    const found = findColumn(rows[index] ?? [], DATE_NAMES);
     if (found !== -1 && (rows[index]?.length ?? 0) >= 3) {
       headerAt = index;
       dateAt = found;
@@ -110,24 +141,23 @@ export const read = (text: string): Reading => {
     }
   }
 
-  if (headerAt === -1) return { lines: [], skipped: rows.length };
+  if (headerAt === -1) {
+    return { lines: [], skipped: rows.length, header: [] };
+  }
 
   const header = rows[headerAt] ?? [];
   const taken = new Set([dateAt]);
-  const claim = (
-    wanted: ReadonlyArray<string>,
-    avoid: ReadonlyArray<string> = [],
-  ): number => {
-    const at = findColumn(header, wanted, avoid, taken);
+  const claim = (names: ReadonlyArray<string>): number => {
+    const at = findColumn(header, names, taken);
     if (at !== -1) taken.add(at);
     return at;
   };
 
-  const nameAt = claim(NAME_WORDS);
-  const categoryAt = claim(CATEGORY_WORDS);
-  const outAt = claim(OUT_WORDS);
-  const inAt = claim(IN_WORDS);
-  const amountAt = claim(AMOUNT_WORDS, [...OUT_WORDS, ...IN_WORDS, "balance"]);
+  const nameAt = claim(NAME_NAMES);
+  const categoryAt = claim(CATEGORY_NAMES);
+  const outAt = claim(OUT_NAMES);
+  const inAt = claim(IN_NAMES);
+  const amountAt = claim(AMOUNT_NAMES);
 
   const lines: Line[] = [];
   let skipped = 0;
@@ -174,7 +204,7 @@ export const read = (text: string): Reading => {
     });
   }
 
-  return { lines, skipped };
+  return { lines, skipped, header };
 };
 
 const mark = (accountId: string, line: Line): string =>
