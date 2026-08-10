@@ -1,5 +1,6 @@
 import { Hono } from "hono";
-import { bring, preview } from "@/app/statements";
+import { visible } from "@/app/categories";
+import { bring, history, preview, undo } from "@/app/statements";
 import { list as listAccounts } from "@/infra/d1/actions/accounts";
 import { getReceipt, putReceipt, removeReceipt } from "@/infra/r2/receipts";
 import type { Env } from "@/infra/web/context";
@@ -27,9 +28,16 @@ export const routes = (): Hono<Env> =>
 
       await removeReceipt(c.env.RECEIPTS, parked(ctx.user.id));
 
+      const categories = await visible(ctx.db, ctx.user.id);
+      const imports = await history(ctx.db, ctx.user.id);
+
       return c.html(
         <StatementPage
           accounts={accounts.value}
+          categories={
+            categories.isOk() ? categories.value.map((one) => one.name) : []
+          }
+          imports={imports.isOk() ? imports.value : []}
           preview={null}
           fileName={null}
           notice={c.req.query("saved") ?? null}
@@ -84,6 +92,8 @@ export const routes = (): Hono<Env> =>
       return c.html(
         <StatementPage
           accounts={accounts.value}
+          categories={[]}
+          imports={[]}
           preview={seen.value}
           fileName={file.name}
           notice={null}
@@ -127,6 +137,31 @@ export const routes = (): Hono<Env> =>
       return c.redirect(
         backTo("/ledger", {
           saved: `${done.value.added} added from the statement.`,
+        }),
+        303,
+      );
+    })
+
+    .post("/settings/import/undo", async (c) => {
+      const ctx = c.get("ctx");
+      const form = await c.req.formData();
+      const accountId = field(form, "accountId");
+      const broughtAt = Number(field(form, "broughtAt"));
+
+      const gone = await undo(ctx.db, ctx.user.id, accountId, broughtAt);
+      if (gone.isErr()) {
+        return c.redirect(
+          back({ error: errorToHttp(gone.error).message }),
+          303,
+        );
+      }
+
+      return c.redirect(
+        back({
+          saved:
+            gone.value === 1
+              ? "1 imported entry removed."
+              : `${gone.value} imported entries removed.`,
         }),
         303,
       );

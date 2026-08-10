@@ -4,6 +4,7 @@ export { create } from "./create";
 export { createMany } from "./createMany";
 export { fetch } from "./fetch";
 export { frequentCategories } from "./frequentCategories";
+export { batches, type ImportBatch, removeBatch } from "./imports";
 export { list, type TransactionQuery } from "./list";
 export { remove, restore } from "./remove";
 export { update } from "./update";
