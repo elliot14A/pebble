@@ -57,6 +57,3 @@ export const slugFor = (name: string): string =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 32);
-
-export const isOwn = (category: Category, userId: string): boolean =>
-  category.ownerId === userId;

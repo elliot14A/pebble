@@ -62,9 +62,6 @@ export const nextAfter = (
     : onOrBefore(year, month + 1, dayOfMonth);
 };
 
-export const isDue = (recurring: Recurring, today: string): boolean =>
-  recurring.archivedAt === null && recurring.nextOn <= today;
-
 export const runsDueBy = (
   recurring: Recurring,
   today: string,

@@ -71,6 +71,13 @@
       "when": 1786262208591,
       "tag": "0009_push",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1786267942073,
+      "tag": "0010_drop_dead_columns",
+      "breakpoints": true
     }
   ]
 }

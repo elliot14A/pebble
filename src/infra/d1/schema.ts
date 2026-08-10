@@ -119,10 +119,6 @@ export const transactions = sqliteTable(
     occurredOn: text("occurred_on").notNull(),
     note: text("note"),
     tags: text("tags"),
-    receiptId: text("receipt_id"),
-    recurringRuleId: text("recurring_rule_id"),
-    billId: text("bill_id"),
-
     clientId: text("client_id").notNull(),
     createdAt: integer("created_at").notNull(),
     updatedAt: integer("updated_at").notNull(),

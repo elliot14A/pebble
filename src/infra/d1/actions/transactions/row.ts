@@ -27,9 +27,4 @@ export const toTransaction = (row: TransactionRow): Transaction => ({
   deletedAt: row.deletedAt,
 });
 
-export const toRow = (transaction: Transaction): TransactionRow => ({
-  ...transaction,
-  receiptId: null,
-  recurringRuleId: null,
-  billId: null,
-});
+export const toRow = (transaction: Transaction): TransactionRow => transaction;

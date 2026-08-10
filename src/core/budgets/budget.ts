@@ -1,5 +1,3 @@
-export const OVERALL = "__overall__";
-
 export type Budget = Readonly<{
   id: string;
   userId: string;
