@@ -423,7 +423,7 @@ export function QuickAdd(props: QuickAddProps) {
             class="press mt-3 flex h-[54px] w-full flex-none items-center justify-center gap-2.5 rounded-[17px] bg-money-deep text-sm font-bold text-on-money shadow-lift transition-opacity duration-150 disabled:opacity-40"
             x-bind:disabled="!ready()"
           >
-            <span class="idle flex items-center gap-2.5">
+            <span class="idle items-center gap-2.5">
               <span x-text="saveLabel()">Save</span>
               <span x-show="ready()">
                 <Icon name="check" size={18} />

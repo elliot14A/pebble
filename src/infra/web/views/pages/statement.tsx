@@ -173,7 +173,7 @@ export function StatementPage(props: StatementPageProps) {
                 disabled={props.preview.fresh === 0}
                 class="press flex h-12 w-full items-center justify-center gap-2 rounded-[15px] bg-money-deep text-[13px] font-bold text-on-money disabled:opacity-40"
               >
-                <span class="idle flex items-center gap-2">
+                <span class="idle items-center gap-2">
                   <Icon name="check" size={16} />
                   Add {props.preview.fresh}
                 </span>

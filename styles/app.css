@@ -590,28 +590,27 @@
   .switch-on .switch-knob {
     transform: translateX(17px);
   }
+}
 
+@layer utilities {
+  .idle {
+    display: inline-flex;
+  }
   .busy {
     display: none;
   }
-  .htmx-request .busy {
-    display: inline-flex;
-  }
-  .htmx-request .idle {
-    display: none;
-  }
-  .sending .busy {
-    display: inline-flex;
-  }
+  .htmx-request .idle,
   .sending .idle {
     display: none;
+  }
+  .htmx-request .busy,
+  .sending .busy {
+    display: inline-flex;
   }
   .sending {
     pointer-events: none;
   }
-}
 
-@layer utilities {
   .tnum {
     font-variant-numeric: tabular-nums;
   }
