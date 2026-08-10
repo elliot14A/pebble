@@ -124,22 +124,14 @@ export function QuickAdd(props: QuickAddProps) {
             </div>
 
             <div class="mt-4 px-1" x-show="type !== 'transfer'">
-              <label
-                class="press scan-tile relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-[16px] border border-money-edge bg-money-wash px-4 py-3 text-left"
+              <div
+                class="scan-tile relative flex items-center gap-3 overflow-hidden rounded-[16px] border border-money-edge bg-money-wash px-4 py-3 text-left"
                 x-bind:class="scanning ? 'reading pointer-events-none' : ''"
               >
-                <input
-                  type="file"
-                  accept="image/*"
-                  class="sr-only"
-                  x-on:change="scan($event)"
-                  x-bind:disabled="scanning"
-                />
-
                 <span class="relative grid h-11 w-11 flex-none place-items-center overflow-hidden rounded-[13px] bg-money-deep text-on-money">
                   <template x-if="preview === ''">
                     <span class="grid place-items-center">
-                      <Icon name="camera" size={19} />
+                      <Icon name="receipt" size={19} />
                     </span>
                   </template>
                   <template x-if="preview !== ''">
@@ -159,7 +151,7 @@ export function QuickAdd(props: QuickAddProps) {
                   />
                   <span class="block text-[10.5px] text-money-deep/70">
                     <span x-show="!scanning" x-cloak>
-                      Take one or pick one you have
+                      Photograph it, or pick one you have
                     </span>
                     <span class="dots" x-show="scanning" x-cloak>
                       Finding the amount, shop and date
@@ -167,10 +159,37 @@ export function QuickAdd(props: QuickAddProps) {
                   </span>
                 </span>
 
-                <span class="flex-none text-money-deep" x-show="!scanning">
-                  <Icon name="arrow" size={16} />
+                <span class="flex flex-none gap-2" x-show="!scanning" x-cloak>
+                  <label
+                    class="press grid h-9 w-9 cursor-pointer place-items-center rounded-[11px] bg-money-deep text-on-money"
+                    aria-label="Take a photo of the receipt"
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      class="sr-only"
+                      x-on:change="scan($event)"
+                      x-bind:disabled="scanning"
+                    />
+                    <Icon name="camera" size={17} />
+                  </label>
+
+                  <label
+                    class="press grid h-9 w-9 cursor-pointer place-items-center rounded-[11px] border border-money-edge bg-paper text-money-deep"
+                    aria-label="Pick a photo you already have"
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      class="sr-only"
+                      x-on:change="scan($event)"
+                      x-bind:disabled="scanning"
+                    />
+                    <Icon name="image" size={17} />
+                  </label>
                 </span>
-              </label>
+              </div>
             </div>
 
             <p

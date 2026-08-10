@@ -31,6 +31,7 @@ const ICONS: Readonly<Record<string, string>> = {
   search: "search",
   calendar: "calendar",
   camera: "camera",
+  image: "image",
   check: "check",
   back: "chevron-left",
   arrow: "chevron-right",

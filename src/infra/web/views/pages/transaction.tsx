@@ -242,33 +242,26 @@ function Receipts(props: {
       <p class="label mb-2">Receipt</p>
 
       {props.receipts.length === 0 ? (
-        <form
-          method="post"
-          action="/receipts/scan"
-          enctype="multipart/form-data"
-          class="card p-3"
-        >
-          <input
-            type="hidden"
-            name="transactionId"
-            value={props.transactionId}
+        <div class="card flex items-center gap-3 p-3">
+          <span class="glyph h-10 w-10 flex-none rounded-[13px]">
+            <Icon name="receipt" size={17} />
+          </span>
+          <span class="min-w-0 flex-1 text-[12.5px] font-semibold text-ink-2">
+            Attach the bill
+          </span>
+
+          <Pick
+            transactionId={props.transactionId}
+            fromCamera
+            label="Take a photo of the bill"
+            icon="camera"
           />
-          <label class="press flex cursor-pointer items-center gap-3">
-            <span class="glyph h-10 w-10 flex-none rounded-[13px]">
-              <Icon name="camera" size={17} />
-            </span>
-            <span class="min-w-0 flex-1 text-[12.5px] font-semibold text-ink-2">
-              Attach a photo of the bill
-            </span>
-            <input
-              type="file"
-              name="photo"
-              accept="image/*"
-              class="sr-only"
-              onchange="this.form.submit()"
-            />
-          </label>
-        </form>
+          <Pick
+            transactionId={props.transactionId}
+            label="Pick a photo you already have"
+            icon="image"
+          />
+        </div>
       ) : (
         props.receipts.map((receipt) => (
           <div class="card overflow-hidden">
@@ -313,4 +306,31 @@ function plainAmount(minor: number, currency: string): string {
   const places = found.isOk() ? found.value.exponent : 2;
   if (places === 0) return String(minor);
   return (minor / 10 ** places).toFixed(places);
+}
+
+function Pick(props: {
+  transactionId: string;
+  label: string;
+  icon: string;
+  fromCamera?: boolean;
+}) {
+  return (
+    <form method="post" action="/receipts/scan" enctype="multipart/form-data">
+      <input type="hidden" name="transactionId" value={props.transactionId} />
+      <label
+        class="press grid h-9 w-9 cursor-pointer place-items-center rounded-[11px] bg-sunk text-ink-2"
+        aria-label={props.label}
+      >
+        <input
+          type="file"
+          name="photo"
+          accept="image/*"
+          {...(props.fromCamera === true ? { capture: "environment" } : {})}
+          class="sr-only"
+          onchange="this.form.submit()"
+        />
+        <Icon name={props.icon} size={16} />
+      </label>
+    </form>
+  );
 }
