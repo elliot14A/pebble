@@ -1,4 +1,5 @@
 import { err, ok } from "neverthrow";
+import { randomToken } from "@/core/bytes";
 import { type AppResult, appError, ValidationErrorCode } from "@/core/error";
 
 const TOKEN_BYTES = 24;
@@ -27,14 +28,7 @@ export type Share = Readonly<{
 export const isSpan = (value: string): value is Span =>
   (SPANS as ReadonlyArray<string>).includes(value);
 
-const toBase64Url = (bytes: Uint8Array): string =>
-  btoa(String.fromCharCode(...bytes))
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-
-export const newShareToken = (): string =>
-  toBase64Url(crypto.getRandomValues(new Uint8Array(TOKEN_BYTES)));
+export const newShareToken = (): string => randomToken(TOKEN_BYTES);
 
 const isDate = (value: string): boolean =>
   /^\d{4}-\d{2}-\d{2}$/.test(value) &&
