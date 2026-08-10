@@ -11,6 +11,7 @@ import {
   press,
   withDecimals,
 } from "@/infra/client/core/keypad";
+import { shrink } from "@/infra/client/dom/shrink";
 
 export type QuickAddConfig = Readonly<{
   accountCurrency: Record<string, string>;
@@ -138,7 +139,7 @@ export const quickAdd = (config: QuickAddConfig) => ({
 
     const settle = async (): Promise<void> => {
       const body = new FormData();
-      body.append("photo", file);
+      body.append("photo", await shrink(file));
       const reply = await window.fetch("/receipts/scan", {
         method: "POST",
         body,

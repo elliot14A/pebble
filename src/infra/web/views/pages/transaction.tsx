@@ -258,13 +258,12 @@ function Receipts(props: {
               <Icon name="camera" size={17} />
             </span>
             <span class="min-w-0 flex-1 text-[12.5px] font-semibold text-ink-2">
-              Attach a photo
+              Attach a photo of the bill
             </span>
             <input
               type="file"
               name="photo"
               accept="image/*"
-              capture="environment"
               class="sr-only"
               onchange="this.form.submit()"
             />

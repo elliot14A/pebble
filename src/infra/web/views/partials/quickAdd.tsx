@@ -131,7 +131,6 @@ export function QuickAdd(props: QuickAddProps) {
                 <input
                   type="file"
                   accept="image/*"
-                  capture="environment"
                   class="sr-only"
                   x-on:change="scan($event)"
                   x-bind:disabled="scanning"
@@ -160,7 +159,7 @@ export function QuickAdd(props: QuickAddProps) {
                   />
                   <span class="block text-[10.5px] text-money-deep/70">
                     <span x-show="!scanning" x-cloak>
-                      Snap the bill and we fill it in
+                      Take one or pick one you have
                     </span>
                     <span class="dots" x-show="scanning" x-cloak>
                       Finding the amount, shop and date
