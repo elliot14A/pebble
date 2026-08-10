@@ -63,15 +63,18 @@ beforeEach(async () => {
 
 describe("runDue", () => {
   it("logs every run that was missed, each on its own date", async () => {
-    const made = await rule({ nextOn: "2026-06-05" });
+    const made = await rule({ nextOn: "2026-03-05" });
 
     const report = await runDue(d1.db, "INR", "2026-08-09", NOW);
     if (report.isErr()) throw new Error(report.error.message);
-    expect(report.value.logged).toBe(3);
+    expect(report.value.logged).toBe(6);
 
     const rows = await list(d1.db, { userId: USER });
     if (rows.isErr()) throw new Error(rows.error.message);
     expect(rows.value.map((r) => r.occurredOn).sort()).toEqual([
+      "2026-03-05",
+      "2026-04-05",
+      "2026-05-05",
       "2026-06-05",
       "2026-07-05",
       "2026-08-05",

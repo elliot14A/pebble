@@ -1,11 +1,12 @@
 import { err, ok, ResultAsync } from "neverthrow";
 import type { AppResult, AppResultAsync } from "@/core/error";
 import { newId } from "@/core/id";
-import { convert, rateOn } from "@/core/rates";
+import { convert, type Rate, rateOn } from "@/core/rates";
 import { nextAfter, type Recurring, runsDueBy } from "@/core/recurring";
+import type { Transaction } from "@/core/transactions";
 import { list as listRates } from "@/infra/d1/actions/rates";
 import { advance, listDue } from "@/infra/d1/actions/recurring";
-import { create } from "@/infra/d1/actions/transactions";
+import { createMany } from "@/infra/d1/actions/transactions";
 import type { DrizzleD1Database } from "@/infra/d1/connection";
 
 export type RunReport = Readonly<{
@@ -14,18 +15,18 @@ export type RunReport = Readonly<{
   billsWaiting: number;
 }>;
 
-const baseFor = async (
-  db: DrizzleD1Database,
+type Move = Readonly<{ id: string; nextOn: string; lastOn: string }>;
+
+const baseFor = (
   rule: Recurring,
   baseCurrency: string,
+  rates: ReadonlyArray<Rate> | null,
   on: string,
-): Promise<number | null> => {
+): number | null => {
   if (rule.currency === baseCurrency) return rule.amountMinor;
+  if (rates === null) return null;
 
-  const rates = await listRates(db, rule.userId);
-  if (rates.isErr()) return null;
-
-  const rate = rateOn(rates.value, rule.currency, on);
+  const rate = rateOn(rates, rule.currency, on);
   if (rate === null) return null;
 
   const converted = convert(
@@ -46,7 +47,21 @@ export const runDue = (
     const due = await listDue(db, today);
     if (due.isErr()) return err(due.error);
 
-    let logged = 0;
+    const held = new Map<string, ReadonlyArray<Rate> | null>();
+    const ratesFor = async (
+      userId: string,
+    ): Promise<ReadonlyArray<Rate> | null> => {
+      const known = held.get(userId);
+      if (known !== undefined) return known;
+
+      const got = await listRates(db, userId);
+      const rates = got.isOk() ? got.value : null;
+      held.set(userId, rates);
+      return rates;
+    };
+
+    const rows: Transaction[] = [];
+    const moves: Move[] = [];
     let billsWaiting = 0;
 
     for (const rule of due.value) {
@@ -58,12 +73,15 @@ export const runDue = (
       const dates = runsDueBy(rule, today);
       if (dates.length === 0) continue;
 
+      const rates =
+        rule.currency === baseCurrency ? null : await ratesFor(rule.userId);
+
       let cursor = rule.nextOn;
 
       for (const on of dates) {
-        const base = await baseFor(db, rule, baseCurrency, on);
+        const base = baseFor(rule, baseCurrency, rates, on);
 
-        const made = await create(db, {
+        rows.push({
           id: newId(now),
           userId: rule.userId,
           accountId: rule.accountId,
@@ -86,20 +104,29 @@ export const runDue = (
           deletedAt: null,
         });
 
-        if (made.isOk()) logged += 1;
         cursor = nextAfter(on, rule.every, rule.dayOfMonth);
       }
 
-      const moved = await advance(
-        db,
-        rule.id,
-        cursor,
-        dates[dates.length - 1] ?? today,
-      );
+      moves.push({
+        id: rule.id,
+        nextOn: cursor,
+        lastOn: dates[dates.length - 1] ?? today,
+      });
+    }
+
+    const saved = rows.length === 0 ? ok(0) : await createMany(db, rows);
+    if (saved.isErr()) return err(saved.error);
+
+    for (const move of moves) {
+      const moved = await advance(db, move.id, move.nextOn, move.lastOn);
       if (moved.isErr()) return err(moved.error);
     }
 
-    return ok({ considered: due.value.length, logged, billsWaiting });
+    return ok({
+      considered: due.value.length,
+      logged: saved.isOk() ? saved.value : 0,
+      billsWaiting,
+    });
   };
 
   return new ResultAsync(run());
