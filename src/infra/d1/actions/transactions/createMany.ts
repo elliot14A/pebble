@@ -1,10 +1,16 @@
+import { getTableColumns } from "drizzle-orm";
 import type { AppResultAsync } from "@/core/error";
 import type { Transaction } from "@/core/transactions";
 import { toRow } from "@/infra/d1/actions/transactions/row";
 import { type DrizzleD1Database, write } from "@/infra/d1/connection";
 import { transactions } from "@/infra/d1/schema";
 
-const PER_STATEMENT = 5;
+const BOUND_LIMIT = 90;
+
+const PER_STATEMENT = Math.max(
+  1,
+  Math.floor(BOUND_LIMIT / Object.keys(getTableColumns(transactions)).length),
+);
 
 export const createMany = (
   db: DrizzleD1Database,
