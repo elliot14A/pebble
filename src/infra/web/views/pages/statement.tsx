@@ -1,11 +1,14 @@
-import type { Preview } from "@/app/statements";
+import type { ImportBatch, Preview } from "@/app/statements";
 import type { Account } from "@/core/accounts";
 import { displayMoney, parseAmount } from "@/core/money";
 import { Icon } from "@/infra/web/views/components/icons";
 import { Shell } from "@/infra/web/views/layouts/shell";
+import { Confirm } from "@/infra/web/views/partials/confirm";
 
 export type StatementPageProps = Readonly<{
   accounts: ReadonlyArray<Account>;
+  categories: ReadonlyArray<string>;
+  imports: ReadonlyArray<ImportBatch>;
   preview: Preview | null;
   fileName: string | null;
   notice: string | null;
@@ -94,7 +97,11 @@ export function StatementPage(props: StatementPageProps) {
         </form>
       ) : null}
 
-      {props.preview === null ? <Guide /> : null}
+      {props.preview === null ? <Guide categories={props.categories} /> : null}
+
+      {props.preview === null ? (
+        <Imports imports={props.imports} accounts={props.accounts} />
+      ) : null}
 
       {props.preview === null ? null : (
         <>
@@ -189,6 +196,55 @@ export function StatementPage(props: StatementPageProps) {
   );
 }
 
+const onDay = (stamp: number): string =>
+  new Date(stamp).toISOString().slice(0, 10);
+
+function Imports(props: {
+  imports: ReadonlyArray<ImportBatch>;
+  accounts: ReadonlyArray<Account>;
+}) {
+  if (props.imports.length === 0) return null;
+
+  const nameOf = (accountId: string): string =>
+    props.accounts.find((one) => one.id === accountId)?.name ?? "an account";
+
+  return (
+    <div class="px-5 pt-4 pb-2">
+      <p class="label mb-2">Brought in so far</p>
+
+      <div class="grid gap-2">
+        {props.imports.map((batch) => (
+          <div class="card flex items-center gap-3 p-3.5">
+            <span class="min-w-0 flex-1">
+              <b class="block truncate text-[12.5px] font-bold tracking-[-0.015em]">
+                {batch.count} into {nameOf(batch.accountId)}
+              </b>
+              <span class="tnum text-[10.5px] text-ink-3">
+                {batch.fromDate} to {batch.toDate} · added{" "}
+                {onDay(batch.broughtAt)}
+              </span>
+            </span>
+
+            <Confirm
+              action="/settings/import/undo"
+              fields={{
+                accountId: batch.accountId,
+                broughtAt: String(batch.broughtAt),
+              }}
+              title="Remove this import?"
+              body={`All ${batch.count} entries from this file go for good. Nothing you typed in yourself is touched, and you can import the file again after.`}
+              confirmLabel="Remove them"
+              cancelLabel="Keep them"
+              triggerLabel={`Remove the ${batch.count} entries brought into ${nameOf(batch.accountId)}`}
+              triggerClass="press flex h-10 w-10 flex-none items-center justify-center rounded-[13px] bg-over-wash text-over"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Spinner() {
   return (
     <svg
@@ -213,7 +269,8 @@ function Spinner() {
   );
 }
 
-const PROMPT = `Turn this bank statement into a csv for pebble.
+const promptFor = (categories: ReadonlyArray<string>): string =>
+  `Turn this bank statement into a csv for pebble.
 
 Rules:
 - Exactly these columns, in this order: date,description,amount,category
@@ -221,14 +278,13 @@ Rules:
 - amount is signed: negative for money leaving the account, positive for money
   arriving. No currency symbol, no thousands separators, a dot for decimals
 - description is the merchant or a short human name, not the bank's reference
-- category is one of: Food, Fuel, Groceries, Rent, Bills, Shopping, Travel,
-  Fun, Health, Education, Investments, Salary, Miscellaneous. Leave it blank
-  if you are not sure. Do not invent new ones
+- category is one of: ${categories.join(", ")}. Leave it blank if you are
+  not sure. Do not invent new ones
 - One row per transaction, oldest first, no totals, no opening or closing
   balance rows, no blank lines
 - Output only the csv`;
 
-function Guide() {
+function Guide(props: { categories: ReadonlyArray<string> }) {
   return (
     <div class="px-5 pt-4 pb-2" x-data="shareLink">
       <p class="label mb-2">What pebble expects</p>
@@ -253,7 +309,7 @@ function Guide() {
           rows={4}
           class="scroll-y mt-3 w-full rounded-tile bg-sunk p-3 text-[10.5px] leading-relaxed text-ink-3 outline-none"
         >
-          {PROMPT}
+          {promptFor(props.categories)}
         </textarea>
 
         <button
