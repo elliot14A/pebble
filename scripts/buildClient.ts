@@ -4,7 +4,7 @@ const JS_DIR = "public/js";
 const CSS_OUT = "public/css/app.css";
 
 const bundle = await Bun.build({
-  entrypoints: ["src/infra/client/dom/index.ts"],
+  entrypoints: ["src/client/dom/index.ts"],
   outdir: JS_DIR,
   naming: "client.js",
   target: "browser",
@@ -17,7 +17,7 @@ if (!bundle.success) {
 }
 
 const worker = await Bun.build({
-  entrypoints: ["src/infra/client/sw/index.ts"],
+  entrypoints: ["src/client/sw/index.ts"],
   outdir: "public",
   naming: "sw.js",
   target: "browser",

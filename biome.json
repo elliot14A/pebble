@@ -11,7 +11,7 @@
       "**",
       "!**/.claude",
       "!migrations",
-      "!src/infra/web/views/components/icons.generated.ts",
+      "!src/interfaces/web/views/components/icons.generated.ts",
       "!public/js",
       "!public/css",
       "!public/sw.js"

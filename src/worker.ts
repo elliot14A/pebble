@@ -1,8 +1,8 @@
+import { makeApp } from "@/app";
 import { remind } from "@/app/push";
 import { runDue } from "@/app/recurring";
 import { connect } from "@/infra/d1/connection";
-import { makeApp } from "@/infra/web/app";
-import { readConfig, readPushConfig } from "@/infra/web/config";
+import { readConfig, readPushConfig } from "@/interfaces/web/config";
 
 type Bindings = {
   DB: D1Database;

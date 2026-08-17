@@ -83,6 +83,9 @@ const banner = [
   "",
 ].join("\n");
 
-await Bun.write("src/infra/web/views/components/icons.generated.ts", banner);
+await Bun.write(
+  "src/interfaces/web/views/components/icons.generated.ts",
+  banner,
+);
 
 process.stdout.write(`icons: ${Object.keys(ICONS).length} from lucide\n`);
